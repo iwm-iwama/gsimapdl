@@ -1,4 +1,4 @@
-<!-- Ver.20191117 'AC-130J' -->
+<!-- Ver.20191217 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -1403,7 +1403,7 @@ function subAddTabCtrl(
 			var $checkBoxSelectMap = [];
 
 			if(document.getElementById("_TA01").value == ""){
-				document.getElementById("_TA01").value = "# タイル種\t拡張子\n# [Tab]区切り\nstd\tpng\nblank\tpng\n";
+				document.getElementById("_TA01").value = "# タイル種\t拡張子\n# [Tab]区切り\nblank\tpng\nstd\tpng\n";
 			}
 
 			var a1 = document.getElementById("_TA01").value.split("\n");
@@ -1423,7 +1423,7 @@ function subAddTabCtrl(
 					catch(e){
 						a3[1] = "png";
 					}
-					a2.push([ a3[0], $URL + a3[0] + "/{z}/{x}/{y}." + a3[1], 0.9, 18]);
+					a2.push([ a3[0], $URL + a3[0] + "/{z}/{x}/{y}." + a3[1], 0.8, 18]);
 					a3 = null;
 				}
 			}
