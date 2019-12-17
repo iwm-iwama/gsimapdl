@@ -1,4 +1,4 @@
-<!-- Ver.20190413_1404 'TR-1A' -->
+<!-- Ver.20191217 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -855,6 +855,35 @@ function _iwmBL(){
 	// センタリング
 	_iwmCM();
 }
+
+/*--------------------
+// URL／BL表示を変更
+--------------------*/
+function subChangeUrl(
+	$Lat, // double
+	$Lng, // double
+	$Zoom // int
+){
+	var i1 = 0;
+	var i2 = arguments.length;
+	for(; i1 < i2; i1++){
+		if(isNaN(arguments[i1])){
+			arguments[i1] = document.getElementById(arguments[i1]).value;
+		}
+	}
+	with(document){
+		getElementById("_NaviLat").value  = $Lat;
+		getElementById("_NaviLng").value  = $Lng;
+		getElementById("_NaviZoom").value = $Zoom;
+	}
+	// URL置換
+	history.replaceState(
+		null,
+		null,
+		("#" + $Zoom + "/" + $Lat + "/" + $Lng)
+	);
+}
+
 /*----------------
 // Simple Window
 ----------------*/
@@ -887,33 +916,78 @@ function subSW01(
 	document.getElementById("_SW01A").innerHTML = document.getElementById("_HDoc01").value;
 }
 
-/*--------------------
-// URL／BL表示を変更
---------------------*/
-function subChangeUrl(
-	$Lat, // double
-	$Lng, // double
-	$Zoom // int
+/*---------------
+// ファイル読込
+---------------*/
+var $FileName = "";
+
+function subReadFile(
+	$fileId,
+	$textareaId
 ){
+	// ボタンにイベントを設定
+	var fileList = document.getElementById($fileId).files;
+
+	// ファイル名記憶
+	$FileName = fileList[0].name;
+
+	var reader = new FileReader();
+	reader.onload = function(evt){
+		document.getElementById($textareaId).value = evt.target.result;
+		// 再設定
+		subMapSelector();
+	}
+	// テキスト書込
+	reader.readAsText(fileList[0]);
+	fileList = null;
+}
+
+/*---------------------
+// Gtsvタグデータ読込
+---------------------*/
+function rtnGtsvTagData(
+	$sText = "",
+	$sTag = ""
+){
+	if($sTag == null){
+		return [];
+	}
+
+	var rtn = [];
+
+	var tagBgn = "<" + $sTag + ">";
+	var tagEnd = "</" + $sTag + ">";
+
+	var bFlg = false;
+
+	var a1 = $sText.trim().split("\n");
 	var i1 = 0;
-	var i2 = arguments.length;
+	var i2 = a1.length;
 	for(; i1 < i2; i1++){
-		if(isNaN(arguments[i1])){
-			arguments[i1] = document.getElementById(arguments[i1]).value;
+		var _s1 = a1[i1].trim();
+
+		// 空白行／コメント行を無視
+		if (_s1.length == 0 || _s1.substring(0, 2) == "//"){
+			continue;
+		}
+		// タグの始まりか？
+		else if (_s1 == tagBgn){
+			bFlg = true;
+		}
+		// タグの終わりか？
+		else if (_s1 == tagEnd){
+			bFlg = false;
+		}
+		// 調べたいタグである
+		else if (bFlg == true){
+			rtn.push(_s1);
 		}
 	}
-	with(document){
-		getElementById("_NaviLat").value  = $Lat;
-		getElementById("_NaviLng").value  = $Lng;
-		getElementById("_NaviZoom").value = $Zoom;
-	}
-	// URL置換
-	history.replaceState(
-		null,
-		null,
-		("#" + $Zoom + "/" + $Lat + "/" + $Lng)
-	);
+	///console.log(rtn);
+
+	return rtn;
 }
+
 /*---------------------------
 // BL座標をタイル座標に変換
 ---------------------------*/
@@ -962,7 +1036,7 @@ function subAddTabCtrl(
 
 </head>
 
-<body onload="subInitDisp();subIwmInput_init();subSimpleWindowInit(['_SW02', '_SW01']);" onresize="subInitDisp();">
+<body onload="subInitDisp();subIwmInput_init();subSimpleWindowInit(['_SW03', '_SW01']);" onresize="subInitDisp();">
 	<!---------------
 	// 数値入力補完
 	---------------->
@@ -1026,22 +1100,19 @@ function subAddTabCtrl(
 			<font class="_simpleWindowClose" onclick="subSimpleWindowOnOff('_SW01');">×</font>
 			<div id="_SW01A" class="_simpleWindowOutput" style="max-height:480px;"></div>
 		</div>
-		<!-----------------
-		// 追加タイル編集
-		------------------>
+		<!---------------
+		// Gtsvファイル
+		---------------->
 		<span style="float:right;margin:0 8px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindowOnOff('_SW02');" style="font-weight:500;">追加タイル編集</font>
+			<font class="_simpleWindowCall" onclick="subSimpleWindowOnOff('_SW03');">Gtsv設定ファイル読込</font>
 		</span>
-		<div id="_SW02" class="_simpleWindow" style="width:400px;">
-			<font class="_simpleWindowTitle">追加タイル編集／[Tab]区切り</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindowOnOff('_SW02');">×</font>
-			<br>
-			<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:380px;" onchange="subMapSelector();"></textarea>
-			<script>
-				document.getElementById("_TA01").onkeydown = function(e){subAddTabCtrl(e, this);}
-			</script>
-			<div style="margin:10px 0;">
-				<a class="_btnNavi1" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank" style="font-size:14px;">地理院タイル一覧⇒</a>
+		<div id="_SW03" class="_simpleWindow" style="width:auto;">
+			<font class="_simpleWindowTitle">表示するタイル形式<tiletype>を読込</font>
+			<font class="_simpleWindowClose" onclick="subSimpleWindowOnOff('_SW03');">×</font>
+			<div class="_simpleWindowOutput" style="background:#fafafa;padding:0;">
+				<input type="file" id="_readFn" class="_btnNavi2" onchange="subReadFile(this.id,'_TA03');"/>
+				<br>
+				<textarea readonly id="_TA03" class="_editTextBox" wrap="off" style="height:200px;width:400px;"></textarea>
 			</div>
 		</div>
 	</div>
@@ -1175,30 +1246,19 @@ function subAddTabCtrl(
 		function subMapSelector(){
 			var $checkBoxSelectMap = [];
 
-			if(document.getElementById("_TA01").value == ""){
-				document.getElementById("_TA01").value = "# タイル種\t拡張子\n# [Tab]区切り\nstd\tpng\n";
-			}
-
-			var a1 = document.getElementById("_TA01").value.split("\n");
+			var a1 = rtnGtsvTagData(document.getElementById("_TA03").value, "tiletype");
 			var a2 = [];
 			var a3 = [];
 
 			var i1 = 0;
 			var i2 = a1.length;
 			for(; i1 < i2; i1++){
-				var s1 = a1[i1].trim().substring(0, 1);
-				if(s1 != "" && s1 != "#"){
-					a3 = a1[i1].split("\t");
-					a3[0] = a3[0].trim();
-					try{
-						a3[1] = a3[1].trim();
-					}
-					catch(e){
-						a3[1] = "png";
-					}
-					a2.push([ a3[0], $URL + a3[0] + "/{z}/{x}/{y}." + a3[1], 0.9, 18]);
-					a3 = null;
+				a3 = a1[i1].split("\t");
+				if(a3.length < 2){
+					a3[1] = "png";
 				}
+				a2.push([a3[0], $URL + a3[0] + "/{z}/{x}/{y}." + a3[1], 0.7, 18]);
+				a3 = null;
 			}
 			a1 = null;
 
@@ -1263,8 +1323,12 @@ function subAddTabCtrl(
 		// 座標マーカー
 		var $BaseMarkerIcon = L.icon(
 			{
-				iconUrl:"dummy",
-				iconSize:[8, 8]
+				iconUrl:"./libs/leaflet/0.7.7/images/marker-icon.png",
+				iconSize: [25, 41],
+				iconAnchor: [13, 40],
+				shadowUrl:"./libs/leaflet/0.7.7/images/marker-shadow.png",
+				shadowSize: [41, 41],
+				shadowAnchor: [12, 40]
 			}
 		);
 		/*---------------
@@ -1437,19 +1501,19 @@ function subAddTabCtrl(
 ._li2{margin:0;}
 ._ol ._li1{padding:6px 0 0 0;}
 </style>
-<span class="_fs">【表示するタイルを追加する】</span>
+<span class="_fs">【表示するタイルを指定する】</span>
  <ul class="_ul">
-  <li class="_li1">[追加タイル編集]ボタンでメニューを開く</li>
+  <li class="_li1">[Gtsv設定ファイル読込]ボタンを押し、地理院タイルをダウンロードするときに使用したGtsvファイル (例)sample.gtsv を読み込む。</li>
  </ul>
 <br>
 <span class="_fs">【地図上でのマウス操作】</span>
  <ul class="_ul">
-  <li class="_li1">ダブルクリック：小マーカー表示</li>
+  <li class="_li1">ダブルクリック：青マーカー表示</li>
  </ul>
 <br>
 <span class="_fs">【マーカー上でのマウス操作】</span>
  <ol class="_ol">
-  <li class="_li1">小マーカー
+  <li class="_li1">青マーカー
    <ul class="_ul">
     <li class="_li2">左クリック：ズームレベル補完表示</li>
     <li class="_li2">右クリック：地図の中心に移動</li>
