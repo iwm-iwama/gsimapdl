@@ -1,4 +1,4 @@
-<!-- Ver.20191217 'TR-1A' -->
+<!-- Ver.20191220 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -1105,7 +1105,6 @@ function subAddTabCtrl(
 		経度：<input type="text" id="_NaviLng" onclick="subIwmInputBL_open(this.id);" onkeydown="subIwmInputBL_keydown(this.id);" placeholder="緯度入力"/>
 		<!-- ズーム --><input type="hidden" id="_NaviZoom"/>
 		<input type="button" class="_btnNavi2" value="＋" onclick="_iwmZA2();"/>
-		URL：<input type="text" id="_NaviURL" onchange="subUrlSelector();subMapSelector();"/>
 		<!---------
 		// ヘルプ
 		---------->
@@ -1132,6 +1131,12 @@ function subAddTabCtrl(
 				<textarea readonly id="_TA03" class="_editTextBox" wrap="off" style="height:200px;width:400px;"></textarea>
 			</div>
 		</div>
+		<!------------
+		// Local URL
+		------------->
+		<span style="float:right;margin:0 8px;">
+			URL：<input type="text" id="_NaviURL" onchange="subUrlSelector();subMapSelector();"/>
+		</span>
 	</div>
 	<div id="_divMap">
 		<script>
