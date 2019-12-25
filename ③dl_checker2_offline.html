@@ -1,4 +1,4 @@
-<!-- Ver.20191220 'TR-1A' -->
+<!-- Ver.20191225 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -20,8 +20,15 @@
 <style>
 @charset "utf-8";
 
-*{margin:0;padding:0;font-family:sans-serif;}
-
+/*-------
+// 共通
+-------*/
+*
+{
+	font-family:sans-serif;
+	margin:0;
+	padding:0;
+}
 /*------------------
 // leaflet CSS置換
 ------------------*/
@@ -44,7 +51,7 @@
 -------------------*/
 body
 {
-	background:#fff;
+	background:#f6f6f7;
 	margin:0;
 	padding:0;
 }
@@ -125,33 +132,32 @@ option
 	background:#955aa6 !important;
 }
 /*---------------
-// 数値入力補完
+// 上部メニュー
 ---------------*/
 #_divNaviCommander
 {
 	background:#505050;
-	border:2px solid #505050;
+	border:0;
 	border-radius:8px 8px 0 0;
 	color:#fff;
 	font-size:14px;
 	line-height:18px;
-	margin:0;
-	padding:2px 0 0 12px;
-	position:absolute;
-	/* 動的に変更 */
 	left:0;
+	margin:0;
+	padding:2px 4px 2px 10px;
+	position:absolute;
 	top:0;
-	height:0;
+	/* 動的に変更 */
 	width:0;
 }
 #_divMap
 {
-	border:solid 2px #505050;
+	border:0;
 	cursor:crosshair;
-	position:absolute;
-	/* 動的に変更 */
 	left:0;
-	top:0;
+	position:absolute;
+	top:24px;
+	/* 動的に変更 */
 	height:0;
 	width:0;
 }
@@ -160,9 +166,8 @@ option
 #_InputZoomA,
 #_InputZoomB
 {
-	background:#ececec;
-	border:1px solid #808080;
-	box-shadow:0 0 2px #aaa;
+	background-color:rgba(255, 255, 255, 0.6);
+	border:1px solid #777;
 	font-size:12px;
 	margin:0;
 	padding:2px;
@@ -179,7 +184,7 @@ option
 {
 	/* 以下、必要に応じて修正 */
 	left:10px;
-	top:45px;
+	top:35px;
 }
 /* ↓OverLap */
 #_InputNum,
@@ -220,17 +225,17 @@ option
 ._ZA,
 ._ZB
 {
-	background:#3d7cce;
+	background-color:rgba(0, 0, 0, 0.6);
 }
 ._Btn1:hover,
 ._ZA:hover,
 ._ZB:hover
 {
-	background:#6dacff !important;
+	background:#3c7bff !important;
 }
 ._Btn2
 {
-	background:#0c4b9d;
+	background-color:rgba(12, 75, 157, 0.8);
 }
 ._Btn2:hover
 {
@@ -238,7 +243,7 @@ option
 }
 ._Btn3
 {
-	background:#e54848;
+	background-color:rgba(229, 72, 72, 0.9);
 }
 ._Btn3:hover
 {
@@ -270,7 +275,7 @@ option
 #_IBL3
 {
 	background:#fff;
-	border:1px solid #3d7cce;
+	border:1px solid #000;
 	color:#000;
 	cursor:text;
 	height:16px;
@@ -295,11 +300,11 @@ option
 #_NaviLng,
 #_NaviURL
 {
-	border:1px solid #3d7cce;
+	border:0;
 	font-size:12px;
 	ime-mode:inactive;
 	margin:0;
-	padding:1px 3px;
+	padding:0 3px;
 }
 #_NaviNum
 {
@@ -348,7 +353,6 @@ option
 ._simpleWindow
 {
 	background:#0d4c9e;
-	box-shadow:0 0 2px #aaa;
 	color:#fff;
 	float:right;
 	font-size:10px;
@@ -360,11 +364,11 @@ option
 	z-index:2000;
 	/* 以下、必要に応じて修正 */
 	right:0;
-	top:26px;
+	top:24px;
 }
 ._simpleWindowTitle
 {
-	display:;/* 不使用のとき "none" */
+	display:;/* 不使用のとき"none"を代入 */
 	margin:0;
 	padding:0;
 }
@@ -416,6 +420,8 @@ option
 /*-----------------------
 // フレームサイズを調整
 -----------------------*/
+var $IsMSIE = 0;
+
 function subInitDisp(){
 	var mapH = 0;
 	var mapW = 0;
@@ -437,40 +443,41 @@ function subInitDisp(){
 		mapW = window.innerWidth;
 	}
 
+	// MSIE ?
+	var uA = window.navigator.userAgent.toLowerCase();
+	if(uA.indexOf("msie") != -1 || uA.indexOf("trident") != -1){
+		if($IsMSIE == 0){
+			++$IsMSIE;
+			alert("このブラウザでは正しく表示されません\n\n【動作確認済】\n・Firefox\n・Google Chrome\n・Microsoft Edge");
+		}
+	}
+
 	/*-------------
 	// style 作成
 	-------------*/
 	// _divNaviCommander
 	var obj1 = document.getElementById("_divNaviCommander").style;
 	with(obj1){
-		height = "20px";
-		left   = "0px";
-		top    = "0px";
-		width  = (mapW - 16) + "px";
+		width = (mapW - 14) + "px";
 	}
-
 	// _divMap
 	var obj2 = document.getElementById("_divMap").style;
 	with(obj2){
-		height = (mapH - 30) + "px";
-		left   = "0px";
-		top    = "26px";
-		width  = (mapW - 4) + "px";
+		height = (mapH - 24) + "px";
+		width  = mapW + "px";
 	}
 	obj1 = obj2 = null;
 }
+
 /*---------------
 // 数値入力補完
 ---------------*/
-// 環境に合わせて設定
-var $AryIwmInput = ["_InputZoomA", "_InputNum", "_InputBL"];
-var $AryIwmIBL = ["_IBL1", "_IBL2", "_IBL3"];
-
 // 大域変数
 var $IwmInput_ctrlId = null;
 var $IwmInputBL_saveId = null;
 var $IwmInputZoom_value = null;
 
+const $AryIwmInput = ["_InputBL"];
 function subIwmInput_init(){
 	var i1 = 0;
 	var i2 = $AryIwmInput.length;
@@ -480,8 +487,8 @@ function subIwmInput_init(){
 }
 function subIwmInputZoomA_open(
 	$outputId, // [id]
-	$posX,     // int
-	$posY      // int
+	$posX,     // INT
+	$posY      // INT
 ){
 	subIwmInput_open("_InputZoomA", $outputId, $posX, $posY, true);
 }
@@ -489,13 +496,13 @@ function subIwmInputZoomA_close(){
 	subIwmInput_close("_InputZoomA");
 }
 function subIwmInputZoom_change(
-	$str // str
+	$str
 ){
 	// 変更前を記憶
 	$IwmInputZoom_value = document.getElementById("_NaviZoom").value = parseInt($str, 10);
 
-	var Color1 = "#3d7cce";
-	var Color2 = "#6dacff";
+	var Color1 = "#000";
+	var Color2 = "#0c4b9d";
 
 	var obj1 = document.getElementsByClassName("_ZA");
 	var obj2 = document.getElementsByClassName("_ZB");
@@ -505,40 +512,28 @@ function subIwmInputZoom_change(
 	var i3 = obj1.length;
 	for(; i2 < i3; i2++){
 		obj1[i2].style.background = (i1 == obj1[i2].value ? Color2 : Color1);
-		obj2[i2].style.background = (i1 == obj2[i2].value ? Color2 : Color1);
+
+		if(i1 == obj1[i2].value){
+			obj1[i2].style.background = Color2;
+			obj1[i2].style.opacity = 0.8;
+		}
+		else{
+			obj1[i2].style.background = Color1;
+			obj1[i2].style.opacity = 0.6;
+		}
+
+		if(i1 == obj2[i2].value){
+			obj2[i2].style.background = Color2;
+			obj2[i2].style.opacity = 0.8;
+		}
+		else{
+			obj2[i2].style.background = Color1;
+			obj2[i2].style.opacity = 0.6;
+		}
 	}
 	obj1 = obj2 = null;
 
 	subIwmInput_close("_InputZoomA");
-}
-function subIwmInputNum_open(
-	$outputId // [id]
-){
-	$IwmInput_ctrlId = $outputId;
-	subIwmInput_init();
-	subIwmInput_open("_InputNum", $outputId, null, null, false);
-}
-function subIwmInputNum_close(){
-	var obj1 = document.getElementById($IwmInput_ctrlId);
-	var d1 = parseFloat(obj1.value);
-	if(isNaN(d1)){
-		d1 = 0;
-	}
-	obj1.value = d1;
-	obj1 = null;
-	subIwmInput_close("_InputNum");
-}
-function subIwmInputNum_keydown(
-	$outputId // [id]
-){
-	document.onkeydown = function(evt){
-		///console.log(evt.keyCode);
-		switch(evt.keyCode){
-			case(13):// [Enter]
-				subIwmInputNum_close();
-			break;
-		}
-	}
 }
 function subIwmInputBL_open(
 	$outputId // [id]
@@ -553,17 +548,10 @@ function subIwmInputBL_open(
 
 	// "_InputBL" を更新
 	_iwmIBL($outputId);
-
-	subIwmInput_open(
-		iId,
-		$outputId,
-		null,
-		null,
-		false
-	);
+	subIwmInput_open(iId, $outputId, null, null, false);
 }
 function subIwmInputBL_close(){
-	document.getElementById($IwmInputBL_saveId).value = cnvIBLto10(
+	document.getElementById($IwmInputBL_saveId).value = rtnGeoIBLto10A(
 		document.getElementById("_IBL1").value,
 		document.getElementById("_IBL2").value,
 		document.getElementById("_IBL3").value
@@ -576,22 +564,21 @@ function subIwmInputBL_saveId(
 ){
 	$IwmInput_ctrlId = $outputId;
 }
-function subIwmInputBL_IBL(
-	$outputId
-){
-	subIwmInputBL_keydown(
-		$outputId
-	);
-}
 function subIwmInputBL_keydown(
-	$outputId // [id]
+	$outputId,   // [id]
+	$decimalSize // 小数点桁数
 ){
+	///console.log($decimalSize);
+	if($decimalSize == undefined){
+		$decimalSize = 0;
+	}
+
 	document.onkeydown = function(evt){
 		///console.log(evt.keyCode);
 		switch(evt.keyCode){
-			case(13):// [Enter]
+			case(13): // [Enter]
 				var obj = document.getElementById($outputId);
-					var d1 = rtnIwmInput_parse(obj.value, true);
+					var d1 = parseFloat(obj.value).toFixed($decimalSize);
 				obj.value = d1;
 				obj = null;
 
@@ -599,7 +586,7 @@ function subIwmInputBL_keydown(
 					_iwmIBL(d1);
 				}
 				else{
-					document.getElementById($IwmInputBL_saveId).value = cnvIBLto10(
+					document.getElementById($IwmInputBL_saveId).value = rtnGeoIBLto10A(
 						document.getElementById("_IBL1").value,
 						document.getElementById("_IBL2").value,
 						document.getElementById("_IBL3").value
@@ -618,9 +605,9 @@ function subIwmInputBL_keydown(
 function subIwmInput_open(
 	$inputId,   // [id]
 	$outputId,  // [id]
-	$posX,      // int
-	$posY,      // int
-	$autoHidden // bool
+	$posX,      // iNT
+	$posY,      // INT
+	$autoHidden // BOOL
 ){
 	$IwmInput_ctrlId = $outputId;
 
@@ -663,7 +650,7 @@ function subIwmInput_close(
 	}
 }
 function subIwmInput_addText(
-	$str // str
+	$str
 ){
 	var obj = document.getElementById($IwmInput_ctrlId);
 		var strBefore = obj.value;
@@ -671,7 +658,7 @@ function subIwmInput_addText(
 		var iSelection = obj.selectionStart;
 		obj.value = strBefore.substr(0, iSelection) + $str + strBefore.substr(iSelection, strBeforeLen);
 		iSelection++;
-		obj.selectionStart = iSelection;// 再フォーカス
+		obj.selectionStart = iSelection; // 再フォーカス
 	obj = null;
 }
 function subIwmInput_cls(){
@@ -685,7 +672,7 @@ function subIwmInput_bs(){
 		iSelection--;
 		if(iSelection >= 0){
 			obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
-			obj.selectionStart = iSelection;// 再フォーカス
+			obj.selectionStart = iSelection; // 再フォーカス
 		}
 	obj = null;
 }
@@ -696,76 +683,11 @@ function subIwmInput_del(){
 		var iSelection = obj.selectionStart;
 		if(iSelection < strBeforeLen){
 			obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
-			obj.selectionStart = iSelection;// 再フォーカス
+			obj.selectionStart = iSelection; // 再フォーカス
 		}
 	obj = null;
 }
-function rtnIwmInput_parse(
-	$str,   // str
-	$bFloat // true=DBL／false=INT／null=無視／Num=有効小数桁
-){
-	// 数値化
-	switch($bFloat){
-		// Double
-		case(true):
-			$str = parseFloat($str);
-		break;
-		// int
-		case(false):
-			$str = parseInt($str, 10);
-		break;
-		// 無視
-		case(null):
-			;
-		break;
-		// 有効小数桁(切捨て)
-		default:
-			var i1 = parseInt($bFloat, 10);
-			if(i1 >= 0){
-				$str = parseFloat($str).toFixed(i1);
-			}
-		break;
-	}
-	return (isNaN($str) ? 0 : $str);
-}
-function cnvIBLto10(
-	$d1, // 度
-	$d2, // 分
-	$d3  // 秒
-){
-	var i1 = 0;
-	var i2 = arguments.length;
-	for(; i1 < i2; i1++){
-		arguments[i1] = (arguments[i1].length == 0 ? 0 : parseFloat(arguments[i1]));
-	}
-	return ($d1 + (($d2 * 60.0) + $d3) / 3600.0);
-}
-function cnv10toIBL(
-	$d1 // 度分秒10進法
-){
-	try{
-		$d1 = parseFloat($d1);
-		if(isNaN($d1)){
-			throw($d1);
-		}
-	}
-	catch(e){
-		///console.log(e);
-		$d1 = 0.0;
-	}
-	var a1 = [];
-	a1[0] = ($d1 | 0);
-		$d1 = ($d1 % 1) * 60;
-	a1[1] = ($d1 | 0);
-		$d1 -= a1[1];
-	a1[2] = ($d1 * 60.0).toFixed(5);
 
-	if((a1[2] | 0) >= 60){
-		a1[1] += 1;
-		a1[2] = (a1[2] % 1).toFixed(5);
-	}
-	return a1;
-}
 /*-------------
 // エイリアス
 -------------*/
@@ -776,13 +698,13 @@ function _iwmIBL(
 	if(isNaN($d1)){
 		$d1 = document.getElementById($d1).value;
 	}
-	_a1 = cnv10toIBL($d1);
+	var a1 = rtnGeo10toIBL($d1);
 	var i1 = 0;
-	var i2 = _a1.length;
-	for(; i1 < i2; i1++){
-		document.getElementById($AryIwmIBL[i1]).value = _a1[i1];
-	}
-	_a1 = null;
+	var i2 = a1.length;
+
+	document.getElementById("_IBL1").value = a1[0].toFixed(0);
+	document.getElementById("_IBL2").value = a1[1].toFixed(0);
+	document.getElementById("_IBL3").value = a1[2].toFixed(8);
 }
 // ベースマーカー再描画
 function _iwmBMN(){
@@ -807,7 +729,7 @@ function _iwmCM(){
 	);
 }
 function _iwmZA(
-	$str // str
+	$str
 ){
 	subIwmInputZoomA_close();
 	subIwmInputZoom_change($str);
@@ -825,7 +747,7 @@ function _iwmZA2(){
 	_iwmCM();
 }
 function _iwmZB(
-	$str // str
+	$str
 ){
 	subIwmInputZoom_change($str);
 
@@ -834,6 +756,7 @@ function _iwmZB(
 	// センタリング
 	subCenterMap2();
 }
+const $AryIwmIBL = ["_IBL1", "_IBL2", "_IBL3"];
 function _iwmBL(){
 	var i1 = 0;
 	var i2 = $AryIwmIBL.length;
@@ -856,40 +779,12 @@ function _iwmBL(){
 	_iwmCM();
 }
 
-/*--------------------
-// URL／BL表示を変更
---------------------*/
-function subChangeUrl(
-	$Lat, // double
-	$Lng, // double
-	$Zoom // int
-){
-	var i1 = 0;
-	var i2 = arguments.length;
-	for(; i1 < i2; i1++){
-		if(isNaN(arguments[i1])){
-			arguments[i1] = document.getElementById(arguments[i1]).value;
-		}
-	}
-	with(document){
-		getElementById("_NaviLat").value  = $Lat;
-		getElementById("_NaviLng").value  = $Lng;
-		getElementById("_NaviZoom").value = $Zoom;
-	}
-	// URL置換
-	history.replaceState(
-		null,
-		null,
-		("#" + $Zoom + "/" + $Lat + "/" + $Lng)
-	);
-}
-
 /*----------------
 // Simple Window
 ----------------*/
 // 初期化
 function subSimpleWindowInit(
-	$aryId // [id]
+	$aryId
 ){
 	var i1 = $aryId.length;
 	while(i1--){
@@ -897,8 +792,8 @@ function subSimpleWindowInit(
 	}
 }
 function subSimpleWindowOnOff(
-	$id,  // [id]
-	$func // function
+	$id,
+	$func
 ){
 	// Open／Close
 	var obj = document.getElementById($id);
@@ -911,7 +806,7 @@ function subSimpleWindowOnOff(
 	}
 }
 function subSW01(
-	$id // [id]
+	$id
 ){
 	document.getElementById("_SW01A").innerHTML = document.getElementById("_HDoc01").value;
 }
@@ -988,28 +883,70 @@ function rtnGtsvTagData(
 	return rtn;
 }
 
-/*---------------------------
-// BL座標をタイル座標に変換
----------------------------*/
-function rtnHashConvTileXY(
-	$aLatLng, // Ary[double, double]
-	$Zoom     // int
+/*--------------------
+// URL／BL表示を変更
+--------------------*/
+function subChangeUrl(
+	$Lat,
+	$Lng,
+	$Zoom
 ){
-	var aPoint = $Map.project($aLatLng, $Zoom).floor();
-
-	var x  = ((aPoint.x / 256) | 0);// タイル全体のX
-	var dx = ((aPoint.x % 256) | 0);// タイル内部のX
-	var y  = ((aPoint.y / 256) | 0);// タイル全体のY
-	var dy = ((aPoint.y % 256) | 0);// タイル内部のY
-
-	return {
-		"z":$Zoom,
-		"x":x,
-		"y":y,
-		"dx":dx,
-		"dy":dy
+	var i1 = 0;
+	var i2 = arguments.length;
+	for(; i1 < i2; i1++){
+		if(isNaN(arguments[i1])){
+			arguments[i1] = document.getElementById(arguments[i1]).value;
+		}
 	}
+	with(document){
+		getElementById("_NaviLat").value  = parseFloat($Lat).toFixed(8);
+		getElementById("_NaviLng").value  = parseFloat($Lng).toFixed(8);
+		getElementById("_NaviZoom").value = $Zoom;
+	}
+	// URL置換
+	history.replaceState(
+		null,
+		null,
+		("#" + $Zoom + "/" + $Lat + "/" + $Lng)
+	);
 }
+
+/*-------------------
+// 度分秒 => 十進法
+-------------------*/
+function rtnGeoIBLto10A(
+	$deg, // 度
+	$min, // 分
+	$sec  // 秒
+){
+	$deg = parseInt($deg, 10);
+	$min = parseInt($min, 10);
+	$sec = parseFloat($sec);
+	return parseFloat($deg + ($min / 60.0) + ($sec / 3600.0));
+}
+
+/*-------------------
+// 十進法 => 度分秒
+-------------------*/
+function rtnGeo10toIBL(
+	$angle // 十進法
+){
+	$angle = parseFloat($angle);
+
+	var deg = parseInt($angle, 10);
+		$angle = ($angle - deg) * 60.0;
+	var min = parseInt($angle, 10);
+		$angle -= min;
+	var sec = parseFloat($angle) * 60.0;
+
+	// 0.999... * 60 => 60.0 対策
+	if(sec == 60.0){
+		min += 1;
+		sec = 0;
+	}
+	return [parseInt(deg, 10), parseInt(min, 10), parseFloat(sec)];
+}
+
 /*----------------------
 // [Tab]入力可能にする
 ----------------------*/
@@ -1026,8 +963,8 @@ function subAddTabCtrl(
 	$e.preventDefault();
 
 	var cursorPosition = $obj.selectionStart;
-	var cursorLeft     = $obj.value.substr(0, cursorPosition);
-	var cursorRight    = $obj.value.substr(cursorPosition, $obj.value.length);
+	var cursorLeft  = $obj.value.substr(0, cursorPosition);
+	var cursorRight = $obj.value.substr(cursorPosition, $obj.value.length);
 
 	$obj.value = cursorLeft + "\t" + cursorRight;
 	$obj.selectionEnd = cursorPosition + 1;
@@ -1062,18 +999,9 @@ function subAddTabCtrl(
 		<input type="button" class="_ZB" value="6" onclick="_iwmZB('6');"><br>
 		<input type="button" class="_ZB" value="5" onclick="_iwmZB('5');">
 	</div>
-	<!--
-	<div id="_InputNum">
-		<input type="button" class="_Btn1" value="7" onclick="subIwmInput_addText('7');"><input type="button" class="_Btn1" value="8" onclick="subIwmInput_addText('8');"><input type="button" class="_Btn1" value="9" onclick="subIwmInput_addText('9');"><br>
-		<input type="button" class="_Btn1" value="4" onclick="subIwmInput_addText('4');"><input type="button" class="_Btn1" value="5" onclick="subIwmInput_addText('5');"><input type="button" class="_Btn1" value="6" onclick="subIwmInput_addText('6');"><br>
-		<input type="button" class="_Btn1" value="1" onclick="subIwmInput_addText('1');"><input type="button" class="_Btn1" value="2" onclick="subIwmInput_addText('2');"><input type="button" class="_Btn1" value="3" onclick="subIwmInput_addText('3');"><br>
-		<input type="button" class="_Btn1" value="0" onclick="subIwmInput_addText('0');"><input type="button" class="_Btn1" value="." onclick="subIwmInput_addText('.');"><input type="button" class="_Btn2" value="Cls" onclick="subIwmInput_cls();"><br>
-		<input type="button" class="_Btn2" value="BS" onclick="subIwmInput_bs();"><input type="button" class="_Btn2" value="Del" onclick="subIwmInput_del();"><input type="button" class="_Btn3" value="OK" onclick="subIwmInputNum_close();">
-	</div>
-	-->
 	<div id="_InputBL">
-		<input type="text" id="_IBL1" onclick="subIwmInputBL_saveId(this.id);" onkeydown="subIwmInputBL_IBL(this.id);" style="width:37px;">度<input type="text" id="_IBL2" onclick="subIwmInputBL_saveId(this.id);" onkeydown="subIwmInputBL_IBL(this.id);" style="width:37px;">分<br>
-		<input type="text" id="_IBL3" onclick="subIwmInputBL_saveId(this.id);" onkeydown="subIwmInputBL_IBL(this.id);" style="width:96px;">秒<br>
+		<input type="text" id="_IBL1" onclick="subIwmInputBL_saveId(this.id);" onkeydown="subIwmInputBL_keydown(this.id, 0);" style="width:37px;">度<input type="text" id="_IBL2" onclick="subIwmInputBL_saveId(this.id);" onkeydown="subIwmInputBL_keydown(this.id, 0);" style="width:37px;">分<br>
+		<input type="text" id="_IBL3" onclick="subIwmInputBL_saveId(this.id);" onkeydown="subIwmInputBL_keydown(this.id, 8);" style="width:96px;">秒<br>
 		<input type="button" class="_Btn1" value="7" onclick="subIwmInput_addText('7');"><input type="button" class="_Btn1" value="8" onclick="subIwmInput_addText('8');"><input type="button" class="_Btn1" value="9" onclick="subIwmInput_addText('9');"><br>
 		<input type="button" class="_Btn1" value="4" onclick="subIwmInput_addText('4');"><input type="button" class="_Btn1" value="5" onclick="subIwmInput_addText('5');"><input type="button" class="_Btn1" value="6" onclick="subIwmInput_addText('6');"><br>
 		<input type="button" class="_Btn1" value="1" onclick="subIwmInput_addText('1');"><input type="button" class="_Btn1" value="2" onclick="subIwmInput_addText('2');"><input type="button" class="_Btn1" value="3" onclick="subIwmInput_addText('3');"><br>
@@ -1084,15 +1012,15 @@ function subAddTabCtrl(
 	// 地理院地図の設定
 	-------------------->
 	<div id="_divNaviCommander">
-		緯度：<input type="text" id="_NaviLat" onclick="subIwmInputBL_open(this.id);" onkeydown="subIwmInputBL_keydown(this.id);" placeholder="経度入力"/>
-		経度：<input type="text" id="_NaviLng" onclick="subIwmInputBL_open(this.id);" onkeydown="subIwmInputBL_keydown(this.id);" placeholder="緯度入力"/>
+		北緯：<input type="text" id="_NaviLat" onclick="subIwmInputBL_open(this.id);" onkeydown="subIwmInputBL_keydown(this.id, 8);" placeholder="緯度入力"/>
+		東経：<input type="text" id="_NaviLng" onclick="subIwmInputBL_open(this.id);" onkeydown="subIwmInputBL_keydown(this.id, 8);" placeholder="経度入力"/>
 		<!-- ズーム --><input type="hidden" id="_NaviZoom"/>
-		<input type="button" class="_btnNavi2" value="＋" onclick="_iwmZA2();"/>
+		<input type="button" class="_btnNavi1" value="＋" onclick="_iwmZA2();"/>
 		<!---------
 		// ヘルプ
 		---------->
 		<span style="float:right;margin:0 8px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindowOnOff('_SW01', 'subSW01(\'_SW01A\')');" style="font-weight:900;">？</font>
+			<font class="_simpleWindowCall" onclick="subSimpleWindowOnOff('_SW01','subSW01(\'_SW01A\')');" style="font-weight:900;">？</font>
 		</span>
 		<div id="_SW01" class="_simpleWindow" style="width:320px;">
 			<font class="_simpleWindowTitle">操作説明</font>
@@ -1118,7 +1046,7 @@ function subAddTabCtrl(
 		// Local URL
 		------------->
 		<span style="float:right;margin:0 8px;">
-			URL：<input type="text" id="_NaviURL" onchange="subUrlSelector();subMapSelector();"/>
+			URL：<input type="text" id="_NaviURL" onchange="subUrlSelector(this.value);subMapSelector();"/>
 		</span>
 	</div>
 	<div id="_divMap">
@@ -1128,8 +1056,8 @@ function subAddTabCtrl(
 
 		// _divNaviCommander 初期座標＠皇居
 		with(document){
-			getElementById("_NaviLat").value  = 35.68518697509636;
-			getElementById("_NaviLng").value  = 139.7522735595703;
+			getElementById("_NaviLat").value  = (35.68518697509636).toFixed(8);
+			getElementById("_NaviLng").value  = (139.7522735595703).toFixed(8);
 			getElementById("_NaviZoom").value = 5;
 		}
 		// URLからXYZ値を取得
@@ -1141,9 +1069,9 @@ function subAddTabCtrl(
 		else{
 			var aHash = hash.split("/");
 			with(document){
-				getElementById("_NaviZoom").value = aHash[0].substr(1);// 先頭の'#'より後
-				getElementById("_NaviLat").value  = aHash[1];
-				getElementById("_NaviLng").value  = aHash[2];
+				getElementById("_NaviZoom").value = aHash[0].substr(1); // 先頭の'#'より後
+				getElementById("_NaviLat").value  = parseFloat(aHash[1]).toFixed(8);
+				getElementById("_NaviLng").value  = parseFloat(aHash[2]).toFixed(8);
 			}
 		}
 
@@ -1151,25 +1079,26 @@ function subAddTabCtrl(
 		var $Map = L.map(
 			"_divMap",
 			{
-				center:[
+				center: [
 					document.getElementById("_NaviLat").value,
 					document.getElementById("_NaviLng").value
 				],
-				zoom:document.getElementById("_NaviZoom").value,
-				minZoom:5,  // 規定
-				maxZoom:18, // 規定
-				zoomControl:false, // Control.Zoom 非表示
-				doubleClickZoom:false // DblClick制御
+				zoom: document.getElementById("_NaviZoom").value,
+				minZoom: 5,  // 最小ズーム
+				maxZoom: 18, // 最大ズーム
+				zoomControl: false, // Control.Zoom 非表示
+				doubleClickZoom: false // DblClick制御
 			}
 		);
+
+		/*---------------
 		// スケール表示
-		L.control.scale(
-			{
-				metric:true,
-				imperial:false,
-				position:"bottomleft"
-			}
-		).addTo($Map);
+		---------------*/
+		L.control.scale({
+			metric: true,
+			imperial: false,
+			position: "bottomleft"
+		}).addTo($Map);
 
 		/*---------------------
 		// タイルの外郭を表示
@@ -1200,18 +1129,17 @@ function subAddTabCtrl(
 		//   (例) ["std", "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", 1.0, 18]
 		// http://maps.gsi.go.jp/development/ichiran.html
 		--------------------------------------------------------------------------------------*/
-		document.getElementById("_NaviURL").value = "./data/";
 		var $URL = null;
-		function subUrlSelector(){
-			$URL = document.getElementById("_NaviURL").value;
-			$URL = (
-				$URL ?
-				$URL.replace(/\/*$/, "/") :
-				"https://cyberjapandata.gsi.go.jp/xyz/"
-			);
-			document.getElementById("_NaviURL").value = $URL;
+
+		function subUrlSelector(
+			$changeUrl
+		){
+			url = $changeUrl;
+			url = url ? url.replace(/\/*$/, "/") : "https://cyberjapandata.gsi.go.jp/xyz/";
+			document.getElementById("_NaviURL").value = $URL = url;
+
 		}
-		subUrlSelector();
+		subUrlSelector("./data/");
 
 		/*---------------
 		// ラジオボタン
@@ -1221,7 +1149,7 @@ function subAddTabCtrl(
 // 20190410
 /*
 		var $radioButtonMap = [];
-			///$radioButtonMap.push(["blank", $URL + "blank/{z}/{x}/{y}.png", 0.9, 18]);
+			$radioButtonMap.push(["blank", $URL + "blank/{z}/{x}/{y}.png", 0.9, 18]);
 			$radioButtonMap.push(["なし", "", 0.0, 18]);
 
 		var a1 = [];
@@ -1233,10 +1161,10 @@ function subAddTabCtrl(
 			$radioButtonSelectMap[a1[0]] = L.tileLayer(
 				a1[1],
 				{
-					attribution:a1[0],
-					opacity:a1[2],
-					maxNativeZoom:a1[3],
-					maxZoom:18
+					attribution: a1[0],
+					opacity: a1[2],
+					maxNativeZoom: a1[3],
+					maxZoom: 18
 				}
 			);
 			a1 = null;
@@ -1248,6 +1176,7 @@ function subAddTabCtrl(
 		// チェックボックス可変
 		-----------------------*/
 		$LMapSelector = null;
+
 		function subMapSelector(){
 			var $checkBoxSelectMap = [];
 
@@ -1274,12 +1203,12 @@ function subAddTabCtrl(
 				$checkBoxSelectMap[a3[0]] = L.tileLayer(
 					a3[1],
 					{
-						attribution:a3[0],
-						opacity:a3[2],
-						maxNativeZoom:a3[3],
-						maxZoom:18
+						attribution: a3[0],
+						opacity: a3[2],
+						maxNativeZoom: a3[3],
+						maxZoom: 18
 					}
-				).addTo($Map);// 初期チェック入れる（迷子防止）
+				).addTo($Map);
 				a3 = null;
 			}
 			a2 = null;
@@ -1290,13 +1219,13 @@ function subAddTabCtrl(
 			// 地図選択メニュー
 			-------------------*/
 			if($LMapSelector){
-				$Map.removeControl($LMapSelector);// 前出を削除
+				$LMapSelector.removeFrom($Map); // 前出を削除
 			}
 			$LMapSelector = L.control.layers(
 				$radioButtonSelectMap,
 				$checkBoxSelectMap,
 				{
-					position:"topright"
+					position: "topright"
 				}
 			);
 			$LMapSelector.addTo($Map);
@@ -1389,8 +1318,8 @@ function subAddTabCtrl(
 					$Lng
 				],
 				{
-					icon:$BaseMarkerIcon,
-					draggable:true // ドラッグ許可
+					icon: $BaseMarkerIcon,
+					draggable: true // ドラッグ許可
 				}
 			).addTo($Map);
 
@@ -1419,22 +1348,22 @@ function subAddTabCtrl(
 				"contextmenu",
 				function(e){
 					// センタリング
-					var hLatLng = this.getLatLng();
+					var a1 = this.getLatLng();
 					subCenterMap(
-						hLatLng.lat,
-						hLatLng.lng
+						a1.lat,
+						a1.lng
 					);
 				}
 			);
-			// ドラッグ <= dragend
+			// ポップアップ情報更新 <= dragend
 			$BaseMarker.on(
 				"dragend",
 				function(e){
 					// URL／BL表示を変更
-					var hLatLng = this.getLatLng();
+					var a1 = this.getLatLng();
 					subChangeUrl(
-						hLatLng.lat,
-						hLatLng.lng,
+						a1.lat,
+						a1.lng,
 						"_NaviZoom"
 					);
 					// "_InputBL" を更新
