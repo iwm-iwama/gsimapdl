@@ -1,4 +1,4 @@
-<!-- Ver.20191223 'AC-130J' -->
+<!-- Ver.20200121 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -543,7 +543,6 @@ function subInitDisp(){
 		left   = obj1.left;
 		width  = (parseInt(obj1.width, 10) + 10) + "px";
 	}
-	obj0 = obj1 = obj2 = null;
 }
 
 /*-------------------------
@@ -578,22 +577,25 @@ function editToGtsv(
 	var rtn = "";
 
 	rtn += "<tiletype>" + CRLF;
-		var a1 = document.getElementById($tiletypeId).value.split("\n");
-		var i1 = 0;
-		var i2 = a1.length;
-		for(; i1 < i2; i1++){
-			var s1 = a1[i1].trim().substring(0, 1);
-			if(s1 != "" && s1 != "#"){
-				a2 = a1[i1].split("\t");
-				a2[0] = a2[0].trim();
+		for(var _s1 of document.getElementById($tiletypeId).value.trimEnd().split("\n")){
+			_s1 = _s1.trim();
+
+			if(_s1.length > 0 && _s1.substr(0, 2) != "//"){
+				var _a1 = _s1.split("\t");
+
+				_a1[0] = _a1[0].trim();
+
 				try{
-					a2[1] = a2[1].trim();
+					_a1[1] = _a1[1].trim();
+					if(_a1[1].length == 0){
+						throw null;
+					}
 				}
 				catch(e){
-					a2[1] = "png";
+					_a1[1] = "png";
 				}
-				rtn += a2.join("\t") + CRLF;
-				a2 = null;
+
+				rtn += _a1.join("\t") + CRLF;
 			}
 		}
 	rtn += "</tiletype>" + CRLF;
@@ -624,9 +626,9 @@ function editSave(
 	var fn = "sample.gtsv";
 
 	// MSIE?
-	if(window.navigator.msSaveBlob){ 
+	if(window.navigator.msSaveBlob){
 		window.navigator.msSaveBlob(blob, fn);
-		window.navigator.msSaveOrOpenBlob(blob, fn); 
+		window.navigator.msSaveOrOpenBlob(blob, fn);
 	}
 	else{
 		document.getElementById($hrefId).download = fn;
@@ -642,12 +644,12 @@ var $IwmInput_ctrlId = null;
 var $IwmInputBL_saveId = null;
 var $IwmInputZoom_value = null;
 
+// 環境に合わせて設定
 const $AryIwmInput = ["_InputBL"];
+
 function subIwmInput_init(){
-	var i1 = 0;
-	var i2 = $AryIwmInput.length;
-	for(; i1 < i2; i1++){
-		subIwmInput_close($AryIwmInput[i1]);
+	for(var _s1 of $AryIwmInput){
+		subIwmInput_close(_s1);
 	}
 }
 function subIwmInputZoomA_open(
@@ -696,7 +698,6 @@ function subIwmInputZoom_change(
 			obj2[i2].style.opacity = 0.6;
 		}
 	}
-	obj1 = obj2 = null;
 
 	subIwmInput_close("_InputZoomA");
 }
@@ -706,7 +707,6 @@ function subIwmInputBL_open(
 	var iId = "_InputBL";
 	if($IwmInput_ctrlId == $outputId){
 		subIwmInput_close(iId);
-		$IwmInput_ctrlId = null;
 		return;
 	}
 	$IwmInputBL_saveId = $outputId;
@@ -721,7 +721,6 @@ function subIwmInputBL_close(){
 		document.getElementById("_IBL2").value,
 		document.getElementById("_IBL3").value
 	);
-	$IwmInput_ctrlId = null;
 	subIwmInput_close("_InputBL");
 }
 function subIwmInputBL_saveId(
@@ -733,19 +732,23 @@ function subIwmInputBL_keydown(
 	$outputId,   // [id]
 	$decimalSize // 小数点桁数
 ){
-	///console.log($decimalSize);
 	if($decimalSize == undefined){
 		$decimalSize = 0;
 	}
 
+	// 他のコントロールに影響するので、
+	// 都度、document.onkeydown = function(evt){} で初期化すること。
 	document.onkeydown = function(evt){
-		///console.log(evt.keyCode);
+		/// console.log(evt.keyCode);
 		switch(evt.keyCode){
 			case(13): // [Enter]
 				var obj = document.getElementById($outputId);
-					var d1 = parseFloat(obj.value).toFixed($decimalSize);
+				var d1 = parseFloat(obj.value).toFixed($decimalSize);
+
+				if(isNaN(d1)){
+					return;
+				}
 				obj.value = d1;
-				obj = null;
 
 				if($IwmInput_ctrlId == $IwmInputBL_saveId){
 					_iwmIBL(d1);
@@ -791,7 +794,6 @@ function subIwmInput_open(
 			(rect.top + window.pageYOffset + obj.clientHeight + 4) :
 			$posY
 		);
-	obj = rect = null;
 
 	with(document.getElementById($inputId).style){
 		display = "";
@@ -811,46 +813,44 @@ function subIwmInput_close(
 		document.getElementById($outputId).style.display = "none";
 	}
 	catch(e){
-		///console.log(e);
+		/// console.log(e);
 	}
+	document.onkeydown = function(evt){} // 初期化
 }
 function subIwmInput_addText(
 	$str
 ){
 	var obj = document.getElementById($IwmInput_ctrlId);
-		var strBefore = obj.value;
-		var strBeforeLen = strBefore.length;
-		var iSelection = obj.selectionStart;
-		obj.value = strBefore.substr(0, iSelection) + $str + strBefore.substr(iSelection, strBeforeLen);
-		iSelection++;
-		obj.selectionStart = iSelection; // 再フォーカス
-	obj = null;
+	var strBefore = obj.value;
+	var strBeforeLen = strBefore.length;
+	var iSelection = obj.selectionStart;
+	obj.value = strBefore.substr(0, iSelection) + $str + strBefore.substr(iSelection, strBeforeLen);
+	iSelection++;
+	obj.selectionStart = iSelection; // 再フォーカス
 }
 function subIwmInput_cls(){
 	document.getElementById($IwmInput_ctrlId).value = "";
 }
 function subIwmInput_bs(){
 	var obj = document.getElementById($IwmInput_ctrlId);
-		var strBefore = obj.value;
-		var strBeforeLen = strBefore.length;
-		var iSelection = obj.selectionStart;
-		iSelection--;
-		if(iSelection >= 0){
-			obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
-			obj.selectionStart = iSelection; // 再フォーカス
-		}
-	obj = null;
+	var strBefore = obj.value;
+	var strBeforeLen = strBefore.length;
+	var iSelection = obj.selectionStart;
+	iSelection--;
+	if(iSelection >= 0){
+		obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
+		obj.selectionStart = iSelection; // 再フォーカス
+	}
 }
 function subIwmInput_del(){
 	var obj = document.getElementById($IwmInput_ctrlId);
-		var strBefore = obj.value;
-		var strBeforeLen = strBefore.length;
-		var iSelection = obj.selectionStart;
-		if(iSelection < strBeforeLen){
-			obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
-			obj.selectionStart = iSelection; // 再フォーカス
-		}
-	obj = null;
+	var strBefore = obj.value;
+	var strBeforeLen = strBefore.length;
+	var iSelection = obj.selectionStart;
+	if(iSelection < strBeforeLen){
+		obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
+		obj.selectionStart = iSelection; // 再フォーカス
+	}
 }
 
 /*-------------
@@ -921,18 +921,12 @@ function _iwmZB(
 	// センタリング
 	subCenterMap2();
 }
-const $AryIwmIBL = ["_IBL1", "_IBL2", "_IBL3"];
 function _iwmBL(){
-	var i1 = 0;
-	var i2 = $AryIwmIBL.length;
-	for(;i1 < i2 ; i1++){
-		if($AryIwmIBL[i1] == $IwmInput_ctrlId){
-			break;
+	for(var _s1 of ["_IBL1", "_IBL2", "_IBL3"]){
+		console.log(_s1, document.getElementById(_s1).value);
+		if(document.getElementById(_s1).value == ""){
+			return;
 		}
-	}
-	if(i1 == i2){
-		// "_InputBL" を更新
-		_iwmIBL($IwmInput_ctrlId);
 	}
 	subIwmInputBL_close();
 
@@ -1303,7 +1297,6 @@ function subAddTabCtrl(
 				// 文字ヌキ
 				obj.fillStyle = "#8888ff";
 				obj.fillText(tileText, 128, 128);
-			obj = null;
 		}
 
 		/*--------------------------------------------------------------------------------------
@@ -1340,7 +1333,6 @@ function subAddTabCtrl(
 					maxZoom: 18
 				}
 			);
-			a1 = null;
 		}
 		// 初期選択値
 		$radioButtonSelectMap[$radioButtonMap[0][0]].addTo($Map);
@@ -1353,50 +1345,44 @@ function subAddTabCtrl(
 			var $checkBoxSelectMap = [];
 
 			if(document.getElementById("_TA01").value == ""){
-				document.getElementById("_TA01").value = "# タイル種\t拡張子\n# [Tab]区切り\nblank\tpng\nstd\tpng\n";
+				document.getElementById("_TA01").value = "// タイル種\t拡張子\n// [Tab]区切り\nblank\tpng\nstd\tpng\n";
 			}
 
-			var a1 = document.getElementById("_TA01").value.split("\n");
-			var a2 = [];
-			var a3 = [];
+			var ary = [];
 
-			var i1 = 0;
-			var i2 = a1.length;
-			for(; i1 < i2; i1++){
-				var s1 = a1[i1].trim().substring(0, 1);
-				if(s1 != "" && s1 != "#"){
-					a3 = a1[i1].split("\t");
+			for(var _s1 of document.getElementById("_TA01").value.trimEnd().split("\n")){
+				_s1 = _s1.trim();
 
-					a3[0] = a3[0].trim();
+				if(_s1.length > 0 && _s1.substr(0, 2) != "//"){
+					var _a1 = _s1.split("\t");
+
+					_a1[0] = _a1[0].trim();
 
 					try{
-						a3[1] = a3[1].trim();
+						_a1[1] = _a1[1].trim();
+						if(_a1[1].length == 0){
+							throw null;
+						}
 					}
 					catch(e){
-						a3[1] = "png";
+						_a1[1] = "png";
 					}
-					a2.push([a3[0], $URL + a3[0] + "/{z}/{x}/{y}." + a3[1], 0.8, 18]);
-					a3 = null;
+
+					ary.push([_a1[0], $URL + _a1[0] + "/{z}/{x}/{y}." + _a1[1], 0.8, 18]);
 				}
 			}
-			a1 = null;
 
-			var i1 = 0;
-			var i2 = a2.length;
-			for(; i1 < i2; i1++){
-				a3 = a2[i1];
-				$checkBoxSelectMap[a3[0]] = L.tileLayer(
-					a3[1],
+			for(var _a1 of ary){
+				$checkBoxSelectMap[_a1[0]] = L.tileLayer(
+					_a1[1],
 					{
-						attribution: a3[0],
-						opacity: a3[2],
-						maxNativeZoom: a3[3],
+						attribution: _a1[0],
+						opacity: _a1[2],
+						maxNativeZoom: _a1[3],
 						maxZoom: 18
 					}
 				).addTo($Map);
-				a3 = null;
 			}
-			a2 = null;
 
 			$checkBoxSelectMap["タイル座標"] = $tileCoord;
 
@@ -1428,7 +1414,7 @@ function subAddTabCtrl(
 						$Map.removeLayer($checkBoxSelectMap[e.name]);
 						// 履歴すべてを非表示にする
 						for(key in $checkBoxSelectMap){
-							///console.log(key);
+							/// console.log(key);
 							$Map.removeLayer($checkBoxSelectMap[key]);
 						}
 					}
@@ -1700,9 +1686,10 @@ function subAddTabCtrl(
 								[$ArySelectMarkerEnd[0], $ArySelectMarkerBgn[1]],
 								$ArySelectMarkerEnd,
 								[$ArySelectMarkerBgn[0], $ArySelectMarkerEnd[1]]
-							]
-//x
-, {color: "#e54848"}
+							],
+							{
+								color: "#e54848"
+							}
 						).addTo($Map)
 					);
 					// [マーカー削除]ボタン表示
@@ -1736,7 +1723,6 @@ function subAddTabCtrl(
 
 					$ArySelectMarkerBgn = $ArySelectMarkerEnd = [];
 				}
-				objList = _addList = null;
 			}
 		);
 		$Map.on(

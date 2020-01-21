@@ -1,4 +1,4 @@
-<!-- Ver.20191225 'TR-1A' -->
+<!-- Ver.20200121 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -477,12 +477,12 @@ var $IwmInput_ctrlId = null;
 var $IwmInputBL_saveId = null;
 var $IwmInputZoom_value = null;
 
+// 環境に合わせて設定
 const $AryIwmInput = ["_InputBL"];
+
 function subIwmInput_init(){
-	var i1 = 0;
-	var i2 = $AryIwmInput.length;
-	for(; i1 < i2; i1++){
-		subIwmInput_close($AryIwmInput[i1]);
+	for(var _s1 of $AryIwmInput){
+		subIwmInput_close(_s1);
 	}
 }
 function subIwmInputZoomA_open(
@@ -531,7 +531,6 @@ function subIwmInputZoom_change(
 			obj2[i2].style.opacity = 0.6;
 		}
 	}
-	obj1 = obj2 = null;
 
 	subIwmInput_close("_InputZoomA");
 }
@@ -541,7 +540,6 @@ function subIwmInputBL_open(
 	var iId = "_InputBL";
 	if($IwmInput_ctrlId == $outputId){
 		subIwmInput_close(iId);
-		$IwmInput_ctrlId = null;
 		return;
 	}
 	$IwmInputBL_saveId = $outputId;
@@ -556,7 +554,6 @@ function subIwmInputBL_close(){
 		document.getElementById("_IBL2").value,
 		document.getElementById("_IBL3").value
 	);
-	$IwmInput_ctrlId = null;
 	subIwmInput_close("_InputBL");
 }
 function subIwmInputBL_saveId(
@@ -568,19 +565,23 @@ function subIwmInputBL_keydown(
 	$outputId,   // [id]
 	$decimalSize // 小数点桁数
 ){
-	///console.log($decimalSize);
 	if($decimalSize == undefined){
 		$decimalSize = 0;
 	}
 
+	// 他のコントロールに影響するので、
+	// 都度、document.onkeydown = function(evt){} で初期化すること。
 	document.onkeydown = function(evt){
-		///console.log(evt.keyCode);
+		/// console.log(evt.keyCode);
 		switch(evt.keyCode){
 			case(13): // [Enter]
 				var obj = document.getElementById($outputId);
-					var d1 = parseFloat(obj.value).toFixed($decimalSize);
+				var d1 = parseFloat(obj.value).toFixed($decimalSize);
+
+				if(isNaN(d1)){
+					return;
+				}
 				obj.value = d1;
-				obj = null;
 
 				if($IwmInput_ctrlId == $IwmInputBL_saveId){
 					_iwmIBL(d1);
@@ -626,7 +627,6 @@ function subIwmInput_open(
 			(rect.top + window.pageYOffset + obj.clientHeight + 4) :
 			$posY
 		);
-	obj = rect = null;
 
 	with(document.getElementById($inputId).style){
 		display = "";
@@ -646,46 +646,44 @@ function subIwmInput_close(
 		document.getElementById($outputId).style.display = "none";
 	}
 	catch(e){
-		///console.log(e);
+		/// console.log(e);
 	}
+	document.onkeydown = function(evt){} // 初期化
 }
 function subIwmInput_addText(
 	$str
 ){
 	var obj = document.getElementById($IwmInput_ctrlId);
-		var strBefore = obj.value;
-		var strBeforeLen = strBefore.length;
-		var iSelection = obj.selectionStart;
-		obj.value = strBefore.substr(0, iSelection) + $str + strBefore.substr(iSelection, strBeforeLen);
-		iSelection++;
-		obj.selectionStart = iSelection; // 再フォーカス
-	obj = null;
+	var strBefore = obj.value;
+	var strBeforeLen = strBefore.length;
+	var iSelection = obj.selectionStart;
+	obj.value = strBefore.substr(0, iSelection) + $str + strBefore.substr(iSelection, strBeforeLen);
+	iSelection++;
+	obj.selectionStart = iSelection; // 再フォーカス
 }
 function subIwmInput_cls(){
 	document.getElementById($IwmInput_ctrlId).value = "";
 }
 function subIwmInput_bs(){
 	var obj = document.getElementById($IwmInput_ctrlId);
-		var strBefore = obj.value;
-		var strBeforeLen = strBefore.length;
-		var iSelection = obj.selectionStart;
-		iSelection--;
-		if(iSelection >= 0){
-			obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
-			obj.selectionStart = iSelection; // 再フォーカス
-		}
-	obj = null;
+	var strBefore = obj.value;
+	var strBeforeLen = strBefore.length;
+	var iSelection = obj.selectionStart;
+	iSelection--;
+	if(iSelection >= 0){
+		obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
+		obj.selectionStart = iSelection; // 再フォーカス
+	}
 }
 function subIwmInput_del(){
 	var obj = document.getElementById($IwmInput_ctrlId);
-		var strBefore = obj.value;
-		var strBeforeLen = strBefore.length;
-		var iSelection = obj.selectionStart;
-		if(iSelection < strBeforeLen){
-			obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
-			obj.selectionStart = iSelection; // 再フォーカス
-		}
-	obj = null;
+	var strBefore = obj.value;
+	var strBeforeLen = strBefore.length;
+	var iSelection = obj.selectionStart;
+	if(iSelection < strBeforeLen){
+		obj.value = strBefore.substr(0, iSelection) + strBefore.substr((iSelection + 1), strBeforeLen);
+		obj.selectionStart = iSelection; // 再フォーカス
+	}
 }
 
 /*-------------
@@ -756,18 +754,12 @@ function _iwmZB(
 	// センタリング
 	subCenterMap2();
 }
-const $AryIwmIBL = ["_IBL1", "_IBL2", "_IBL3"];
 function _iwmBL(){
-	var i1 = 0;
-	var i2 = $AryIwmIBL.length;
-	for(;i1 < i2 ; i1++){
-		if($AryIwmIBL[i1] == $IwmInput_ctrlId){
-			break;
+	for(var _s1 of ["_IBL1", "_IBL2", "_IBL3"]){
+		console.log(_s1, document.getElementById(_s1).value);
+		if(document.getElementById(_s1).value == ""){
+			return;
 		}
-	}
-	if(i1 == i2){
-		// "_InputBL" を更新
-		_iwmIBL($IwmInput_ctrlId);
 	}
 	subIwmInputBL_close();
 
@@ -855,14 +847,11 @@ function rtnGtsvTagData(
 
 	var bFlg = false;
 
-	var a1 = $sText.trim().split("\n");
-	var i1 = 0;
-	var i2 = a1.length;
-	for(; i1 < i2; i1++){
-		var _s1 = a1[i1].trim();
+	for(var _s1 of $sText.trim().split("\n")){
+		_s1 = _s1.trim();
 
 		// 空白行／コメント行を無視
-		if (_s1.length == 0 || _s1.substring(0, 2) == "//"){
+		if (_s1.length == 0 || _s1.substr(0, 2) == "//"){
 			continue;
 		}
 		// タグの始まりか？
@@ -878,7 +867,7 @@ function rtnGtsvTagData(
 			rtn.push(_s1);
 		}
 	}
-	///console.log(rtn);
+	/// console.log(rtn);
 
 	return rtn;
 }
@@ -1120,7 +1109,6 @@ function subAddTabCtrl(
 				// 文字ヌキ
 				obj.fillStyle = "#8888ff";
 				obj.fillText(tileText, 128, 128);
-			obj = null;
 		}
 
 		/*--------------------------------------------------------------------------------------
@@ -1167,7 +1155,6 @@ function subAddTabCtrl(
 					maxZoom: 18
 				}
 			);
-			a1 = null;
 		}
 		// 初期選択値
 		$radioButtonSelectMap[$radioButtonMap[0][0]].addTo($Map);
@@ -1180,38 +1167,27 @@ function subAddTabCtrl(
 		function subMapSelector(){
 			var $checkBoxSelectMap = [];
 
-			var a1 = rtnGtsvTagData(document.getElementById("_TA03").value, "tiletype");
-			var a2 = [];
-			var a3 = [];
+			var ary = [];
 
-			var i1 = 0;
-			var i2 = a1.length;
-			for(; i1 < i2; i1++){
-				a3 = a1[i1].split("\t");
-				if(a3.length < 2){
-					a3[1] = "png";
+			for(var _a1 of rtnGtsvTagData(document.getElementById("_TA03").value, "tiletype")){
+				var _a2 = _a1.split("\t");
+				if(_a2.length < 2){
+					_a2[1] = "png";
 				}
-				a2.push([a3[0], $URL + a3[0] + "/{z}/{x}/{y}." + a3[1], 0.7, 18]);
-				a3 = null;
+				ary.push([_a2[0], $URL + _a2[0] + "/{z}/{x}/{y}." + _a2[1], 0.8, 18]);
 			}
-			a1 = null;
 
-			var i1 = 0;
-			var i2 = a2.length;
-			for(; i1 < i2; i1++){
-				a3 = a2[i1];
-				$checkBoxSelectMap[a3[0]] = L.tileLayer(
-					a3[1],
+			for(var _a1 of ary){
+				$checkBoxSelectMap[_a1[0]] = L.tileLayer(
+					_a1[1],
 					{
-						attribution: a3[0],
-						opacity: a3[2],
-						maxNativeZoom: a3[3],
+						attribution: _a1[0],
+						opacity: _a1[2],
+						maxNativeZoom: _a1[3],
 						maxZoom: 18
 					}
 				).addTo($Map);
-				a3 = null;
 			}
-			a2 = null;
 
 			$checkBoxSelectMap["タイル座標"] = $tileCoord;
 
@@ -1243,7 +1219,7 @@ function subAddTabCtrl(
 						$Map.removeLayer($checkBoxSelectMap[e.name]);
 						// 履歴すべてを非表示にする
 						for(key in $checkBoxSelectMap){
-							///console.log(key);
+							/// console.log(key);
 							$Map.removeLayer($checkBoxSelectMap[key]);
 						}
 					}
