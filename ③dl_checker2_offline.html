@@ -908,16 +908,6 @@ function subAddTabCtrl(
 				).addTo($Map);
 			}
 
-			$checkBoxSelectMap["UTMグリッド"] = L.tileLayer(
-				"http://{s}.tile.stamen.com/utm/{z}/{x}/{y}.png",
-				{
-					attribution: "Map tiles by <a href='http://stamen.com' target='_blank'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0' target='_blank'>CC BY 3.0</a>.",
-					opacity: 1.0,
-					maxNativeZoom: 18,
-					maxZoom: 18
-				}
-			);
-
 			$checkBoxSelectMap["タイル座標"] = $tileCoord;
 
 			/*-------------------
