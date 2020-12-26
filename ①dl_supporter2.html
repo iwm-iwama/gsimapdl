@@ -1,18 +1,18 @@
-<!-- Ver.20200125 'AC-130J' -->
+<!-- Ver.20201226 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Script-Type" content="text/javascript"/>
 <title>地理院タイル・ダウンローダー設定ファイル作成</title>
 
 <!--------------------------------------------------------------------
 // leaflet 0.7.x
 --------------------------------------------------------------------->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css"/>
 
 <!--------------------------------------------------------------------
 // MiniMap
@@ -21,15 +21,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
 
 <!--------------------------------------------------------------------
-// Awesome-markers
+// leaflet.awesome-markers.min
 --------------------------------------------------------------------->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
 
 <!--------------------------------------------------------------------
-// font-awesome
+// fork-awesome
 --------------------------------------------------------------------->
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous"/>
 
 <!--------------------------------------------------------------------
 // CSS
@@ -85,9 +85,9 @@ ol
 ._titleMain
 {
 	color:#000;
-	font-size:14px;
-	font-weight:bold;
-	margin:0;
+	font-size:16px;
+	font-weight:900;
+	margin:2px;
 	padding:0;
 }
 ._titleSub
@@ -158,9 +158,11 @@ ol
 	border:0;
 	color:#fff;
 	font-size:12px;
+	line-height:18px;/* WebKitの余白に対応するため以下18pxで統一 */
 	margin:0;
 	padding:0 8px;
 	text-decoration:none;
+	vertical-align:middle;
 }
 ._btnNavi1:hover,
 ._btnNavi2:hover,
@@ -175,7 +177,7 @@ ol
 }
 ._btnNavi1:hover
 {
-	background:#6dacff !important;
+	background:#6dacff;
 }
 ._btnNavi2
 {
@@ -183,7 +185,7 @@ ol
 }
 ._btnNavi2:hover
 {
-	background:#ed4e68 !important;
+	background:#ed4e68;
 }
 ._btnNavi3
 {
@@ -191,7 +193,7 @@ ol
 }
 ._btnNavi3:hover
 {
-	background:#3dce7c !important;
+	background:#3dce7c;
 }
 ._btnNavi4
 {
@@ -199,7 +201,7 @@ ol
 }
 ._btnNavi4:hover
 {
-	background:#955aa6 !important;
+	background:#955aa6;
 }
 /*---------------
 // 上部メニュー
@@ -210,8 +212,7 @@ ol
 	border:0;
 	border-radius:8px 8px 0 0;
 	color:#fff;
-	font-size:14px;
-	line-height:18px;
+	font-size:13px;
 	left:0;
 	margin:0;
 	padding:2px 4px 2px 10px;
@@ -222,13 +223,12 @@ ol
 }
 #_divMap
 {
-	border:2px solid #505050;
 	cursor:crosshair;
 	left:0;
 	position:absolute;
-	top:24px;
 	/* 動的に変更 */
 	height:0;
+	top:0;
 	width:0;
 }
 #_InputZoomA,
@@ -240,7 +240,7 @@ ol
 	margin:0;
 	padding:2px;
 	position:absolute;
-	z-index:2000;
+	z-index:1500;
 }
 #_InputZoomA
 {
@@ -250,7 +250,7 @@ ol
 {
 	/* 以下、必要に応じて修正 */
 	left:320px;
-	top:35px;
+	top:40px;
 }
 /* ↓OverLap */
 #_InputZoomA
@@ -327,19 +327,26 @@ ol
 {
 	border:0;
 	font-size:12px;
+	height:18px;
 	ime-mode:inactive;
+	line-height:18px;
 	margin:0;
-	padding:0 3px;
+	padding:0 2px;
+	vertical-align:middle;
+}
+#_NaviZoom
+{
+	width:0;
 }
 #_NaviLat,
 #_NaviLng
 {
-	width:100px;
+	width:90px;
 }
 #_NaviZoom:hover,
 #_NaviZoom:focus,
 {
-	background:#ff5 !important;
+	background:#ff5;
 }
 /*----------------
 // Simple Window
@@ -348,8 +355,7 @@ ol
 {
 	border:solid 1px #fff;
 	color:#fff;
-	font-size:13px;
-	font-weight:500;
+	font-size:12px;
 	float:right;
 	margin:0;
 	padding:0 4px;
@@ -399,11 +405,10 @@ ol
 	background:#fff;
 	border:0;
 	color:#000;
-	font-size:13px;
-	line-height:14px;
+	font-size:12px;
 	margin:1px;
 	overflow:auto;
-	padding:16px 0;
+	padding:0;
 	text-align:left;
 }
 /*---------------
@@ -418,7 +423,7 @@ ol
 	margin:0;
 	overflow:auto;
 	padding:2px 6px;
-	resize: none;
+	resize:none;
 }
 ._editTextBox:focus,
 ._editTextBox:hover
@@ -427,12 +432,13 @@ ol
 }
 </style>
 <script>
-// 左ナビ幅
-var $MapNaviL = 290;
-
 /*-----------------------
 // フレームサイズを調整
 -----------------------*/
+var $MapNaviL = 290;
+var $NaviCommanderPaddingLR = 14;
+var $MapTop = 24;
+
 function subInitDisp(){
 	var mapH = window.innerHeight;
 	var mapW = window.innerWidth;
@@ -458,14 +464,14 @@ function subInitDisp(){
 	var obj1 = document.getElementById("_divNaviCommander").style;
 	with(obj1){
 		left  = ($MapNaviL + 20) + "px";
-		width = (mapW - 34 - $MapNaviL) + "px";
+		width = (mapW - 20 - $NaviCommanderPaddingLR - $MapNaviL) + "px";
 	}
 	// _divMap
-	var obj2 = document.getElementById("_divMap").style;
-	with(obj2){
-		height = (mapH - 28) + "px";
+	with(document.getElementById("_divMap").style){
+		height = (mapH - $MapTop) + "px";
 		left   = obj1.left;
-		width  = (parseInt(obj1.width, 10) + 10) + "px";
+		top    = $MapTop + "px";
+		width  = (parseInt(obj1.width, 10) + $NaviCommanderPaddingLR) + "px";
 	}
 }
 
@@ -622,13 +628,13 @@ function subIwmInput_Open(
 	var obj = document.getElementById($outputId);
 	var rect = obj.getBoundingClientRect();
 
-	var posX = ($posX == undefined || $posX == null ? rect.left + window.pageXOffset : $posX);
-	var posY = ($posY == undefined || $posY == null ? rect.top + window.pageYOffset + obj.clientHeight + 4 : $posY);
+	var _posX = ($posX == undefined || $posX == null ? rect.left + window.pageXOffset : $posX);
+	var _posY = ($posY == undefined || $posY == null ? rect.top + window.pageYOffset + obj.clientHeight + 4 : $posY);
 
 	with(document.getElementById($inputId).style){
 		display = "";
-		top  = posY + "px";
-		left = posX + "px";
+		left = _posX + "px";
+		top  = _posY + "px";
 	}
 
 	// 設定ミリ秒後に自動終了
@@ -876,11 +882,9 @@ function subAddTabCtrl(
 	// 画面左側（ナビゲータ）を設定
 	-------------------------------->
 	<div id="_divNavi">
-		<div class="_titleMain">
-			<font style="color:#fa0;font-size:30px;vertical-align:middle;">■</font>地理院タイルDL支援2020
-		</div>
+		<div class="_titleMain">地理院タイルDL支援2020</div>
 		<div class="_titleSub">
-			地理院タイルダウンローダー(*)の設定ファイルを作成するサイトです。<br><div style="text-align:center;color:#f30">(*) iwm_gsimapdl-cli.exe</div>
+			地理院タイルダウンローダー(*)の設定ファイルを作成するサイトです。<br><div style="text-align:center;color:#f30">(*) iwm_gsimapdl-cli_20200418.exe</div>
 		</div>
 		<div class="_vArrow">▼</div>
 		<div class="_expBox">
@@ -923,7 +927,7 @@ function subAddTabCtrl(
 		ズームレベル<br>
 		<input type="button" class="_ZA" value="5" onclick="_iwmZA('5');"><input type="button" class="_ZA" value="6" onclick="_iwmZA('6');"><input type="button" class="_ZA" value="7" onclick="_iwmZA('7');"><input type="button" class="_ZA" value="8" onclick="_iwmZA('8');"><input type="button" class="_ZA" value="9" onclick="_iwmZA('9');"><br>
 		<input type="button" class="_ZA" value="10" onclick="_iwmZA('10');"><input type="button" class="_ZA" value="11" onclick="_iwmZA('11');"><input type="button" class="_ZA" value="12" onclick="_iwmZA('12');"><input type="button" class="_ZA" value="13" onclick="_iwmZA('13');"><input type="button" class="_ZA" value="14" onclick="_iwmZA('14');"><br>
-		<input type="button" class="_ZA" value="15" onclick="_iwmZA('15');"><input type="button" class="_ZA" value="16" onclick="_iwmZA('16');"><input type="button" class="_ZA" value="17" onclick="_iwmZA('17');"><input type="button" class="_ZA" value="18" onclick="_iwmZA('18');"><input type="button" class="_Btn3" value="＋" onclick="_iwmZA2();">
+		<input type="button" class="_ZA" value="15" onclick="_iwmZA('15');"><input type="button" class="_ZA" value="16" onclick="_iwmZA('16');"><input type="button" class="_ZA" value="17" onclick="_iwmZA('17');"><input type="button" class="_ZA" value="18" onclick="_iwmZA('18');"><div class="_btnNavi2" style="display:inline-block;_display:inline;font-size:14px;height:26px;line-height:26px;margin:2px;padding:0;vertical-align:top;width:26px;" onclick="_iwmZA2();"><i class="fa fa-map-marker"></i></div>
 	</div>
 	<div id="_InputZoomB">
 		<input type="button" class="_ZB" value="18" onclick="_iwmZB('18');"><br>
@@ -945,21 +949,21 @@ function subAddTabCtrl(
 	// 地理院地図の設定
 	-------------------->
 	<div id="_divNaviCommander">
-		北緯：<input readonly type="text" id="_NaviLat"/>
-		東経：<input readonly type="text" id="_NaviLng"/>
+		北緯&nbsp;<input readonly type="text" id="_NaviLat"/>
+		東経&nbsp;<input readonly type="text" id="_NaviLng"/>
 		<!-- ズーム --><input type="hidden" id="_NaviZoom"/>
-		<input type="button" class="_btnNavi1" value="＋" onclick="_iwmZA2();"/>
+		<div class="_btnNavi1" style="display:inline-block;_display:inline;font-size:14px;line-height:16px;" onclick="_iwmZA2();"><i class="fa fa-map-marker"></i></div>
 		<input type="button" id="_btnMarker" class="_btnNavi2" value="マーカー消去" onclick="subMyObj_Remove($ArySelectedLayer);"/>
 		<!---------
 		// ヘルプ
 		---------->
-		<span style="float:right;margin:0 8px;">
+		<span style="float:right;margin:0 8px 0 4px;">
 			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW01','subSimpleWindow_HDoc01(\'_SW01A\')');" style="font-weight:900;">？</font>
 		</span>
 		<div id="_SW01" class="_simpleWindow" style="width:320px;">
 			<font class="_simpleWindowTitle">操作説明</font>
 			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW01');">×</font>
-			<div id="_SW01A" class="_simpleWindowOutput" style="max-height:480px;"></div>
+			<div id="_SW01A" class="_simpleWindowOutput" style="max-height:500px;padding:0 0 12px 0;"></div>
 		</div>
 		<!-----------------
 		// 追加タイル編集
@@ -971,12 +975,12 @@ function subAddTabCtrl(
 			<font class="_simpleWindowTitle">追加タイル編集／[Tab]区切り</font>
 			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW02');">×</font>
 			<br>
-			<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:380px;" onchange="subMapSelector();"></textarea>
+			<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:381px;" onchange="subMapSelector();"></textarea>
 			<script>
 				document.getElementById("_TA01").onkeydown = function(e){subAddTabCtrl(e, this);}
 			</script>
-			<div style="margin:10px 0;">
-				<a class="_btnNavi3" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank" style="font-size:14px;">地理院タイル一覧⇒</a>
+			<div style="margin:2px 0 8px 0;text-align:center;">
+				<a class="_btnNavi3" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank" style="font-size:12px;padding:2px 8px;">地理院タイル一覧⇒</a>
 			</div>
 		</div>
 	</div>
@@ -1010,12 +1014,12 @@ function subAddTabCtrl(
 		var $Map = L.map(
 			"_divMap",
 			{
-				center: [document.getElementById("_NaviLat").value, document.getElementById("_NaviLng").value],
-				zoom: document.getElementById("_NaviZoom").value,
-				minZoom: 5,  // 最小ズーム
-				maxZoom: 18, // 最大ズーム
-				zoomControl: false, // Control.Zoom 非表示
-				doubleClickZoom: false // DblClick制御
+				center:[document.getElementById("_NaviLat").value, document.getElementById("_NaviLng").value],
+				zoom:document.getElementById("_NaviZoom").value,
+				minZoom:5,  // 最小ズーム
+				maxZoom:18, // 最大ズーム
+				zoomControl:false, // Control.Zoom 非表示
+				doubleClickZoom:false // DblClick制御
 			}
 		);
 
@@ -1023,9 +1027,9 @@ function subAddTabCtrl(
 		// スケール表示
 		---------------*/
 		L.control.scale({
-			metric: true,
-			imperial: false,
-			position: "bottomleft"
+			metric:true,
+			imperial:false,
+			position:"bottomleft"
 		}).addTo($Map);
 
 		/*---------------------
@@ -1104,10 +1108,10 @@ function subAddTabCtrl(
 				$checkBoxSelectMap[_a1[0]] = L.tileLayer(
 					_a1[1],
 					{
-						attribution: _a1[0],
-						opacity: _a1[2],
-						maxNativeZoom: _a1[3],
-						maxZoom: 18
+						attribution:_a1[0],
+						opacity:_a1[2],
+						maxNativeZoom:_a1[3],
+						maxZoom:18
 					}
 				).addTo($Map);
 			}
@@ -1115,10 +1119,10 @@ function subAddTabCtrl(
 			$checkBoxSelectMap["UTMグリッド"] = L.tileLayer(
 				"http://{s}.tile.stamen.com/utm/{z}/{x}/{y}.png",
 				{
-					attribution: "Map tiles by <a href='http://stamen.com' target='_blank'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0' target='_blank'>CC BY 3.0</a>.",
-					opacity: 1.0,
-					maxNativeZoom: 18,
-					maxZoom: 18
+					attribution:"Map tiles by <a href='http://stamen.com' target='_blank'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0' target='_blank'>CC BY 3.0</a>.",
+					opacity:1.0,
+					maxNativeZoom:18,
+					maxZoom:18
 				}
 			);
 
@@ -1134,7 +1138,7 @@ function subAddTabCtrl(
 				$radioButtonSelectMap,
 				$checkBoxSelectMap,
 				{
-					position: "topright"
+					position:"topright"
 				}
 			);
 			$LMapSelector.addTo($Map);
@@ -1155,18 +1159,18 @@ function subAddTabCtrl(
 		// 座標マーカー
 		var $BaseMarkerIcon = L.AwesomeMarkers.icon(
 			{
-				icon: "home",
-				prefix: "fa",
-				markerColor: "darkblue",
-				spin: false
+				icon:"home",
+				prefix:"fa",
+				markerColor:"darkblue",
+				spin:false
 			}
 		);
 		var $AryLocalMarkerIcon = L.AwesomeMarkers.icon(
 			{
-				icon: "cog",
-				prefix: "fa",
-				markerColor: "red",
-				spin: true
+				icon:"cog",
+				prefix:"fa",
+				markerColor:"red",
+				spin:true
 			}
 		);
 		/*---------------
@@ -1221,8 +1225,8 @@ function subAddTabCtrl(
 			$BaseMarker = L.marker(
 				[$Lat, $Lng],
 				{
-					icon: $BaseMarkerIcon,
-					draggable: true // ドラッグ許可
+					icon:$BaseMarkerIcon,
+					draggable:true // ドラッグ許可
 				}
 			).addTo($Map);
 
@@ -1276,14 +1280,14 @@ function subAddTabCtrl(
 		var miniMapLayer = new L.TileLayer(
 			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
 			{
-				minZoom: 3,
-				maxZoom: 15
+				minZoom:3,
+				maxZoom:15
 			}
 		);
 		new L.Control.MiniMap(
 			miniMapLayer,
 			{
-				toggleDisplay: true
+				toggleDisplay:true
 			}
 		).addTo($Map);
 
@@ -1322,8 +1326,8 @@ function subAddTabCtrl(
 								hLatLng.lng
 							],
 							{
-								icon: $AryLocalMarkerIcon,
-								draggable: "true"
+								icon:$AryLocalMarkerIcon,
+								draggable:"true"
 							}
 						).addTo($Map)
 					);
@@ -1394,7 +1398,7 @@ function subAddTabCtrl(
 								[$ArySelectMarkerBgn[0], $ArySelectMarkerEnd[1]]
 							],
 							{
-								color: "#e54848"
+								color:"#e54848"
 							}
 						).addTo($Map)
 					);
@@ -1406,7 +1410,7 @@ function subAddTabCtrl(
 					var thisZoom = $Map.getZoom();
 
 					if(thisZoom < 10){
-						_addList += ("\# Z" + thisZoom + ": " + "選択タイル数に注意!!\n");
+						_addList += ("\# Z" + thisZoom + "：" + "選択タイル数に注意!!\n");
 					}
 					var hTileMinXy = rtnHashConvTileXY(
 						$ArySelectMarkerBgn,
@@ -1451,34 +1455,34 @@ function subAddTabCtrl(
 ---------------------->
 <textarea id="_HDoc01" style="display:none;">
 <style>
-._fs{color:#f00;}
+._div_head{background:#ffc;color:#000;margin:8px 4px 4px 4px;padding:0 8px;font-weight:600;}
 ._ol, ._ul{margin:0;padding:0;}
-._li1, ._li2{padding:1px;}
-._li1{margin:0 0 0 32px;}
-._li2{margin:0;}
-._ol ._li1{padding:6px 0 0 0;}
+._li1, ._li2{padding:0 0 2px 0;}
+._li1{margin:0 0 0 24px;}
+._li2{margin:0 0 0 8px;}
+._font_size22px{font-size:22px;}
+._font_color1{color:#3d7cce;}
+._font_color2{color:#bd1e38;}
 </style>
-<span class="_fs">【表示するタイルを指定する】</span>
+<div class="_div_head">表示するタイルを指定する</div>
  <ul class="_ul">
   <li class="_li1">[追加タイル編集]ボタンを押し、タイル種／拡張子を指定する。</li>
  </ul>
-<br>
-<span class="_fs">【地図上でのマウス操作】</span>
+<div class="_div_head">地図上でのマウス操作</div>
  <ul class="_ul">
-  <li class="_li1">ダブルクリック：青マーカー表示</li>
-  <li class="_li1">右クリック：赤マーカー追加</li>
+  <li class="_li1">ダブルクリック：<font class="_font_color1">青マーカー<i class="fa fa-map-marker _font_size22px"></i></font>&nbsp;移動</li>
+  <li class="_li1">右クリック：<font class="_font_color2">赤マーカー<i class="fa fa-map-marker _font_size22px"></i></font>&nbsp;追加</li>
  </ul>
-<br>
-<span class="_fs">【マーカー上でのマウス操作】</span>
+<div class="_div_head">マーカー上でのマウス操作</div>
  <ol class="_ol">
-  <li class="_li1">青マーカー
+  <li class="_li1"><font class="_font_color1">青マーカー<i class="fa fa-map-marker _font_size22px"></i></font>
    <ul class="_ul">
     <li class="_li2">左クリック：ズームレベル補完表示</li>
     <li class="_li2">右クリック：地図の中心に移動</li>
     <li class="_li2">ドラッグ：移動</li>
    </ul>
   </li>
-  <li class="_li1">赤マーカー
+  <li class="_li1"><font class="_font_color2">赤マーカー<i class="fa fa-map-marker _font_size22px"></i></font>
    <ul class="_ul">
     <li class="_li2">左クリック：何もしない</li>
     <li class="_li2">右クリック：消去</li>
