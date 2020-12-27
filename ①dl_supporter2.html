@@ -1,4 +1,4 @@
-<!-- Ver.20201226 'AC-130J' -->
+<!-- Ver.20201227 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -9,10 +9,10 @@
 <title>地理院タイル・ダウンローダー設定ファイル作成</title>
 
 <!--------------------------------------------------------------------
-// leaflet 0.7.x
+// leaflet
 --------------------------------------------------------------------->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
 <!--------------------------------------------------------------------
 // MiniMap
@@ -84,18 +84,16 @@ ol
 }
 ._titleMain
 {
-	color:#000;
+	color:#383838;
 	font-size:16px;
 	font-weight:900;
-	margin:2px;
+	margin:0 2px;
 	padding:0;
 }
 ._titleSub
 {
 	background:#fff;
 	border:1px solid #3d7cce;
-	border-bottom:2px solid #3d7cce;
-	border-top:2px solid #3d7cce;
 	color:#000;
 	font-size:13px;
 	margin:0;
@@ -108,7 +106,7 @@ ol
 	border-radius:0 0 8px 8px;
 	font-size:12px;
 	margin:0;
-	padding:0 10px 10px 10px;
+	padding:0 10px 6px 10px;
 }
 ._expBoxTitle
 {
@@ -1032,27 +1030,30 @@ function subAddTabCtrl(
 			position:"bottomleft"
 		}).addTo($Map);
 
-		/*---------------------
-		// タイルの外郭を表示
-		---------------------*/
-		var $tileCoord = L.tileLayer.canvas();
-		$tileCoord.drawTile = function(canvas, tilePoint, zoom){
-			var tileText = zoom + "-" + tilePoint.x + "-" + tilePoint.y;
-			var obj = canvas.getContext("2d");
+		/*-------------
+		// タイル座標
+		-------------*/
+		var $TileCoord = new L.GridLayer();
+		$TileCoord.createTile = function(coords){
+			var tile = L.DomUtil.create("canvas", "leaflet-tile");
+				tile.width = tile.height = 256;
+			var tileText = coords.z + "-" + coords.x + "-" + coords.y;
+			var ctx = tile.getContext("2d");
 				// 枠線
-				obj.lineWidth = 1;
-				obj.strokeStyle = "#000";
-				obj.strokeRect(0, 0, 255, 255);
+				ctx.lineWidth = 1;
+				ctx.strokeStyle = "#000";
+				ctx.strokeRect(0, 0, 255, 255);
 				// 文字
-				obj.font = "24px Arial";
-				obj.textAlign = "center";
-				obj.lineWidth = 6.0;
-				obj.strokeStyle = "#fff";
-				obj.strokeText(tileText, 128, 128);
+				ctx.font = "24px Arial";
+				ctx.textAlign = "center";
+				ctx.lineWidth = 6.0;
+				ctx.strokeStyle = "#fff";
+				ctx.strokeText(tileText, 128, 128);
 				// 文字ヌキ
-				obj.fillStyle = "#8888ff";
-				obj.fillText(tileText, 128, 128);
-		}
+				ctx.fillStyle = "#88f";
+				ctx.fillText(tileText, 128, 128);
+			return tile;
+		};
 
 		/*--------------------------------------------------------------------------------------
 		// メニュー等で使用
@@ -1126,7 +1127,7 @@ function subAddTabCtrl(
 				}
 			);
 
-			$checkBoxSelectMap["タイル座標"] = $tileCoord;
+			$checkBoxSelectMap["タイル座標"] = $TileCoord;
 
 			/*-------------------
 			// 地図選択メニュー
