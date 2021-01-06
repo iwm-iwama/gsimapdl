@@ -1,4 +1,4 @@
-<!-- Ver.20201227 'TR-1A' -->
+<!-- Ver.20210106 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -298,7 +298,7 @@ option
 	width:120px;
 }
 #_NaviZoom:hover,
-#_NaviZoom:focus,
+#_NaviZoom:focus
 {
 	background:#ff5;
 }
@@ -530,7 +530,13 @@ function _iwmCU(){
 }
 // センタリング
 function _iwmCM(){
-	subCenterMap1("_NaviLat", "_NaviLng");
+	$Map.setView(
+		[
+			document.getElementById("_NaviLat").value,
+			document.getElementById("_NaviLng").value
+		],
+		document.getElementById("_NaviZoom").value
+	);
 }
 function _iwmZA(
 	$str
@@ -556,7 +562,10 @@ function _iwmZB(
 	// URL／BL表示を変更
 	_iwmCU();
 	// センタリング
-	_iwmCM();
+	$Map.setView(
+		$Map.getCenter(),
+		document.getElementById("_NaviZoom").value
+	);
 }
 
 /*----------------
@@ -851,7 +860,7 @@ function subAddTabCtrl(
 				zoom:document.getElementById("_NaviZoom").value,
 				minZoom:5,  // 最小ズーム
 				maxZoom:18, // 最大ズーム
-				zoomControl:false, // Control.Zoom 非表示
+				zoomControl:false,    // Control.Zoom 非表示
 				doubleClickZoom:false // DblClick制御
 			}
 		);
@@ -859,11 +868,13 @@ function subAddTabCtrl(
 		/*---------------
 		// スケール表示
 		---------------*/
-		L.control.scale({
-			metric:true,
-			imperial:false,
-			position:"bottomleft"
-		}).addTo($Map);
+		L.control.scale(
+			{
+				metric:true,
+				imperial:false,
+				position:"bottomleft"
+			}
+		).addTo($Map);
 
 		/*-------------
 		// タイル座標
@@ -992,24 +1003,7 @@ function subAddTabCtrl(
 				spin:false
 			}
 		);
-		/*---------------
-		// センタリング
-		---------------*/
-		function subCenterMap1(
-			$Lat,
-			$Lng
-		){
-			if(isNaN($Lat)){
-				$Lat = document.getElementById($Lat).value;
-			}
-			if(isNaN($Lng)){
-				$Lng = document.getElementById($Lng).value;
-			}
-			$Map.setView(
-				[$Lat, $Lng],
-				document.getElementById("_NaviZoom").value
-			);
-		}
+
 		/*---------------------
 		// ベースマーカー描画
 		---------------------*/
@@ -1054,9 +1048,10 @@ function subAddTabCtrl(
 			$BaseMarker.on(
 				"contextmenu",
 				function(e){
-					// センタリング
-					var a1 = this.getLatLng();
-					subCenterMap1(a1.lat, a1.lng);
+					$Map.setView(
+						this.getLatLng(),
+						document.getElementById("_NaviZoom").value
+					);
 				}
 			);
 			// ポップアップ情報更新 <= dragend

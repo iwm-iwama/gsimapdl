@@ -1,4 +1,4 @@
-<!-- Ver.20201227 'AC-130J' -->
+<!-- Ver.20210106 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -342,7 +342,7 @@ ol
 	width:90px;
 }
 #_NaviZoom:hover,
-#_NaviZoom:focus,
+#_NaviZoom:focus
 {
 	background:#ff5;
 }
@@ -672,9 +672,12 @@ function _iwmCU(){
 }
 // センタリング
 function _iwmCM(){
-	subCenterMap1(
-		document.getElementById("_NaviLat").value,
-		document.getElementById("_NaviLng").value,
+	$Map.setView(
+		[
+			document.getElementById("_NaviLat").value,
+			document.getElementById("_NaviLng").value
+		],
+		document.getElementById("_NaviZoom").value
 	);
 }
 function _iwmZA(
@@ -701,7 +704,10 @@ function _iwmZB(
 	// URL／BL表示を変更
 	_iwmCU();
 	// センタリング
-	_iwmCM();
+	$Map.setView(
+		$Map.getCenter(),
+		document.getElementById("_NaviZoom").value
+	);
 }
 
 /*----------------
@@ -970,7 +976,7 @@ function subAddTabCtrl(
 			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW02');" style="font-weight:500;">追加タイル編集</font>
 		</span>
 		<div id="_SW02" class="_simpleWindow" style="width:400px;">
-			<font class="_simpleWindowTitle">追加タイル編集／[Tab]区切り</font>
+			<font class="_simpleWindowTitle">追加タイル編集</font>
 			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW02');">×</font>
 			<br>
 			<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:381px;" onchange="subMapSelector();"></textarea>
@@ -1016,7 +1022,7 @@ function subAddTabCtrl(
 				zoom:document.getElementById("_NaviZoom").value,
 				minZoom:5,  // 最小ズーム
 				maxZoom:18, // 最大ズーム
-				zoomControl:false, // Control.Zoom 非表示
+				zoomControl:false,    // Control.Zoom 非表示
 				doubleClickZoom:false // DblClick制御
 			}
 		);
@@ -1024,11 +1030,13 @@ function subAddTabCtrl(
 		/*---------------
 		// スケール表示
 		---------------*/
-		L.control.scale({
-			metric:true,
-			imperial:false,
-			position:"bottomleft"
-		}).addTo($Map);
+		L.control.scale(
+			{
+				metric:true,
+				imperial:false,
+				position:"bottomleft"
+			}
+		).addTo($Map);
 
 		/*-------------
 		// タイル座標
@@ -1078,7 +1086,7 @@ function subAddTabCtrl(
 			var obj = document.getElementById("_TA01");
 
 			if(obj.value == ""){
-				obj.value = "// タイル種\t拡張子\n// [Tab]区切り\nblank\tpng\nstd\tpng\n";
+				obj.value = "// [Tab]区切り\n// タイル種\t拡張子\nblank\tpng\nstd\tpng\n";
 			}
 
 			var ary = [];
@@ -1174,31 +1182,7 @@ function subAddTabCtrl(
 				spin:true
 			}
 		);
-		/*---------------
-		// センタリング
-		---------------*/
-		function subCenterMap1(
-			$Lat,
-			$Lng
-		){
-			if(isNaN($Lat)){
-				$Lat = document.getElementById($Lat).value;
-			}
-			if(isNaN($Lng)){
-				$Lng = document.getElementById($Lng).value;
-			}
-			$Map.setView(
-				[$Lat, $Lng],
-				document.getElementById("_NaviZoom").value
-			);
-		}
-		function subCenterMap2(){
-			$Map.setView(
-				$Map.getCenter(),
-				// 必ず "_NaviZoom" で呼ぶ
-				document.getElementById("_NaviZoom").value
-			);
-		}
+
 		/*---------------------
 		// ベースマーカー描画
 		---------------------*/
@@ -1251,9 +1235,10 @@ function subAddTabCtrl(
 			$BaseMarker.on(
 				"contextmenu",
 				function(e){
-					// センタリング
-					var a1 = this.getLatLng();
-					subCenterMap1(a1.lat, a1.lng);
+					$Map.setView(
+						this.getLatLng(),
+						document.getElementById("_NaviZoom").value
+					);
 				}
 			);
 			// ポップアップ情報更新 <= dragend
@@ -1341,8 +1326,7 @@ function subAddTabCtrl(
 					// 何もしない <= click
 					$AryLocalMarker[0].on(
 						"click",
-						function(e){
-						}
+						function(e){}
 					);
 					// 開始点キャンセル <= contextmenu
 					$AryLocalMarker[0].on(
@@ -1394,9 +1378,15 @@ function subAddTabCtrl(
 						L.polygon(
 							[
 								$ArySelectMarkerBgn,
-								[$ArySelectMarkerEnd[0], $ArySelectMarkerBgn[1]],
+								[
+									$ArySelectMarkerEnd[0],
+									$ArySelectMarkerBgn[1]
+								],
 								$ArySelectMarkerEnd,
-								[$ArySelectMarkerBgn[0], $ArySelectMarkerEnd[1]]
+								[
+									$ArySelectMarkerBgn[0],
+									$ArySelectMarkerEnd[1]
+								]
 							],
 							{
 								color:"#e54848"
