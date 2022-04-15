@@ -1,4 +1,4 @@
-<!-- Ver.20220412 'AC-130J' -->
+<!-- Ver.20220415 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -400,7 +400,7 @@ ol
 }
 ._simpleWindowOutput
 {
-	background:#fff;
+	background:#f7f7f7;
 	border:0;
 	color:#000;
 	font-size:12px;
@@ -930,7 +930,7 @@ function subAddTabCtrl(
 		<div id="_SW01" class="_simpleWindow" style="width:320px;">
 			<font class="_simpleWindowTitle">操作説明</font>
 			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW01');">×</font>
-			<div id="_SW01A" class="_simpleWindowOutput" style="max-height:500px;padding:0 0 12px 0;"></div>
+			<div id="_SW01A" class="_simpleWindowOutput" style="background:#fff;max-height:500px;padding:0 0 12px 0;"></div>
 		</div>
 		<!-----------------
 		// 追加タイル編集
@@ -941,12 +941,12 @@ function subAddTabCtrl(
 		<div id="_SW02" class="_simpleWindow" style="width:470px;">
 			<font class="_simpleWindowTitle">追加タイル編集</font>
 			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW02');">×</font>
-			<br>
-			<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:452px;"></textarea>
-			<script>
-				document.getElementById("_TA01").onkeydown = function(e){subAddTabCtrl(e, this);}
-			</script>
-			<div style="margin:0 0 8px 0;">
+			<div class="_simpleWindowOutput" style="padding:0 0 8px 0;text-align:center;">
+				<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:452px;"></textarea>
+				<script>
+					document.getElementById("_TA01").onkeydown = function(e){subAddTabCtrl(e, this);}
+				</script>
+				<br>
 				<input type="button" class="_btnNavi3" value="←地図へ反映" onclick="subMapSelector();subSimpleWindow_OpenClose('_SW02','_NC02');"/>
 				<a class="_btnNavi4" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル一覧⇒</a>
 			</div>
