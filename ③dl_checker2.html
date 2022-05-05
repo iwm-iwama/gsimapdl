@@ -1,4 +1,4 @@
-<!-- Ver.20220415 'TR-1A' -->
+<!-- Ver.20220505 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -10,24 +10,28 @@
 
 <!--------------------------------------------------------------------
 // leaflet
+// https://leafletjs.com/
 --------------------------------------------------------------------->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
 
 <!--------------------------------------------------------------------
-// MiniMap
+// Leaflet.MiniMap
+// https://github.com/Norkart/Leaflet-MiniMap
 --------------------------------------------------------------------->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
 
 <!--------------------------------------------------------------------
-// leaflet.awesome-markers.min
+// leaflet.awesome-markers
+// https://github.com/lvoogdt/Leaflet.awesome-markers
 --------------------------------------------------------------------->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"></script>
 
 <!--------------------------------------------------------------------
 // fork-awesome
+// https://forkaweso.me/Fork-Awesome/
 --------------------------------------------------------------------->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous"/>
 
@@ -773,12 +777,12 @@ function subAddTabCtrl(
 		<span style="float:right;margin:0 4px;">
 			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW03');" style="font-weight:500;">Gtsv設定ファイル読込</font>
 		</span>
-		<div id="_SW03" class="_simpleWindow" style="width:450px;">
+		<div id="_SW03" class="_simpleWindow" style="width:400px;">
 			<font class="_simpleWindowTitle">Gtsv設定ファイル読込</font>
 			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW03');">×</font>
 			<div class="_simpleWindowOutput">
-				<input type="file" id="_readFn" class="_btnNavi2" style="width:448px;" accept=".gtsv" onchange="subReadFile(this.id,'_TA03');"/>
-				<textarea readonly id="_TA03" class="_editTextBox" wrap="off" style="height:180px;width:432px;" placeholder="// 例 皇居付近の地理院タイルを取得&#13;<tiletype>&#13;std	png&#13;</tiletype>&#13;<range>&#13;15	29104	29105	12902&#13;15	29104	29105	12903&#13;</range>&#13;"></textarea>
+				<input type="file" id="_readFn" class="_btnNavi2" style="width:398px;" accept=".gtsv" onchange="subReadFile(this.id,'_TA03');"/>
+				<textarea readonly id="_TA03" class="_editTextBox" wrap="off" style="height:350px;width:382px;" placeholder="// 例 皇居付近の地理院タイルを取得&#13;<tiletype>&#13;std	png&#13;</tiletype>&#13;<range>&#13;15	29104	29105	12902&#13;15	29104	29105	12903&#13;</range>&#13;"></textarea>
 			</div>
 		</div>
 		<!------------
