@@ -1,4 +1,4 @@
-<!-- Ver.20220505 'AC-130J' -->
+<!-- Ver.20221101 'AC-130J' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -12,8 +12,8 @@
 // leaflet
 // https://leafletjs.com/
 --------------------------------------------------------------------->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
 
 <!--------------------------------------------------------------------
 // Leaflet.MiniMap
@@ -418,7 +418,7 @@ ol
 ---------------*/
 ._editTextBox
 {
-	border:2px solid #fa0;
+	border:1px solid #a5a5a5;
 	color:#000;
 	font-size:13px;
 	ime-mode:inactive;
@@ -426,11 +426,6 @@ ol
 	overflow:auto;
 	padding:2px 6px;
 	resize:none;
-}
-._editTextBox:focus,
-._editTextBox:hover
-{
-	background:#ffa;
 }
 </style>
 <script>
@@ -726,19 +721,17 @@ function subSimpleWindow_Init(
 		document.getElementById($aryId[i1]).style.display = "none";
 	}
 }
-function subSimpleWindow_OnOff(
+function subSimpleWindow_Open(
 	$id,
 	$func
 ){
-	// Open／Close
-	const obj = document.getElementById($id);
-	if(obj.style.display == ""){
-		obj.style.display = "none";
-	}
-	else{
-		obj.style.display = "";
-		eval($func);
-	}
+	document.getElementById($id).style.display = "";
+	eval($func);
+}
+function subSimpleWindow_Close(
+	$id
+){
+	document.getElementById($id).style.display = "none";
 }
 function subSimpleWindow_HDoc01(
 	$id
@@ -862,7 +855,7 @@ function subAddTabCtrl(
 			<div class="_expBoxTitle">(1) タイルを選択する</div>
 			ダウンロードするタイルを、下のボタンから編集してください。<br>
 			<form style="text-align:center;">
-				<input type="button" class="_btnNavi1" value="追加タイル編集" onclick="subSimpleWindow_OnOff('_SW02');"/>
+				<input type="button" class="_btnNavi1" value="追加タイル編集" onclick="subSimpleWindow_Open('_SW02');"/>
 			</form>
 		</div>
 		<div class="_vArrow">▼</div>
@@ -929,30 +922,30 @@ function subAddTabCtrl(
 		// ヘルプ
 		---------->
 		<span style="float:right;margin:0 8px 0 4px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW01','subSimpleWindow_HDoc01(\'_SW01A\')');" style="font-weight:900;">？</font>
+			<font class="_simpleWindowCall" onclick="subSimpleWindow_Open('_SW01','subSimpleWindow_HDoc01(\'_SW01A\')');" style="font-weight:900;">？</font>
 		</span>
 		<div id="_SW01" class="_simpleWindow" style="width:320px;">
 			<font class="_simpleWindowTitle">操作説明</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW01');">×</font>
+			<font class="_simpleWindowClose" onclick="subSimpleWindow_Close('_SW01');">×</font>
 			<div id="_SW01A" class="_simpleWindowOutput" style="background:#fff;max-height:500px;padding:0 0 12px 0;"></div>
 		</div>
 		<!-----------------
 		// 追加タイル編集
 		------------------>
 		<span style="float:right;margin:0 4px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW02');" style="font-weight:500;">追加タイル編集</font>
+			<font class="_simpleWindowCall" onclick="subSimpleWindow_Open('_SW02');" style="font-weight:500;">追加タイル編集</font>
 		</span>
 		<div id="_SW02" class="_simpleWindow" style="width:470px;">
 			<font class="_simpleWindowTitle">追加タイル編集</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW02');">×</font>
+			<font class="_simpleWindowClose" onclick="subSimpleWindow_Close('_SW02');">×</font>
 			<div class="_simpleWindowOutput" style="padding:0 0 8px 0;text-align:center;">
-				<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:452px;"></textarea>
+				<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:454px;"></textarea>
 				<script>
 					document.getElementById("_TA01").onkeydown = function(e){subAddTabCtrl(e, this);}
 				</script>
 				<br>
 				<input type="button" class="_btnNavi3" value="←地図へ反映" onclick="subMapSelector();subSimpleWindow_OpenClose('_SW02','_NC02');"/>
-				<a class="_btnNavi4" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル一覧⇒</a>
+				<a class="_btnNavi4" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル一覧</a>
 			</div>
 		</div>
 	</div>

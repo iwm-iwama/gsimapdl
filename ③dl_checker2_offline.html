@@ -1,4 +1,4 @@
-<!-- Ver.20220505 'TR-1A' -->
+<!-- Ver.20221101 'TR-1A' -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -359,7 +359,7 @@ option
 ---------------*/
 ._editTextBox
 {
-	border:2px solid #fa0;
+	border:1px solid #a5a5a5;
 	color:#000;
 	font-size:13px;
 	ime-mode:inactive;
@@ -367,11 +367,6 @@ option
 	overflow:auto;
 	padding:2px 6px;
 	resize:none;
-}
-._editTextBox:focus,
-._editTextBox:hover
-{
-	background:#ffa;
 }
 </style>
 <script>
@@ -569,19 +564,17 @@ function subSimpleWindow_Init(
 		document.getElementById($aryId[i1]).style.display = "none";
 	}
 }
-function subSimpleWindow_OnOff(
+function subSimpleWindow_Open(
 	$id,
 	$func
 ){
-	// Open／Close
-	const obj = document.getElementById($id);
-	if(obj.style.display == ""){
-		obj.style.display = "none";
-	}
-	else{
-		obj.style.display = "";
-		eval($func);
-	}
+	document.getElementById($id).style.display = "";
+	eval($func);
+}
+function subSimpleWindow_Close(
+	$id
+){
+	document.getElementById($id).style.display = "none";
 }
 function subSimpleWindow_HDoc01(
 	$id
@@ -712,7 +705,7 @@ function subAddTabCtrl(
 
 </head>
 
-<body onload="subInitDisp();subSimpleWindow_Init(['_SW03','_SW01']);subSimpleWindow_OnOff('_SW03');" onresize="subInitDisp();">
+<body onload="subInitDisp();subSimpleWindow_Init(['_SW03','_SW01']);subSimpleWindow_Open('_SW03');" onresize="subInitDisp();">
 	<!---------------
 	// 数値入力補完
 	---------------->
@@ -750,25 +743,25 @@ function subAddTabCtrl(
 		// ヘルプ
 		---------->
 		<span style="float:right;margin:0 8px 0 4px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW01','subSimpleWindow_HDoc01(\'_SW01A\')');" style="font-weight:900;">？</font>
+			<font class="_simpleWindowCall" onclick="subSimpleWindow_Open('_SW01','subSimpleWindow_HDoc01(\'_SW01A\')');" style="font-weight:900;">？</font>
 		</span>
 		<div id="_SW01" class="_simpleWindow" style="width:320px;">
 			<font class="_simpleWindowTitle">操作説明</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW01');">×</font>
+			<font class="_simpleWindowClose" onclick="subSimpleWindow_Close('_SW01');">×</font>
 			<div id="_SW01A" class="_simpleWindowOutput" style="background:#fff;max-height:500px;padding:0 0 12px 0;"></div>
 		</div>
 		<!---------------
 		// Gtsvファイル
 		---------------->
 		<span style="float:right;margin:0 4px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindow_OnOff('_SW03');" style="font-weight:500;">Gtsv設定ファイル読込</font>
+			<font class="_simpleWindowCall" onclick="subSimpleWindow_Open('_SW03');" style="font-weight:500;">Gtsv設定ファイル読込</font>
 		</span>
-		<div id="_SW03" class="_simpleWindow" style="width:400px;">
+		<div id="_SW03" class="_simpleWindow" style="width:450px;">
 			<font class="_simpleWindowTitle">Gtsv設定ファイル読込</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindow_OnOff('_SW03');">×</font>
+			<font class="_simpleWindowClose" onclick="subSimpleWindow_Close('_SW03');">×</font>
 			<div class="_simpleWindowOutput">
-				<input type="file" id="_readFn" class="_btnNavi2" style="width:398px;" accept=".gtsv" onchange="subReadFile(this.id,'_TA03');"/>
-				<textarea readonly id="_TA03" class="_editTextBox" wrap="off" style="height:350px;width:382px;" placeholder="// 例 皇居付近の地理院タイルを取得&#13;<tiletype>&#13;std	png&#13;</tiletype>&#13;<range>&#13;15	29104	29105	12902&#13;15	29104	29105	12903&#13;</range>&#13;"></textarea>
+				<input type="file" id="_readFn" class="_btnNavi2" style="width:448px;" accept=".gtsv" onchange="subReadFile(this.id,'_TA03');"/>
+				<textarea readonly id="_TA03" class="_editTextBox" wrap="off" style="height:480px;width:434px;" placeholder="// 例 皇居付近の地理院タイルを取得&#13;<tiletype>&#13;std	png&#13;</tiletype>&#13;<range>&#13;15	29104	29105	12902&#13;15	29104	29105	12903&#13;</range>&#13;"></textarea>
 			</div>
 		</div>
 		<!------------
