@@ -1,46 +1,38 @@
-<!-- Ver.202305xx 'AC-130J' -->
-
+<!-- Ver.20240315 'AC-130J' -->
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="Content-Script-Type" content="text/javascript"/>
 <title>地理院タイル・ダウンローダー設定ファイル作成</title>
-
 <!--------------------------------------------------------------------
 // leaflet
 // https://leafletjs.com/
 --------------------------------------------------------------------->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
 <!--------------------------------------------------------------------
 // Leaflet.MiniMap
 // https://github.com/Norkart/Leaflet-MiniMap
 --------------------------------------------------------------------->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
-
 <!--------------------------------------------------------------------
 // leaflet.awesome-markers
 // https://github.com/lvoogdt/Leaflet.awesome-markers
 --------------------------------------------------------------------->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"></script>
-
 <!--------------------------------------------------------------------
 // fork-awesome
 // https://forkaweso.me/Fork-Awesome/
 --------------------------------------------------------------------->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous"/>
-
 <!--------------------------------------------------------------------
 // CSS
 --------------------------------------------------------------------->
 <style>
 @charset "utf-8";
-
 /*-------
 // 共通
 -------*/
@@ -56,6 +48,12 @@
 .leaflet-container
 {
 	background:#fff;
+}
+.leaflet-control-minimap
+{
+	border:solid 2px rgba(0, 0, 0, 0.6);
+	border-radius:12px;
+	box-shadow:none;
 }
 #map
 {
@@ -77,81 +75,53 @@ body
 	margin:10px;
 	padding:0;
 }
-li
+a
 {
-	margin:10px 0;
+	text-decoration:none;
 }
-ol
+table
 {
-	margin:10px 0 10px 30px;
-	padding:0;
+	border-collapse:collapse;
 }
-._titleMain
+input[type=button],
+input[type=checkbox],
+input[type=file],
+input[type=number],
+input[type=range],
+input[type=text]
 {
-	color:#383838;
-	font-size:19px;
-	font-weight:600;
-	margin:0 2px;
-	padding:0;
+	vertical-align:middle;
 }
-._titleSub
+input[type=checkbox]:focus,
+input[type=file]:focus,
+input[type=number]:focus,
+input[type=range]:focus,
+input[type=text]:focus,
+textarea:focus
 {
-	background:#fff;
-	border:1px solid #3d7cce;
+	outline:1px solid #3d7cce; /* ブラウザの強調設定を上書き */
+}
+input[type=file]
+{
+	background:#bd1e38;
 	color:#000;
-	font-size:13px;
-	font-weight:500;
-	margin:0;
-	padding:4px 10px;
-}
-._expBox
-{
-	background:#fff;
-	border:1px solid #3d7cce;
-	border-radius:0 0 8px 8px;
 	font-size:12px;
 	margin:0;
-	padding:0 10px 6px 10px;
+	padding:0;
 }
-._expBoxTitle
+input[type=file]:hover
 {
-	color:#404040;
-	font-size:13px;
-	font-weight:bold;
-	margin:3px 0 6px 0;
-	text-align:center;
+	color:#fff;
 }
-._vArrow
+input[type=number]
 {
-	color:#f30;
-	font-size:18px;
-	font-weight:bold;
-	margin:1px;
-	text-align:center;
-}
-#_editList
-{
-	background:#fee;
-	border:2px solid #e54848;
-	color:#000;
-	font-size:13px;
-	height:80px;
+	border:solid 1px #3d7cce;
 	margin:0;
-	padding:2px 6px;
-	resize:none;
-	width:274px;
+	padding:0;
 }
-#_saveList
+input[type=range]
 {
-	background:#fff;
-	border:1px solid #aaa;
-	color:#333;
-	font-size:12px;
-	height:160px;
-	margin:0;
-	padding:2px 6px;
-	resize:none;
-	width:276px;
+	width:160px; /* Leaflet.Control.Opacity */
 }
 ._btnNavi1,
 ._btnNavi2,
@@ -161,11 +131,16 @@ ol
 	border:0;
 	color:#fff;
 	font-size:12px;
-	line-height:18px;/* WebKitの余白に対応するため以下18pxで統一 */
+	height:20px;
 	margin:0;
 	padding:0 8px;
-	text-decoration:none;
 	vertical-align:middle;
+	/* a[href] 対応 */
+	display:inline-block;
+	line-height:20px;
+	text-decoration:none;
+	/* div 対応 */
+	text-align:center;
 }
 ._btnNavi1:hover,
 ._btnNavi2:hover,
@@ -206,10 +181,76 @@ ol
 {
 	background:#a578a6;
 }
+li
+{
+	margin:10px 0;
+}
+ol
+{
+	margin:10px 0 10px 30px;
+	padding:0;
+}
+._titleMain
+{
+	color:#383838;
+	font-size:19px;
+	font-weight:600;
+	margin:0 2px;
+	padding:0;
+}
+._expBox
+{
+	background:#fff;
+	border:1px solid #3d7cce;
+	border-radius:0 0 8px 8px;
+	font-size:12px;
+	margin:0;
+	padding:0 10px 6px 10px;
+}
+._expBoxTitle
+{
+	color:#404040;
+	font-size:13px;
+	font-weight:bold;
+	margin:3px 0 6px 0;
+	text-align:center;
+}
+._vArrow
+{
+	color:#f30;
+	font-size:18px;
+	font-weight:bold;
+	margin:1px;
+	text-align:center;
+}
+#__editList
+{
+	background:#fee;
+	border:2px solid #e54848;
+	color:#000;
+	font-size:13px;
+	height:80px;
+	margin:0;
+	padding:2px 6px;
+	resize:none;
+	width:274px;
+}
+#__saveList
+{
+	background:#fff;
+	border:1px solid #aaa;
+	color:#333;
+	font-size:12px;
+	height:160px;
+	margin:0;
+	padding:2px 6px;
+	resize:none;
+	width:276px;
+}
 /*---------------
 // 上部メニュー
 ---------------*/
-#_divNaviCommander
+#__divNaviCommander
 {
 	background:#505050;
 	border:0;
@@ -224,8 +265,9 @@ ol
 	/* 動的に変更 */
 	width:0;
 }
-#_divMap
+#__divMap
 {
+	border:solid 1px rgba(80, 80, 80, 1.0);
 	cursor:crosshair;
 	left:0;
 	position:absolute;
@@ -234,8 +276,8 @@ ol
 	top:0;
 	width:0;
 }
-#_InputZoomA,
-#_InputZoomB
+#__InputZoomA,
+#__InputZoomB
 {
 	background-color:rgba(255, 255, 255, 0.6);
 	border:1px solid #777;
@@ -245,23 +287,23 @@ ol
 	position:absolute;
 	z-index:1500;
 }
-#_InputZoomA
+#__InputZoomA
 {
 	top:-1000px;/* フォーマット時に隠すため */
 }
-#_InputZoomB
+#__InputZoomB
 {
 	/* 以下、必要に応じて修正 */
 	left:320px;
 	top:40px;
 }
 /* ↓OverLap */
-#_InputZoomA
+#__InputZoomA
 {
 	text-align:center;
 	width:150px;
 }
-#_InputZoomB
+#__InputZoomB
 {
 	border:0;
 	margin:0;
@@ -315,19 +357,21 @@ ol
 {
 	margin:0;
 }
-#_InputZoomA > ._ZA,
-#_InputZoomA > ._Btn3,
-#_InputZoomB > ._ZB
+#__InputZoomA > ._ZA,
+#__InputZoomA > ._Btn3,
+#__InputZoomB > ._ZB
 {
 	height:26px;
 	width:26px;
 }
 /* ↑OverLap */
-#_NaviZoom,
-#_NaviLat,
-#_NaviLng
+#__NaviZoom,
+#__NaviLat,
+#__NaviLng
 {
+	background:#666;
 	border:0;
+	color:#fff;
 	font-size:12px;
 	height:18px;
 	ime-mode:inactive;
@@ -336,17 +380,17 @@ ol
 	padding:0 2px;
 	vertical-align:middle;
 }
-#_NaviZoom
+#__NaviZoom
 {
 	width:0;
 }
-#_NaviLat,
-#_NaviLng
+#__NaviLat,
+#__NaviLng
 {
 	width:90px;
 }
-#_NaviZoom:hover,
-#_NaviZoom:focus
+#__NaviZoom:hover,
+#__NaviZoom:focus
 {
 	background:#ff5;
 }
@@ -355,10 +399,12 @@ ol
 ----------------*/
 ._simpleWindowCall
 {
+	background:transparent;
 	border:solid 1px #fff;
 	color:#fff;
 	font-size:12px;
 	float:right;
+	height:20px;
 	margin:0;
 	padding:0 4px;
 }
@@ -369,38 +415,17 @@ ol
 }
 ._simpleWindow
 {
-	background-color:rgba(13, 76, 158, 0.8);
+	background-color:rgba(13, 76, 158, 0.9);
 	color:#fff;
 	float:right;
-	font-size:11px;
+	font-size:12px;
 	line-height:22px;
 	margin:0;
 	padding:0;
 	position:absolute;
 	text-align:center;
+	top: -1000px;
 	z-index:2000;
-	/* 以下、必要に応じて修正 */
-	right:0;
-	top:24px;
-}
-._simpleWindowTitle
-{
-	display:; /* ''=表示／'none'=非表示 */
-	margin:0;
-	padding:0;
-}
-._simpleWindowClose
-{
-	color:#f00;
-	float:right;
-	font-size:18px;
-	font-weight:900;
-	padding:0 3px 0 0;
-}
-._simpleWindowClose:hover
-{
-	color:#fff;
-	cursor:pointer;
 }
 ._simpleWindowOutput
 {
@@ -428,426 +453,441 @@ ol
 	resize:none;
 }
 </style>
+<!---------
+// 前処理
+---------->
 <script>
-/*-----------------------
-// フレームサイズを調整
------------------------*/
-let $MapNaviL = 290;
-let $NaviCommanderPaddingLR = 14;
-let $MapTop = 24;
-
-function subInitDisp(){
-	const mapH = window.innerHeight;
-	const mapW = window.innerWidth;
-
-	// Microsoft?
-	let uA = window.navigator.userAgent.toLowerCase();
-	/// console.log(uA);
-
-	if(uA.indexOf("edge") > -1 || uA.indexOf("trident") > -1 || uA.indexOf("msie") > -1){
-		alert("このブラウザでは正しく表示されません\n\n【動作確認済】\n・Firefox\n・Google Chrome\n・Opera\n・Vivaldi");
-		exit;
+	// MSIE
+	const uA = window.navigator.userAgent.toLowerCase();
+	if(uA.indexOf("edge") != -1 || uA.indexOf("trident") != -1 || uA.indexOf("msie") != -1)
+	{
+		alert("このブラウザでは正しく動作しないことがあります。\n\n【動作確認済】\n・Firefox\n・Google Chrome\n・Opera\n・Vivaldi");
 	}
-
-	/*-------------
-	// style 作成
-	-------------*/
-	// _divNavi
-	obj0 = document.getElementById("_divNavi").style;
-	with(obj0){
-		width = $MapNaviL + "px";
-	}
-	// _divNaviCommander
-	let obj1 = document.getElementById("_divNaviCommander").style;
-	with(obj1){
-		left  = ($MapNaviL + 20) + "px";
-		width = (mapW - 20 - $NaviCommanderPaddingLR - $MapNaviL) + "px";
-	}
-	// _divMap
-	with(document.getElementById("_divMap").style){
-		height = (mapH - $MapTop) + "px";
-		left   = obj1.left;
-		top    = $MapTop + "px";
-		width  = (parseInt(obj1.width, 10) + $NaviCommanderPaddingLR) + "px";
-	}
-}
-
-/*-------------------------
-// クリップボードにコピー
--------------------------*/
-function editCopy(
-	$textareaId // [id]
-){
-	document.getElementById($textareaId).select();
-	document.execCommand("copy");
-}
-
-/*---------
-// クリア
----------*/
-function editReset(
-	$textareaId // [id]
-){
-	document.getElementById($textareaId).value = "";
-}
-
-/*-------------------------
-// Gtsvフォーマットに変換
--------------------------*/
-function editToGtsv(
-	$tiletypeId, // [id]
-	$rangeId,    // [id]
-	$outputId    // [id]
-){
-	let rtn = "";
-
-	rtn += "<tiletype>" + "\n";
-		for(let _s1 of document.getElementById($tiletypeId).value.trimEnd().split("\n")){
-			_s1 = _s1.trim();
-
-			if(_s1.length > 0 && _s1.substr(0, 2) != "//"){
-				let _a1 = _s1.split("\t");
-
-				_a1[0] = _a1[0].trim();
-
-				try{
-					_a1[1] = _a1[1].trim();
-					if(_a1[1].length == 0){
-						throw null;
-					}
-				}
-				catch(e){
-					_a1[1] = "png";
-				}
-
-				rtn += _a1.join("\t") + "\n";
-			}
-		}
-	rtn += "</tiletype>" + "\n";
-
-	rtn += "<range>" + "\n";
-		let a1 = document.getElementById($rangeId).value.split("\n");
-		let i1 = 0;
-		let i2 = a1.length;
-		for(; i1 < i2; i1++){
-			a1[i1] = a1[i1].trim();
-			if(a1[i1] != ""){
-				rtn += a1[i1] + "\n";
-			}
-		}
-	rtn += "</range>" + "\n";
-
-	document.getElementById($outputId).value = rtn;
-}
-
-/*-----------------
-// ファイルに保存
------------------*/
-function editSave(
-	$outputId, // [id]
-	$hrefId    // [id]
-){
-	let blob = new Blob([document.getElementById($outputId).value], {"type":"text/plain"});
-	let fn = "sample.gtsv";
-
-	// MSIE?
-	if(window.navigator.msSaveBlob){
-		window.navigator.msSaveBlob(blob, fn);
-		window.navigator.msSaveOrOpenBlob(blob, fn);
-	}
-	else{
-		document.getElementById($hrefId).download = fn;
-		document.getElementById($hrefId).href = window.URL.createObjectURL(blob);
-	}
-}
-
-/*---------------
-// 数値入力補完
----------------*/
-// 大域変数
-let $subIwmInput_BL_toSave = null;
-
-function subIwmInput_ZoomA_Open(
-	$outputId, // [id]
-	$posX,     // INT
-	$posY      // INT
-){
-	subIwmInput_Open("_InputZoomA", $outputId, $posX, $posY, true);
-}
-function subIwmInput_ZoomA_Close(){
-	subIwmInput_Close("_InputZoomA");
-}
-function subIwmInput_Zoom_Change(
-	$str
-){
-	document.getElementById("_NaviZoom").value = parseInt($str, 10);
-
-	const Color1 = "#000";
-	const Color2 = "#0c4b9d";
-
-	const obj1 = document.getElementsByClassName("_ZA");
-	const obj2 = document.getElementsByClassName("_ZB");
-
-	let i1 = $str;
-	let i2 = 0;
-	let i3 = obj1.length;
-	for(; i2 < i3; i2++){
-		obj1[i2].style.background = (i1 == obj1[i2].value ? Color2 : Color1);
-
-		if(i1 == obj1[i2].value){
-			obj1[i2].style.background = Color2;
-			obj1[i2].style.opacity = 0.8;
-		}
-		else{
-			obj1[i2].style.background = Color1;
-			obj1[i2].style.opacity = 0.6;
-		}
-
-		if(i1 == obj2[i2].value){
-			obj2[i2].style.background = Color2;
-			obj2[i2].style.opacity = 0.8;
-		}
-		else{
-			obj2[i2].style.background = Color1;
-			obj2[i2].style.opacity = 0.6;
-		}
-	}
-
-	subIwmInput_Close("_InputZoomA");
-}
-function subIwmInput_Open(
-	$inputId,   // [id]
-	$outputId,  // [id]
-	$posX,      // iNT
-	$posY,      // INT
-	$autoHidden // BOOL
-){
-	const obj = document.getElementById($outputId);
-	const rect = obj.getBoundingClientRect();
-
-	const _posX = ($posX == null || $posX == undefined ? rect.left + window.pageXOffset : $posX);
-	const _posY = ($posY == null || $posY == undefined ? rect.top + window.pageYOffset + obj.clientHeight + 4 : $posY);
-
-	with(document.getElementById($inputId).style){
-		display = "";
-		left    = _posX + "px";
-		top     = _posY + "px";
-	}
-
-	// 設定ミリ秒後に自動終了
-	if($autoHidden){
-		setTimeout("subIwmInput_Close('" + $inputId + "')", 2500);
-	}
-}
-function subIwmInput_Close(
-	$outputId // [id]
-){
-	try{
-		document.getElementById($outputId).style.display = "none";
-	}
-	catch(e){
-		/// console.log(e);
-	}
-}
-
-/*-------------
-// エイリアス
--------------*/
-// "_InputBL" を更新
-function _iwmIBL(
-	$d1 // DBL
-){
-	if(isNaN($d1)){
-		$d1 = document.getElementById($d1).value;
-	}
-}
-// ベースマーカー再描画
-function _iwmBMN(){
-	subBaseMarkerNew("_NaviLat", "_NaviLng");
-}
-// URL／BL表示を変更
-function _iwmCU(){
-	subChangeUrl("_NaviLat", "_NaviLng", "_NaviZoom");
-}
-// センタリング
-function _iwmCM(){
-	$Map.setView(
-		[
-			document.getElementById("_NaviLat").value,
-			document.getElementById("_NaviLng").value
-		],
-		document.getElementById("_NaviZoom").value
-	);
-}
-function _iwmZA(
-	$str
-){
-	subIwmInput_ZoomA_Close();
-	subIwmInput_Zoom_Change($str);
-	// ベースマーカー再描画
-	_iwmBMN();
-	// URL／BL表示を変更
-	_iwmCU();
-	// センタリング
-	_iwmCM();
-}
-function _iwmZA2(){
-	subIwmInput_ZoomA_Close();
-	// センタリング
-	_iwmCM();
-}
-function _iwmZB(
-	$str
-){
-	subIwmInput_Zoom_Change($str);
-	// URL／BL表示を変更
-	_iwmCU();
-	// センタリング
-	$Map.setView(
-		$Map.getCenter(),
-		document.getElementById("_NaviZoom").value
-	);
-}
-
-/*----------------
-// Simple Window
-----------------*/
-// 初期化
-function subSimpleWindow_Init(
-	$aryId
-){
-	let i1 = $aryId.length;
-	while(i1--){
-		document.getElementById($aryId[i1]).style.display = "none";
-	}
-}
-function subSimpleWindow_Open(
-	$id,
-	$func
-){
-	document.getElementById($id).style.display = "";
-	eval($func);
-}
-function subSimpleWindow_Close(
-	$id
-){
-	document.getElementById($id).style.display = "none";
-}
-function subSimpleWindow_HDoc01(
-	$id
-){
-	document.getElementById($id).innerHTML = document.getElementById("_HDoc01").value;
-}
-
-/*---------------------------
-// BL座標をタイル座標に変換
----------------------------*/
-function rtnHashConvTileXY(
-	$aLatLng, // Ary[double, double]
-	$Zoom     // int
-){
-	let aPoint = $Map.project($aLatLng, $Zoom).floor();
-
-	let x  = ((aPoint.x / 256) | 0); // タイル全体のX
-	let dx = ((aPoint.x % 256) | 0); // タイル内部のX
-	let y  = ((aPoint.y / 256) | 0); // タイル全体のY
-	let dy = ((aPoint.y % 256) | 0); // タイル内部のY
-
-	return {
-		"z":$Zoom,
-		"x":x,
-		"y":y,
-		"dx":dx,
-		"dy":dy
-	}
-}
-
-/*--------------------
-// URL／BL表示を変更
---------------------*/
-function subChangeUrl(
-	$Lat,
-	$Lng,
-	$Zoom
-){
-	let i1 = 0;
-	let i2 = arguments.length;
-	for(; i1 < i2; i1++){
-		if(isNaN(arguments[i1])){
-			arguments[i1] = document.getElementById(arguments[i1]).value;
-		}
-	}
-	with(document){
-		getElementById("_NaviLat").value  = parseFloat($Lat).toFixed(8);
-		getElementById("_NaviLng").value  = parseFloat($Lng).toFixed(8);
-		getElementById("_NaviZoom").value = $Zoom;
-	}
-	// URL置換
-	history.replaceState(
-		null,
-		null,
-		("#" + $Zoom + "/" + $Lat + "/" + $Lng)
-	);
-}
-/*------------------------------------
-// [マーカー消去]ボタン 表示／非表示
-------------------------------------*/
-function subMyObj_Init(){
-	document.getElementById("_btnMarker").style.display = "none";
-}
-function subMyObj_OnOff(
-	$aryObj
-){
-	document.getElementById("_btnMarker").style.display = ($aryObj.length > 0 ? "" : "none");
-}
-
-/*-----------------------
-// ローカルマーカー消去
------------------------*/
-function subMyObj_Remove(
-	$aryObj
-){
-	let obj = null;
-	while((obj = $aryObj.pop()) != undefined){
-		obj.remove($Map);
-	}
-	// [マーカー消去]ボタン 非表示
-	document.getElementById("_btnMarker").style.display = "none";
-}
-
-/*----------------------
-// [Tab]入力可能にする
-----------------------*/
-/*【参考】
-	http://www.webclap-dandy.com/?category=Programing&id=5
-*/
-function subAddTabCtrl(
-	$e,
-	$obj
-){
-	if($e.keyCode != 9){
-		return;
-	}
-	$e.preventDefault();
-
-	const cursorPosition = $obj.selectionStart;
-	const cursorLeft     = $obj.value.substr(0, cursorPosition);
-	const cursorRight    = $obj.value.substr(cursorPosition, $obj.value.length);
-
-	$obj.value = cursorLeft + "\t" + cursorRight;
-	$obj.selectionEnd = cursorPosition + 1;
-}
 </script>
-
+<script>
+	/*-----------------------
+	// フレームサイズを調整
+	-----------------------*/
+	// 大域定数
+	const $mapNaviL = 290;
+	const $naviCommanderPaddingLR = 14;
+	const $mapTopPx = 24;
+	function subInitDisp()
+	{
+		const mapH = window.innerHeight;
+		const mapW = window.innerWidth;
+		// __divNavi
+		document.getElementById("__divNavi").style.width = $mapNaviL + "px";
+		// __divNaviCommander
+		const obj1 = document.getElementById("__divNaviCommander").style;
+		obj1.left  = ($mapNaviL + 20) + "px";
+		obj1.width = (mapW - 20 - $naviCommanderPaddingLR - $mapNaviL) + "px";
+		// __divMap
+		// border-width = 2
+		const obj2 = document.getElementById("__divMap").style;
+		obj2.height = (mapH - $mapTopPx - 2) + "px";
+		obj2.left   = obj1.left;
+		obj2.top    = $mapTopPx + "px";
+		obj2.width  = (parseInt(obj1.width, 10) + $naviCommanderPaddingLR - 2) + "px";
+	}
+	/*--------------------
+	// URL／BL表示を変更
+	--------------------*/
+	function subChangeUrl(
+		$Lat,
+		$Lng,
+		$Zoom
+	)
+	{
+		for(let _i1 = 0, _i2 = arguments.length; _i1 < _i2; _i1++)
+		{
+			if(isNaN(arguments[_i1]))
+			{
+				arguments[_i1] = document.getElementById(arguments[_i1]).value;
+			}
+		}
+		document.getElementById("__NaviLat").value  = parseFloat($Lat).toFixed(8);
+		document.getElementById("__NaviLng").value  = parseFloat($Lng).toFixed(8);
+		document.getElementById("__NaviZoom").value = $Zoom;
+		// URL置換
+		history.replaceState(
+			null,
+			null,
+			("#" + $Zoom + "/" + $Lat + "/" + $Lng)
+		);
+	}
+	/*-------------------------
+	// クリップボードにコピー
+	-------------------------*/
+	function editCopy(
+		$textareaId // [id]
+	)
+	{
+		document.getElementById($textareaId).select();
+		document.execCommand("copy");
+	}
+	/*---------
+	// クリア
+	---------*/
+	function editReset(
+		$textareaId // [id]
+	)
+	{
+		document.getElementById($textareaId).value = "";
+	}
+	/*-------------------------
+	// Gtsvフォーマットに変換
+	-------------------------*/
+	function editToGtsv(
+		$tiletypeId, // [id]
+		$rangeId,    // [id]
+		$outputId    // [id]
+	)
+	{
+		let rtn = "";
+		rtn += "<tiletype>" + "\n";
+			for(let _s1 of document.getElementById($tiletypeId).value.trimEnd().split("\n"))
+			{
+				_s1 = _s1.trim();
+				if(_s1.length > 0 && _s1.substr(0, 2) != "//")
+				{
+					let _a1 = _s1.split("\t");
+					_a1[0] = _a1[0].trim();
+					try
+					{
+						_a1[1] = _a1[1].trim();
+						if(_a1[1].length == 0)
+						{
+							throw null;
+						}
+					}
+					catch(e)
+					{
+						_a1[1] = "png";
+					}
+					rtn += _a1.join("\t") + "\n";
+				}
+			}
+		rtn += "</tiletype>" + "\n";
+		rtn += "<range>" + "\n";
+			let a1 = document.getElementById($rangeId).value.split("\n");
+			for(let _i1 = 0, _i2 = a1.length; _i1 < _i2; _i1++)
+			{
+				a1[_i1] = a1[_i1].trim();
+				if(a1[_i1].length > 0)
+				{
+					rtn += a1[_i1] + "\n";
+				}
+			}
+		rtn += "</range>" + "\n";
+		document.getElementById($outputId).value = rtn;
+	}
+	/*-----------------
+	// ファイルに保存
+	-----------------*/
+	function editSave(
+		$outputId, // [id]
+		$hrefId    // [id]
+	)
+	{
+		let blob = new Blob([document.getElementById($outputId).value], {"type":"text/plain"});
+		let fn = "sample.gtsv";
+		// MSIE?
+		if(window.navigator.msSaveBlob)
+		{
+			window.navigator.msSaveBlob(blob, fn);
+			window.navigator.msSaveOrOpenBlob(blob, fn);
+		}
+		else
+		{
+			document.getElementById($hrefId).download = fn;
+			document.getElementById($hrefId).href = window.URL.createObjectURL(blob);
+		}
+	}
+	/*---------------
+	// 数値入力補完
+	---------------*/
+	// 大域変数
+	let $subIwmInput_BL_toSave = null;
+	function subIwmInput_Init()
+	{
+		subIwmInput_Close("__InputBL");
+	}
+	function subIwmInput_ZoomA_Open(
+		$outputId, // [id]
+		$posX,     // INT
+		$posY      // INT
+	)
+	{
+		subIwmInput_Open("__InputZoomA", $outputId, $posX, $posY, true);
+	}
+	function subIwmInput_ZoomA_Close()
+	{
+		subIwmInput_Close("__InputZoomA");
+	}
+	function subIwmInput_Zoom_Change(
+		$str
+	)
+	{
+		document.getElementById("__NaviZoom").value = parseInt($str, 10);
+		const color1 = "#000";
+		const color2 = "#0c4b9d";
+		const obj1 = document.getElementsByClassName("_ZA");
+		const obj2 = document.getElementsByClassName("_ZB");
+		let i1 = $str;
+		let i2 = 0;
+		let i3 = obj1.length;
+		for(; i2 < i3; i2++)
+		{
+			obj1[i2].style.background = (i1 == obj1[i2].value ? color2 : color1);
+			if(i1 == obj1[i2].value)
+			{
+				obj1[i2].style.background = color2;
+				obj1[i2].style.opacity = 0.8;
+			}
+			else
+			{
+				obj1[i2].style.background = color1;
+				obj1[i2].style.opacity = 0.6;
+			}
+			if(i1 == obj2[i2].value)
+			{
+				obj2[i2].style.background = color2;
+				obj2[i2].style.opacity = 0.8;
+			}
+			else
+			{
+				obj2[i2].style.background = color1;
+				obj2[i2].style.opacity = 0.6;
+			}
+		}
+		subIwmInput_Close("__InputZoomA");
+	}
+	function subIwmInput_Open(
+		$inputId,   // [id]
+		$outputId,  // [id]
+		$posX,      // iNT
+		$posY,      // INT
+		$autoHidden // BOOL
+	)
+	{
+		$subIwmInput_BL_now = $outputId;
+		// 他の入力フォームを全て閉じる
+		subIwmInput_Init();
+		const obj1 = document.getElementById($outputId);
+		const rect = obj1.getBoundingClientRect();
+		const _posX = ($posX == null || $posX == undefined ? rect.left + window.pageXOffset : $posX);
+		const _posY = ($posY == null || $posY == undefined ? rect.top + window.pageYOffset + obj1.clientHeight : $posY);
+		const obj2 = document.getElementById($inputId).style;
+		obj2.display = "";
+		obj2.left    = _posX + "px";
+		obj2.top     = _posY + "px";
+		// 設定ミリ秒後に自動終了
+		if($autoHidden)
+		{
+			setTimeout("subIwmInput_Close('" + $inputId + "')", 2500);
+		}
+	}
+	function subIwmInput_Close(
+		$outputId // [id]
+	)
+	{
+		try
+		{
+			document.getElementById($outputId).style.display = "none";
+		}
+		catch(e)
+		{
+		}
+		// 初期化
+		$subIwmInput_BL_now = null;
+		document.onkeydown = function(evt){}
+	}
+	/*-------------
+	// エイリアス
+	-------------*/
+	// "__InputBL" を更新
+	function subIwmIBL(
+		$d1 // DBL
+	)
+	{
+		if(isNaN($d1))
+		{
+			$d1 = document.getElementById($d1).value;
+		}
+	}
+	// ベースマーカー再描画
+	function subIwmBMN()
+	{
+		subBaseMarkerNew("__NaviLat", "__NaviLng");
+	}
+	// URL／BL表示を変更
+	function subIwmCU()
+	{
+		subChangeUrl("__NaviLat", "__NaviLng", "__NaviZoom");
+	}
+	// センタリング
+	let $iwmSV_hash = null;
+	function subIwmSV()
+	{
+		if($iwmSV_hash)
+		{
+			$Map.setView(
+				[$iwmSV_hash.lat, $iwmSV_hash.lng],
+				document.getElementById("__NaviZoom").value
+			);
+			$iwmSV_hash = null;
+		}
+		else
+		{
+			$Map.setView(
+				[document.getElementById("__NaviLat").value, document.getElementById("__NaviLng").value],
+				document.getElementById("__NaviZoom").value
+			);
+		}
+	}
+	// $BaseMarker 再描画
+	function subIwmBM_Reset()
+	{
+		subBaseMarkerNew("__NaviLat", "__NaviLng");
+		subIwmCU();
+		subIwmSV();
+	}
+	function subIwmZB(
+		$str
+	)
+	{
+		subIwmInput_Zoom_Change($str);
+		// URL／BL表示を変更
+		subIwmCU();
+		// センタリング
+		$Map.setView(
+			$Map.getCenter(),
+			document.getElementById("__NaviZoom").value
+		);
+	}
+	/*----------------
+	// Simple Window
+	----------------*/
+	const $AryNaviCommanderId = ["__NC02", "__NC01"];
+	const $ArySimpleWindowId  = ["__SW02", "__SW01"];
+	function subSimpleWindow_OpenClose(
+		$id,
+		$btnId
+	)
+	{
+		const bg1 = document.getElementById($btnId).style.background;
+		for(let _s1 of $AryNaviCommanderId)
+		{
+			document.getElementById(_s1).style.background = "";
+		}
+		for(let _s1 of $ArySimpleWindowId)
+		{
+			document.getElementById(_s1).style.top = "-1000px";
+		}
+		if(! bg1)
+		{
+			document.getElementById($id).style.top = $mapTopPx + "px";
+			document.getElementById($btnId).style.background = "#3c639b";
+		}
+	}
+	/*------------------------------------
+	// [マーカー消去]ボタン 表示／非表示
+	------------------------------------*/
+	function subMyObj_Init()
+	{
+		document.getElementById("__RmMarker").style.display = "none";
+	}
+	function subMyObj_OnOff(
+		$aryObj
+	)
+	{
+		document.getElementById("__RmMarker").style.display = ($aryObj.length > 0 ? "" : "none");
+	}
+	/*-----------------------
+	// $AryLocalMarker 消去
+	-----------------------*/
+	function subMyObj_Remove(
+		$aryObj
+	)
+	{
+		while((_o1 = $aryObj.pop()) != undefined)
+		{
+			_o1.remove($Map);
+		}
+		// Leaflet.greatCircle
+		// [マーカー消去]ボタン 非表示
+		document.getElementById("__RmMarker").style.display = "none";
+	}
+	/*----------------------
+	// [Tab]入力可能にする
+	----------------------*/
+	/*【参考】
+		http://www.webclap-dandy.com/?category=Programing&id=5
+	*/
+	function subAddTabCtrl(
+		$this,
+		$e
+	)
+	{
+		if($e.keyCode != 9)
+		{
+			return;
+		}
+		$e.preventDefault();
+		const cursorPosition = $this.selectionStart;
+		const cursorLeft     = $this.value.substr(0, cursorPosition);
+		const cursorRight    = $this.value.substr(cursorPosition, $this.value.length);
+		$this.value = cursorLeft + "\t" + cursorRight;
+		$this.selectionEnd = cursorPosition + 1;
+	}
+	/*---------------------------
+	// BL座標をタイル座標に変換
+	---------------------------*/
+	function rtnHashConvTileXY(
+		$aLatLng, // Ary[double, double]
+		$Zoom     // int
+	)
+	{
+		let aPoint = $Map.project($aLatLng, $Zoom).floor();
+		let x  = ((aPoint.x / 256) | 0); // タイル全体のX
+		let dx = ((aPoint.x % 256) | 0); // タイル内部のX
+		let y  = ((aPoint.y / 256) | 0); // タイル全体のY
+		let dy = ((aPoint.y % 256) | 0); // タイル内部のY
+		return {
+			"z":$Zoom,
+			"x":x,
+			"y":y,
+			"dx":dx,
+			"dy":dy
+		}
+	}
+</script>
 </head>
-
-<body onload="subInitDisp();subMyObj_Init();subSimpleWindow_Init(['_SW02','_SW01']);" onresize="subInitDisp();">
+<body>
+	<script>
+		window.addEventListener(
+			"load",
+			function()
+			{
+				subInitDisp();
+				subMyObj_Init();
+			}
+		);
+		window.addEventListener(
+			"resize",
+			function()
+			{
+				subInitDisp();
+			}
+		);
+	</script>
 	<!-------------------------------
 	// 画面左側（ナビゲータ）を設定
 	-------------------------------->
-	<div id="_divNavi">
+	<div id="__divNavi">
 		<div class="_titleMain">地理院タイルDL支援 2022</div>
-		<div class="_titleSub">
+		<div class="_expBox" style="font-size:14px;padding:5px 10px 10px 10px;">
 			地理院タイルダウンローダー(*)の設定ファイルを作成するサイトです。<br><div style="color:#f30">(*) iwm_gsimapdl.exe</div>
 		</div>
 		<div class="_vArrow">▼</div>
@@ -855,7 +895,7 @@ function subAddTabCtrl(
 			<div class="_expBoxTitle">(1) タイルを選択する</div>
 			ダウンロードするタイルを、下のボタンから編集してください。<br>
 			<form style="text-align:center;">
-				<input type="button" class="_btnNavi1" value="追加タイル編集" onclick="subSimpleWindow_Open('_SW02');"/>
+				<input type="button" class="_btnNavi1" value="追加タイル" onclick="subSimpleWindow_OpenClose('__SW02','__NC02');"/>
 			</form>
 		</div>
 		<div class="_vArrow">▼</div>
@@ -870,123 +910,145 @@ function subAddTabCtrl(
 			ズームレベル上下のタイルを自動で取得します。<p>
 		</div>
 		<div class="_vArrow">▼</div>
-		<textarea id="_editList" readonly></textarea>
+		<textarea id="__editList" readonly></textarea>
 		<div style="text-align:center;">
-			<input type="button" class="_btnNavi2" value="クリア" onclick="editReset('_editList');editReset('_saveList')"/>
+			<input type="button" class="_btnNavi2" value="クリア" onclick="editReset('__editList');editReset('__saveList')"/>
 		</div>
 		<div class="_vArrow">▼</div>
 		<div class="_expBox">
 			<div class="_expBoxTitle">(3) 編集内容を保存する</div>
 			確認後、[ファイルに保存]してください。<p>
 		</div>
-		<textarea id="_saveList" readonly></textarea>
+		<textarea id="__saveList" readonly></textarea>
 		<div style="text-align:center;">
-			<a id="_btnDL" class="_btnNavi1" href="#" download="" onclick="editSave('_saveList', this.id)">ファイルに保存</a>
+			<a id="_btnDL" class="_btnNavi1" href="#" download="" onclick="editSave('__saveList', this.id)">ファイルに保存</a>
 		</div>
 	</div>
 	<!---------------
 	// 数値入力補完
 	---------------->
-	<div id="_InputZoomA">
+	<div id="__InputZoomA">
 		ズームレベル<br>
-		<input type="button" class="_ZA" value="5" onclick="_iwmZA('5');"><input type="button" class="_ZA" value="6" onclick="_iwmZA('6');"><input type="button" class="_ZA" value="7" onclick="_iwmZA('7');"><input type="button" class="_ZA" value="8" onclick="_iwmZA('8');"><input type="button" class="_ZA" value="9" onclick="_iwmZA('9');"><br>
-		<input type="button" class="_ZA" value="10" onclick="_iwmZA('10');"><input type="button" class="_ZA" value="11" onclick="_iwmZA('11');"><input type="button" class="_ZA" value="12" onclick="_iwmZA('12');"><input type="button" class="_ZA" value="13" onclick="_iwmZA('13');"><input type="button" class="_ZA" value="14" onclick="_iwmZA('14');"><br>
-		<input type="button" class="_ZA" value="15" onclick="_iwmZA('15');"><input type="button" class="_ZA" value="16" onclick="_iwmZA('16');"><input type="button" class="_ZA" value="17" onclick="_iwmZA('17');"><input type="button" class="_ZA" value="18" onclick="_iwmZA('18');"><div class="_btnNavi1" style="display:inline-block;_display:inline;font-size:14px;height:26px;line-height:26px;margin:2px;padding:0;vertical-align:top;width:26px;" onclick="_iwmZA2();"><i class="fa fa-map-marker"></i></div>
+		<input type="button" class="_ZA" value="5" onclick="subIwmZA('5');"><input type="button" class="_ZA" value="6" onclick="subIwmZA('6');"><input type="button" class="_ZA" value="7" onclick="subIwmZA('7');"><input type="button" class="_ZA" value="8" onclick="subIwmZA('8');"><input type="button" class="_ZA" value="9" onclick="subIwmZA('9');"><br>
+		<input type="button" class="_ZA" value="10" onclick="subIwmZA('10');"><input type="button" class="_ZA" value="11" onclick="subIwmZA('11');"><input type="button" class="_ZA" value="12" onclick="subIwmZA('12');"><input type="button" class="_ZA" value="13" onclick="subIwmZA('13');"><input type="button" class="_ZA" value="14" onclick="subIwmZA('14');"><br>
+		<input type="button" class="_ZA" value="15" onclick="subIwmZA('15');"><input type="button" class="_ZA" value="16" onclick="subIwmZA('16');"><input type="button" class="_ZA" value="17" onclick="subIwmZA('17');"><input type="button" class="_ZA" value="18" onclick="subIwmZA('18');"><div class="_btnNavi1" style="display:inline-block;_display:inline;font-size:14px;height:26px;line-height:26px;margin:2px;padding:0;vertical-align:top;width:26px;" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div>
 	</div>
-	<div id="_InputZoomB">
-		<input type="button" class="_ZB" value="18" onclick="_iwmZB('18');"><br>
-		<input type="button" class="_ZB" value="17" onclick="_iwmZB('17');"><br>
-		<input type="button" class="_ZB" value="16" onclick="_iwmZB('16');"><br>
-		<input type="button" class="_ZB" value="15" onclick="_iwmZB('15');"><br>
-		<input type="button" class="_ZB" value="14" onclick="_iwmZB('14');"><br>
-		<input type="button" class="_ZB" value="13" onclick="_iwmZB('13');"><br>
-		<input type="button" class="_ZB" value="12" onclick="_iwmZB('12');"><br>
-		<input type="button" class="_ZB" value="11" onclick="_iwmZB('11');"><br>
-		<input type="button" class="_ZB" value="10" onclick="_iwmZB('10');"><br>
-		<input type="button" class="_ZB" value="9" onclick="_iwmZB('9');"><br>
-		<input type="button" class="_ZB" value="8" onclick="_iwmZB('8');"><br>
-		<input type="button" class="_ZB" value="7" onclick="_iwmZB('7');"><br>
-		<input type="button" class="_ZB" value="6" onclick="_iwmZB('6');"><br>
-		<input type="button" class="_ZB" value="5" onclick="_iwmZB('5');">
+	<script>
+		function subIwmZA(
+			$str
+		)
+		{
+			subIwmInput_ZoomA_Close();
+			subIwmInput_Zoom_Change($str);
+			subBaseMarkerNew("__NaviLat", "__NaviLng");
+			subIwmCU();
+			subIwmSV();
+		}
+		function subIwmZA2()
+		{
+			subIwmInput_ZoomA_Close();
+			subIwmSV();
+		}
+	</script>
+	<div id="__InputZoomB">
+		<div style="background:#999;border-radius:3px 3px 0 0;height:3px;width:26px;"></div>
+		<input type="button" class="_ZB" value="18" onclick="subIwmZB('18');"><br>
+		<input type="button" class="_ZB" value="17" onclick="subIwmZB('17');"><br>
+		<input type="button" class="_ZB" value="16" onclick="subIwmZB('16');"><br>
+		<input type="button" class="_ZB" value="15" onclick="subIwmZB('15');"><br>
+		<input type="button" class="_ZB" value="14" onclick="subIwmZB('14');"><br>
+		<input type="button" class="_ZB" value="13" onclick="subIwmZB('13');"><br>
+		<input type="button" class="_ZB" value="12" onclick="subIwmZB('12');"><br>
+		<input type="button" class="_ZB" value="11" onclick="subIwmZB('11');"><br>
+		<input type="button" class="_ZB" value="10" onclick="subIwmZB('10');"><br>
+		<input type="button" class="_ZB" value="9" onclick="subIwmZB('9');"><br>
+		<input type="button" class="_ZB" value="8" onclick="subIwmZB('8');"><br>
+		<input type="button" class="_ZB" value="7" onclick="subIwmZB('7');"><br>
+		<input type="button" class="_ZB" value="6" onclick="subIwmZB('6');"><br>
+		<input type="button" class="_ZB" value="5" onclick="subIwmZB('5');">
+		<div style="background:#999;border-radius:0 0 3px 3px;height:3px;width:26px;"></div>
 	</div>
 	<!-------------------
 	// 地理院地図の設定
 	-------------------->
-	<div id="_divNaviCommander">
-		北緯&nbsp;<input readonly type="text" id="_NaviLat"/>
-		東経&nbsp;<input readonly type="text" id="_NaviLng"/>
-		<!-- ズーム --><input type="hidden" id="_NaviZoom"/>
-		<div class="_btnNavi1" style="display:inline-block;_display:inline;font-size:14px;line-height:16px;" onclick="_iwmZA2();"><i class="fa fa-map-marker"></i></div>
-		<input type="button" id="_btnMarker" class="_btnNavi2" value="マーカー消去" onclick="subMyObj_Remove($ArySelectedLayer);"/>
+	<div id="__divNaviCommander">
+		緯度&nbsp;<input readonly type="text" id="__NaviLat"/>
+		経度&nbsp;<input readonly type="text" id="__NaviLng"/>
+		<!-- ズーム --><input type="hidden" id="__NaviZoom"/>
+		<div class="_btnNavi1" style="border-radius:10px;display:inline-block;font-size:14px;height:20px;margin:0 0 0 2px;padding:0;width:20px;" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div>
+		<input type="button" id="__RmMarker" class="_btnNavi2" style="border-radius:10px;font-size:17px;height:20px;margin:0 0 0 4px;padding:0;width:20px;" value="×" onclick="subMyObj_Remove($ArySelectedLayer);"/>
 		<!---------
 		// ヘルプ
 		---------->
-		<span style="float:right;margin:0 8px 0 4px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindow_Open('_SW01','subSimpleWindow_HDoc01(\'_SW01A\')');" style="font-weight:900;">？</font>
-		</span>
-		<div id="_SW01" class="_simpleWindow" style="width:320px;">
-			<font class="_simpleWindowTitle">操作説明</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindow_Close('_SW01');">×</font>
-			<div id="_SW01A" class="_simpleWindowOutput" style="background:#fff;max-height:500px;padding:0 0 12px 0;"></div>
+		<div id="__NC01" style="float:right;margin:0 8px 0 4px;">
+			<input type="button" class="_simpleWindowCall" value="？" onclick="subSimpleWindow_OpenClose('__SW01','__NC01');"/>
 		</div>
-		<!-----------------
-		// 追加タイル編集
-		------------------>
-		<span style="float:right;margin:0 4px;">
-			<font class="_simpleWindowCall" onclick="subSimpleWindow_Open('_SW02');" style="font-weight:500;">追加タイル編集</font>
-		</span>
-		<div id="_SW02" class="_simpleWindow" style="width:470px;">
-			<font class="_simpleWindowTitle">追加タイル編集</font>
-			<font class="_simpleWindowClose" onclick="subSimpleWindow_Close('_SW02');">×</font>
-			<div class="_simpleWindowOutput" style="padding:0 0 8px 0;text-align:center;">
-				<textarea id="_TA01" class="_editTextBox" wrap="off" style="height:180px;width:454px;"></textarea>
+		<div id="__SW01" class="_simpleWindow" style="right:0;width:360px;">
+			<div>操作説明</div>
+			<div id="__SW01Doc" class="_simpleWindowOutput" style="background:#fff;max-height:600px;padding:0 0 12px 0;"></div>
+		</div>
+		<!-------------
+		// 追加タイル
+		-------------->
+		<div id="__NC02" style="float:right;margin:0 4px;">
+			<input type="button" class="_simpleWindowCall" value="追加タイル" onclick="subSimpleWindow_OpenClose('__SW02','__NC02');"/>
+		</div>
+		<div id="__SW02" class="_simpleWindow" style="right:0;width:670px;">
+			<div>追加タイル</div>
+			<div class="_simpleWindowOutput" style="padding:4px 6px 6px 6px;">
+				<input type="file" id="__fileAddMap" accept=".tsv" style="width:656px;" onchange="subAddFile(this.id,'__TA02',0);"/>
+				<textarea id="__TA02" class="_editTextBox" wrap="off" style="height:360px;width:642px;"></textarea>
 				<script>
-					document.getElementById("_TA01").onkeydown = function(e){subAddTabCtrl(e, this);}
+					document.getElementById("__TA02").onkeydown = function(e){subAddTabCtrl(this, e);}
 				</script>
-				<br>
-				<input type="button" class="_btnNavi3" value="←地図へ反映" onclick="subMapSelector();subSimpleWindow_OpenClose('_SW02','_NC02');"/>
-				<a class="_btnNavi4" href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル一覧</a>
+				<input type="button" class="_btnNavi3" value="←地図に反映" onclick="subMapSelector();subSimpleWindow_OpenClose('__SW02','__NC02');"/>
+				<a href="http://maps.gsi.go.jp/development/ichiran.html" target="_blank" class="_btnNavi4">地理院タイル一覧</a>
 			</div>
 		</div>
 	</div>
-	<div id="_divMap">
+	<div id="__divMap">
 		<script>
 		// 地図描写調整
 		subInitDisp();
-
-		// _divNaviCommander 初期座標＠皇居
-		with(document){
-			getElementById("_NaviLat").value  = (35.68518697509636).toFixed(8);
-			getElementById("_NaviLng").value  = (139.7522735595703).toFixed(8);
-			getElementById("_NaviZoom").value = 5;
-		}
-		// URLからXYZ値を取得
+		// URLからアンカー(#Z/X/Y)取得
 		const hash = window.location.hash;
-
-		if(hash.length){
+		if(hash.length)
+		{
 			const aHash = hash.split("/");
-			document.getElementById("_NaviZoom").value = aHash[0].substr(1); // 先頭の'#'より後
-			document.getElementById("_NaviLat").value  = parseFloat(aHash[1]).toFixed(8);
-			document.getElementById("_NaviLng").value  = parseFloat(aHash[2]).toFixed(8);
+			let iZoom = parseInt(aHash[0].substr(1), 10);
+			if(isNaN(iZoom))
+			{
+				subIwmCU();
+			}
+			else
+			{
+				document.getElementById("__NaviZoom").value = iZoom;
+				document.getElementById("__NaviLat").value  = parseFloat(aHash[1]);
+				document.getElementById("__NaviLng").value  = parseFloat(aHash[2]);
+			}
 		}
-		else{
-			// URL／BL表示を変更
-			_iwmCU();
+		else
+		{
+			// 初回座標＠皇居
+			document.getElementById("__NaviZoom").value = 5;
+			document.getElementById("__NaviLat").value  = 35.68518697509636;
+			document.getElementById("__NaviLng").value  = 139.7522735595703;
 		}
-
+		// 小数点８桁以上
+		document.getElementById("__NaviLat").value = parseFloat(document.getElementById("__NaviLat").value).toFixed(8);
+		document.getElementById("__NaviLng").value = parseFloat(document.getElementById("__NaviLng").value).toFixed(8);
 		// 初回表示設定
 		const $Map = L.map(
-			"_divMap",
+			"__divMap",
 			{
-				center:[document.getElementById("_NaviLat").value, document.getElementById("_NaviLng").value],
-				zoom:document.getElementById("_NaviZoom").value,
+				center:[document.getElementById("__NaviLat").value, document.getElementById("__NaviLng").value],
+				zoom:document.getElementById("__NaviZoom").value,
 				minZoom:5,  // 最小ズーム
 				maxZoom:18, // 最大ズーム
 				zoomControl:false,    // Control.Zoom 非表示
 				doubleClickZoom:false // DblClick制御
 			}
 		);
-
 		/*---------------
 		// スケール表示
 		---------------*/
@@ -997,19 +1059,19 @@ function subAddTabCtrl(
 				position:"bottomleft"
 			}
 		).addTo($Map);
-
 		/*-------------
 		// タイル座標
 		-------------*/
 		const $TileCoord = new L.GridLayer();
-		$TileCoord.createTile = function(coords){
+		$TileCoord.createTile = function(coords)
+		{
 			const tile = L.DomUtil.create("canvas", "leaflet-tile");
 				tile.width = tile.height = 256;
 			const tileText = coords.z + "-" + coords.x + "-" + coords.y;
 			const ctx = tile.getContext("2d");
 				// 枠線
 				ctx.lineWidth = 1;
-				ctx.strokeStyle = "#000";
+				ctx.strokeStyle = "#555";
 				ctx.strokeRect(0, 0, 255, 255);
 				// 文字
 				ctx.font = "24px Arial";
@@ -1018,62 +1080,51 @@ function subAddTabCtrl(
 				ctx.strokeStyle = "#fff";
 				ctx.strokeText(tileText, 128, 128);
 				// 文字ヌキ
-				ctx.fillStyle = "#88f";
+				ctx.fillStyle = "#55f";
 				ctx.fillText(tileText, 128, 128);
 			return tile;
 		};
-
-		/*--------------------------------------------------------------------------------------
-		// メニュー等で使用
-		//   [0]'地図種', [1]'URL', [2]'拡張子', [3]'opacity', [4]'maxNativeZoom'
-		//   (例) ["std", "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", 1.0, 18]
-		// http://maps.gsi.go.jp/development/ichiran.html
-		--------------------------------------------------------------------------------------*/
 		const $URL = "https://cyberjapandata.gsi.go.jp/xyz/";
-
 		/*---------------
 		// ラジオボタン
 		---------------*/
 		let $RadioButtonSelectMap = [];
-
 		/*-----------------------
 		// チェックボックス可変
 		-----------------------*/
-		let $LMapSelector = null;
-
-		function subMapSelector(){
+		let $MapSelector = null;
+		function subMapSelector()
+		{
 			let checkBoxSelectMap = [];
-			const obj = document.getElementById("_TA01");
-
-			if(obj.value == ""){
-				obj.value = "// [Tab]区切り\n// タイル種\t拡張子\nstd\tpng\n";
+			const obj = document.getElementById("__TA02");
+			if(obj.value == "")
+			{
+				obj.value = "// [Tab]区切り\n// タイル種\t拡張子\npale\tpng\n";
 			}
-
 			let ary = [];
-
-			for(let _s1 of document.getElementById("_TA01").value.trimEnd().split("\n")){
+			for(let _s1 of document.getElementById("__TA02").value.trimEnd().split("\n"))
+			{
 				_s1 = _s1.trim();
-
-				if(_s1.length > 0 && _s1.substr(0, 2) != "//"){
+				if(_s1.length > 0 && _s1.substr(0, 2) != "//")
+				{
 					let _a1 = _s1.split("\t");
-
 					_a1[0] = _a1[0].trim();
-
 					try{
 						_a1[1] = _a1[1].trim();
-						if(_a1[1] == ""){
+						if(_a1[1] == "")
+						{
 							throw null;
 						}
 					}
-					catch(e){
+					catch(e)
+					{
 						_a1[1] = "png";
 					}
-
-					ary.push([_a1[0], $URL + _a1[0] + "/{z}/{x}/{y}." + _a1[1], 0.8, 18]);
+					ary.push([_a1[0], $URL + _a1[0] + "/{z}/{x}/{y}." + _a1[1], 1.0, 18]);
 				}
 			}
-
-			for(let _a1 of ary){
+			for(let _a1 of ary)
+			{
 				checkBoxSelectMap[_a1[0]] = L.tileLayer(
 					_a1[1],
 					{
@@ -1084,45 +1135,40 @@ function subAddTabCtrl(
 					}
 				).addTo($Map);
 			}
-
-			checkBoxSelectMap["UTMグリッド"] = L.tileLayer(
-				"http://{s}.tile.stamen.com/utm/{z}/{x}/{y}.png",
-				{
-					attribution:"Map tiles by <a href='http://stamen.com' target='_blank'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0' target='_blank'>CC BY 3.0</a>.",
-					opacity:1.0,
-					maxNativeZoom:18,
-					maxZoom:18
-				}
-			);
-
-			checkBoxSelectMap["タイル座標"] = $TileCoord;
-
+			checkBoxSelectMap["タイル座標"] = $TileCoord.addTo($Map);
+			///checkBoxSelectMap["タイル座標"] = $TileCoord.addTo($Map);
 			/*-------------------
 			// 地図選択メニュー
 			-------------------*/
-			if($LMapSelector){
-				$Map.removeControl($LMapSelector); // 前出を削除
+			if($MapSelector)
+			{
+				$Map.removeControl($MapSelector); // 前出を削除
 			}
-			$LMapSelector = L.control.layers(
+			$MapSelector = L.control.layers(
 				$RadioButtonSelectMap,
 				checkBoxSelectMap,
 				{
 					position:"topright"
 				}
 			);
-			$LMapSelector.addTo($Map);
-
+			$MapSelector.addTo($Map);
 			// 初回表示の処理
 			$Map.on(
 				"overlayremove",
-				function(e){
-					// 地図選択メニューから削除
-					checkBoxSelectMap[e.name].remove($Map);
+				function(e)
+				{
+					try
+					{
+						// 地図選択メニューから削除
+						$MapOverlays[e.name].remove($Map);
+					}
+					catch(e)
+					{
+					}
 				}
 			);
 		}
 		subMapSelector();
-
 		// 座標マーカー
 		const $BaseMarkerIcon = L.AwesomeMarkers.icon(
 			{
@@ -1140,29 +1186,30 @@ function subAddTabCtrl(
 				spin:true
 			}
 		);
-
 		/*---------------------
 		// ベースマーカー描画
 		---------------------*/
 		let $BaseMarker = null;
 		let $AryLocalMarker = [];
-
 		// 範囲選択用マーカー
 		let $ArySelectMarkerBgn = [];
 		let $ArySelectMarkerEnd = [];
 		let $ArySelectedLayer = [];
 		let $SelectMarkerBgn = null;
-
 		function subBaseMarkerNew(
 			$Lat,
 			$Lng
-		){
-			for(let _i1 = 0, _i2 = arguments.length; _i1 < _i2; _i1++){
-				if(isNaN(arguments[_i1])){
+		)
+		{
+			for(let _i1 = 0, _i2 = arguments.length; _i1 < _i2; _i1++)
+			{
+				if(isNaN(arguments[_i1]))
+				{
 					arguments[_i1] = document.getElementById(arguments[_i1]).value;
 				}
 			}
-			if($BaseMarker){
+			if($BaseMarker)
+			{
 				$Map.removeLayer($BaseMarker);
 			}
 			$BaseMarker = L.marker(
@@ -1172,80 +1219,69 @@ function subAddTabCtrl(
 					draggable:true // ドラッグ許可
 				}
 			).addTo($Map);
-
 			// URL／BL表示を変更
-			subChangeUrl($Lat, $Lng, "_NaviZoom");
-
+			subChangeUrl($Lat, $Lng, "__NaviZoom");
 			// ズームレベル変更 <= click
 			$BaseMarker.on(
 				"click",
-				function(e){
+				function(e)
+				{
 					// ズームレベル補完
 					const mouseP = $Map.latLngToContainerPoint(this.getLatLng());
 					subIwmInput_ZoomA_Open(
-						"_NaviZoom",
-						(mouseP.x + 40 + $MapNaviL),
+						"__NaviZoom",
+						(mouseP.x + 40 + $mapNaviL),
 						(mouseP.y - 25)
-					);
-				}
-			);
-			// センタリング <= contextmenu
-			$BaseMarker.on(
-				"contextmenu",
-				function(e){
-					$Map.setView(
-						this.getLatLng(),
-						document.getElementById("_NaviZoom").value
 					);
 				}
 			);
 			// ポップアップ情報更新 <= dragend
 			$BaseMarker.on(
 				"dragend",
-				function(e){
+				function(e)
+				{
 					// URL／BL表示を変更
 					const a1 = this.getLatLng();
-
-					subChangeUrl(a1.lat, a1.lng, "_NaviZoom");
-
+					subChangeUrl(a1.lat, a1.lng, "__NaviZoom");
 					// "_InputBL" を更新
-					_iwmIBL($subIwmInput_BL_toSave);
+					subIwmIBL($subIwmInput_BL_toSave);
 				}
 			);
 		}
-
 		// ベースマーカー初回描画
-		_iwmBMN();
-
+		subIwmBMN();
 		// ズームバー
 		subIwmInput_Zoom_Change($Map.getZoom());
-
 		// ミニマップ
 		const miniMapLayer = new L.TileLayer(
-			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
+			"https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
 			{
 				minZoom:3,
-				maxZoom:15
+				maxZoom:18
 			}
 		);
 		new L.Control.MiniMap(
 			miniMapLayer,
 			{
-				toggleDisplay:true
+				height:256,
+				position:"bottomright",
+				toggleDisplay:true,
+				width:256,
+				zoomLevelOffset:-3
 			}
 		).addTo($Map);
-
 		/*---------------------
 		// 地図上イベント共通
 		---------------------*/
 		// マーカー毎のイベント設定後でないと不具合
 		$Map.on(
 			"dblclick",
-			function(e){
+			function(e)
+			{
 				// ズームレベル補完
 				subIwmInput_ZoomA_Open(
-					"_NaviZoom",
-					(e.containerPoint.x + 20 + $MapNaviL + 20),
+					"__NaviZoom",
+					(e.containerPoint.x + 20 + $mapNaviL + 20),
 					(e.containerPoint.y - 25)
 				);
 				// ベースマーカー再描画
@@ -1254,14 +1290,14 @@ function subAddTabCtrl(
 		);
 		$Map.on(
 			"contextmenu",
-			function(e){
+			function(e)
+			{
 				// 範囲選択
-				objList = document.getElementById("_editList");
+				objList = document.getElementById("__editList");
 				_addList = "";
-
 				let hLatLng = e.latlng;
-
-				if($AryLocalMarker.length == 0){
+				if($AryLocalMarker.length == 0)
+				{
 					// マーカー作成
 					$AryLocalMarker.push(
 						L.marker(
@@ -1280,7 +1316,6 @@ function subAddTabCtrl(
 						e.latlng.lat,
 						e.latlng.lng
 					];
-
 					// 何もしない <= click
 					$AryLocalMarker[0].on(
 						"click",
@@ -1289,7 +1324,8 @@ function subAddTabCtrl(
 					// 開始点キャンセル <= contextmenu
 					$AryLocalMarker[0].on(
 						"contextmenu",
-						function(e){
+						function(e)
+						{
 							$Map.removeLayer(this);
 							$AryLocalMarker = [];
 							$ArySelectMarkerBgn = [];
@@ -1298,7 +1334,8 @@ function subAddTabCtrl(
 					// ドラッグ <= dragend
 					$AryLocalMarker[0].on(
 						"dragend",
-						function(e){
+						function(e)
+						{
 							let hLatLng = this.getLatLng();
 							$ArySelectMarkerBgn = [
 								hLatLng.lat,
@@ -1311,26 +1348,25 @@ function subAddTabCtrl(
 					// 開始点を消去
 					$Map.removeLayer($AryLocalMarker[0]);
 					$AryLocalMarker = [];
-
 					// 終了点BL
 					$ArySelectMarkerEnd = [
 						e.latlng.lat,
 						e.latlng.lng
 					];
-
-					// 北緯
-					if($ArySelectMarkerBgn[0] < $ArySelectMarkerEnd[0]){
+					// 緯度
+					if($ArySelectMarkerBgn[0] < $ArySelectMarkerEnd[0])
+					{
 						let d1 = $ArySelectMarkerBgn[0];
 						$ArySelectMarkerBgn[0] = $ArySelectMarkerEnd[0];
 						$ArySelectMarkerEnd[0] = d1;
 					}
-					// 東経
-					if($ArySelectMarkerBgn[1] > $ArySelectMarkerEnd[1]){
+					// 経度
+					if($ArySelectMarkerBgn[1] > $ArySelectMarkerEnd[1])
+					{
 						let d1 = $ArySelectMarkerBgn[1];
 						$ArySelectMarkerBgn[1] = $ArySelectMarkerEnd[1];
 						$ArySelectMarkerEnd[1] = d1;
 					}
-
 					// 画面描写
 					$ArySelectedLayer.push(
 						L.polygon(
@@ -1353,12 +1389,11 @@ function subAddTabCtrl(
 					);
 					// [マーカー消去]ボタン表示
 					subMyObj_OnOff($ArySelectedLayer);
-
 					// リスト出力
 					_addList = "";
 					let thisZoom = $Map.getZoom();
-
-					if(thisZoom < 10){
+					if(thisZoom < 10)
+					{
 						_addList += ("\# Z" + thisZoom + "：" + "選択タイル数に注意!!\n");
 					}
 					let hTileMinXy = rtnHashConvTileXY(
@@ -1369,26 +1404,24 @@ function subAddTabCtrl(
 						$ArySelectMarkerEnd,
 						thisZoom
 					);
-
-					for(let i1 = hTileMinXy.y; i1 <= hTileMaxXy.y; i1++){
+					for(let i1 = hTileMinXy.y; i1 <= hTileMaxXy.y; i1++)
+					{
 						_addList += (thisZoom + "\t" + hTileMinXy.x + "\t" + hTileMaxXy.x + "\t" + i1 + "\n");
 					}
 					objList.value += _addList;
-
-					editToGtsv('_TA01', '_editList', '_saveList');
-
+					editToGtsv("__TA02", "__editList", "__saveList");
 					// 最終行へ移動
 					objList.scrollTop = objList.scrollHeight;
-
 					$ArySelectMarkerBgn = $ArySelectMarkerEnd = [];
 				}
 			}
 		);
 		$Map.on(
 			"zoomend",
-			function(e){
+			function(e)
+			{
 				// URL／BL表示を変更
-				subChangeUrl("_NaviLat", "_NaviLng", $Map.getZoom());
+				subChangeUrl("__NaviLat", "__NaviLng", $Map.getZoom());
 				// ズームバー
 				subIwmInput_Zoom_Change($Map.getZoom());
 			}
@@ -1396,13 +1429,11 @@ function subAddTabCtrl(
 		</script>
 	</div>
 </body>
-
 </html>
-
 <!---------------------
 // ヒアドキュメント風
 ---------------------->
-<textarea id="_HDoc01" style="display:none;">
+<textarea id="__HDoc01" style="display:none;">
 <style>
 ._div_head{background:#ffc;color:#000;margin:8px 4px 4px 4px;padding:0 8px;font-weight:600;}
 ._ol, ._ul{margin:0;padding:0;}
@@ -1415,7 +1446,7 @@ function subAddTabCtrl(
 </style>
 <div class="_div_head">表示するタイルを指定する</div>
  <ul class="_ul">
-  <li class="_li1">[追加タイル編集]ボタンを押し、タイル種／拡張子を指定する。</li>
+  <li class="_li1">[追加タイル]ボタンを押し、タイル種／拡張子を指定する。</li>
  </ul>
 <div class="_div_head">地図上でのマウス操作</div>
  <ul class="_ul">
@@ -1427,7 +1458,6 @@ function subAddTabCtrl(
   <li class="_li1"><font class="_font_color1">青マーカー<i class="fa fa-map-marker _font_size22px"></i></font>
    <ul class="_ul">
     <li class="_li2">左クリック：ズームレベル補完表示</li>
-    <li class="_li2">右クリック：地図の中心に移動</li>
     <li class="_li2">ドラッグ：移動</li>
    </ul>
   </li>
@@ -1441,3 +1471,6 @@ function subAddTabCtrl(
  </ol>
 </li>
 </textarea>
+<script>
+	document.getElementById("__SW01Doc").innerHTML = document.getElementById("__HDoc01").value;
+</script>
