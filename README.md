@@ -11,7 +11,7 @@
 		Microsoft(R) .NET Framework 4.8.1 ランタイム
 			https://dotnet.microsoft.com/ja-jp/download/dotnet-framework/thank-you/net481-web-installer
 
-	iwm_gsimapdl_linux-mono.exe
+	iwm_gsimapdl-mono_linux.bin
 		Linux Mono 環境
 			https://www.mono-project.com/download/stable/#download-lin-debian
 		必要なライブラリ
@@ -34,9 +34,9 @@
 			$ iwm_gsimapdl.exe sample.gtsv -test
 		02_iwm_Gsimapdl-supporter.exe のバックエンド。
 
-	iwm_gsimapdl_linux-mono.exe
+	iwm_gsimapdl-mono_linux.bin
 		iwm_gsimapdl.exe の Linux Mono 版コマンドライン・ツール。
-			$ mono ./iwm_gsimapdl_linux-mono.exe ./sample.gtsv -test
+			$ mono ./iwm_gsimapdl-mono_linux.bin ./sample.gtsv -test
 
 	03_dl_checker2.html
 		ダウンロードされた地理院タイルを閲覧するためのオンライン版ツール。
@@ -53,5 +53,5 @@
 
 	・Linux
 		(1) 01_dl_supporter2.html
-		(2) iwm_gsimapdl_linux-mono.exe
+		(2) iwm_gsimapdl-mono_linux.bin
 		(3) 03_dl_checker2.html
