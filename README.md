@@ -12,7 +12,7 @@
 			https://dotnet.microsoft.com/ja-jp/download/dotnet-framework/thank-you/net481-web-installer
 
 	iwm_gsimapdl-mono_linux.bin
-		Linux Mono 環境
+		Mono(Linux) 環境
 			https://www.mono-project.com/download/stable/#download-lin-debian
 		必要なライブラリ
 			libmono-system-net-http4.0-cil
