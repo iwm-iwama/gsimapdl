@@ -1,4 +1,4 @@
-<!-- Ver.20240315 'TR-1A' -->
+<!-- Ver.20250505 'TR-1A' -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -809,8 +809,8 @@ input[type=range]
 		<!-------------
 		// Local File
 		-------------->
-		<span style="float:right;margin:0 8px;">
-			file&nbsp;<input type="text" id="__NaviURL" onchange="subUrlSelector(this.value);subMapSelector();"/>
+		<span style="float:right;font-size:12px;line-height:18px;margin:0 8px;">
+			フォルダ&nbsp;<input type="text" id="__NaviURL" onchange="subUrlSelector(this.value);subMapSelector();" style="width:250px;"/>
 		</span>
 	</div>
 	<div id="__divMap">
@@ -878,7 +878,7 @@ input[type=range]
 			const ctx = tile.getContext("2d");
 				// 枠線
 				ctx.lineWidth = 1;
-				ctx.strokeStyle = "#000";
+				ctx.strokeStyle = "#555";
 				ctx.strokeRect(0, 0, 255, 255);
 				// 文字
 				ctx.font = "24px Arial";
@@ -887,7 +887,7 @@ input[type=range]
 				ctx.strokeStyle = "#fff";
 				ctx.strokeText(tileText, 128, 128);
 				// 文字ヌキ
-				ctx.fillStyle = "#88f";
+				ctx.fillStyle = "#55f";
 				ctx.fillText(tileText, 128, 128);
 			return tile;
 		};
