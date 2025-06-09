@@ -1,87 +1,69 @@
-<!-- Ver.20250505 'TR-1A' -->
+<!-- Ver.20250610 'TR-1A' -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="Content-Script-Type" content="text/javascript"/>
 <title>地理院タイル・チェッカー</title>
-<!--------------------------------------------------------------------
-// leaflet
-// https://leafletjs.com/
---------------------------------------------------------------------->
+<!--
+	leaflet
+	https://leafletjs.com/
+-->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<!--------------------------------------------------------------------
-// Leaflet.MiniMap
-// https://github.com/Norkart/Leaflet-MiniMap
---------------------------------------------------------------------->
+<!--
+	Leaflet.MiniMap
+	https://github.com/Norkart/Leaflet-MiniMap
+-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
-<!--------------------------------------------------------------------
-// leaflet.awesome-markers
-// https://github.com/lvoogdt/Leaflet.awesome-markers
---------------------------------------------------------------------->
+<!--
+	leaflet.awesome-markers
+	https://github.com/lvoogdt/Leaflet.awesome-markers
+-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"></script>
-<!--------------------------------------------------------------------
-// fork-awesome
-// https://forkaweso.me/Fork-Awesome/
---------------------------------------------------------------------->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous"/>
-<!--------------------------------------------------------------------
-// CSS
---------------------------------------------------------------------->
+<!--
+	fork-awesome
+	https://forkaweso.me/Fork-Awesome/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css" integrity="sha256-XoaMnoYC5TH6/+ihMEnospgm0J1PM/nioxbOUdnM8HY=" crossorigin="anonymous"/>
 <style>
 @charset "utf-8";
-/*-------
-// 共通
--------*/
+/* 共通 */
 *
 {
-	font-family:sans-serif;
-	margin:0;
-	padding:0;
+	font-family: sans-serif;
 }
-/*------------------
-// leaflet CSS置換
-------------------*/
+/* leaflet CSS置換 */
 .leaflet-container
 {
-	background:#fff;
+	background: #fff;
 }
 .leaflet-control-minimap
 {
-	border:solid 2px rgba(0, 0, 0, 0.6);
-	border-radius:12px;
-	box-shadow:none;
+	border: solid 2px #505050;
+	border-radius: 12px;
+	box-shadow: none;
 }
 #map
 {
-	position:absolute;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	margin:0;
-	padding:0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
-/*-------------------
-// 本スクリプト関係
--------------------*/
+/* 本スクリプト関係 */
 body
 {
-	background:#ffe;
-	font-size:10px;
-	margin:10px;
-	padding:0;
+	background: #f6f6f7;
 }
 a
 {
-	text-decoration:none;
-}
-table
-{
-	border-collapse:collapse;
+	text-decoration: none;
 }
 input[type=button],
 input[type=checkbox],
@@ -90,7 +72,22 @@ input[type=number],
 input[type=range],
 input[type=text]
 {
-	vertical-align:middle;
+	vertical-align: middle;
+}
+input[type=button],
+input[type=checkbox],
+input[type=file],
+input[type=range]
+{
+	cursor: pointer;
+}
+input[type=text]
+{
+	cursor: text;
+}
+textarea
+{
+	display: block;
 }
 input[type=checkbox]:focus,
 input[type=file]:focus,
@@ -99,315 +96,338 @@ input[type=range]:focus,
 input[type=text]:focus,
 textarea:focus
 {
-	outline:1px solid #3d7cce; /* ブラウザの強調設定を上書き */
+	outline: 0; /* ブラウザの強調設定を上書き */
 }
 input[type=file]
 {
-	background:#bd1e38;
-	color:#000;
-	font-size:12px;
-	margin:0;
-	padding:0;
+	background: #fff;
+	color: #111;
+	font-size: 12px;
+	margin: 0 0 1px 1px;
+	padding: 1px;
 }
-input[type=file]:hover
+input[type=file]::file-selector-button,
+input[type=file]::-webkit-file-upload-button
 {
-	color:#fff;
+	background: #bd1e38;
+	border: none;
+	color: #fff;
+	padding: 0px 8px;
+	margin: 0 4px 0 0;
 }
 input[type=number]
 {
-	border:solid 1px #3d7cce;
-	margin:0;
-	padding:0;
+	border: solid 1px #3d7cce;
+	margin: 0;
+	padding: 0;
 }
 input[type=range]
 {
-	width:160px; /* Leaflet.Control.Opacity */
+	width: 160px; /* Leaflet.Control.Opacity */
 }
 ._btnNavi1,
+._btnNavi1fa,
 ._btnNavi2,
+._btnNavi2fa,
 ._btnNavi3,
-._btnNavi4
+._btnNavi4,
+._btnNavi5
 {
-	border:0;
-	color:#fff;
-	font-size:12px;
-	height:20px;
-	margin:0;
-	padding:0 8px;
-	vertical-align:middle;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	font-size: 12px;
+	height: 20px;
+	margin: 0;
+	padding: 0 8px;
+	vertical-align: middle;
 	/* a[href] 対応 */
-	display:inline-block;
-	line-height:20px;
-	text-decoration:none;
+	display: inline-block;
+	line-height: 20px;
+	text-decoration: none;
 	/* div 対応 */
-	text-align:center;
+	text-align: center;
+}
+._btnNavi1,
+._btnNavi1fa
+{
+	background: #3d7cce;
 }
 ._btnNavi1:hover,
+._btnNavi1fa:hover
+{
+	background: #6dacff;
+}
+._btnNavi2,
+._btnNavi2fa
+{
+	background: #bd1e38;
+}
 ._btnNavi2:hover,
-._btnNavi3:hover,
-._btnNavi4:hover
+._btnNavi2fa:hover
 {
-	cursor:pointer;
+	background: #ed4e68;
 }
-._btnNavi1
+._btnNavi1fa,
+._btnNavi2fa
 {
-	background:#3d7cce;
-}
-._btnNavi1:hover
-{
-	background:#6dacff;
-}
-._btnNavi2
-{
-	background:#bd1e38;
-}
-._btnNavi2:hover
-{
-	background:#ed4e68;
+	border-radius: 10px;
+	font-size: 16px;
+	line-height: 17px;
+	margin: 0 0 0 4px;
+	padding: 0;
+	width: 20px;
 }
 ._btnNavi3
 {
-	background:#2dae6c;
+	background: #2dae6c;
 }
 ._btnNavi3:hover
 {
-	background:#3dce7c;
+	background: #3dce7c;
 }
 ._btnNavi4
 {
-	background:#855896;
+	background: #855896;
 }
 ._btnNavi4:hover
 {
-	background:#a578a6;
+	background: #a578a6;
 }
-/*---------------
-// 上部メニュー
----------------*/
+._btnNavi5
+{
+	background: #ffa500;
+}
+._btnNavi5:hover
+{
+	background: #ffc520;
+}
+._textNavi1
+{
+	border: solid 1px #3d7cce;
+	color: #000;
+	font-size: 12px;
+	height: 18px;
+	line-height: 18px;
+	margin: 0;
+	padding: 0 3px;
+}
+/* 上部メニュー */
 #__divNaviCommander
 {
-	background:#505050;
-	border:0;
-	border-radius:8px 8px 0 0;
-	color:#fff;
-	font-size:13px;
-	left:0;
-	margin:0;
-	padding:2px 4px 2px 10px;
-	position:absolute;
-	top:0;
+	background: #505050;
+	border: 0;
+	border-radius: 8px 8px 0 0;
+	color: #fff;
+	font-size: 13px;
+	left: 0;
+	line-height: 17px;
+	margin: 0;
+	padding: 2px 4px 2px 10px;
+	position: absolute;
+	top: 0;
 	/* 動的に変更 */
-	width:0;
+	width: 0;
 }
 #__divMap
 {
-	cursor:crosshair;
-	left:0;
-	position:absolute;
+	cursor: crosshair;
+	left: 0;
+	position: absolute;
 	/* 動的に変更 */
-	height:0;
-	top:0;
-	width:0;
+	height: 0;
+	top: 0;
+	width: 0;
 }
 #__InputZoomA,
-#__InputZoomB
+#__InputZoomB,
+#__InputBL
 {
-	background-color:rgba(255, 255, 255, 0.6);
-	border:1px solid #777;
-	font-size:12px;
-	margin:0;
-	padding:2px;
-	position:absolute;
-	z-index:1500;
+	cursor: pointer;
+	font-size: 12px;
+	margin: 0;
+	position: absolute;
+	z-index: 1500;
 }
 #__InputZoomA
 {
-	top:-1000px;/* フォーマット時に隠すため */
+	background: rgba(255, 255, 255, 0.65);
+	border: solid 1px #7a7a7a;
+	padding: 2px;
+	width: 150px;
 }
 #__InputZoomB
 {
-	/* 以下、必要に応じて修正 */
-	left:10px;
-	top:34px;
+	background: rgba(56, 56, 56, 0.2);
+	border: 0;
+	padding: 0;
 }
-/* ↓OverLap */
-#__InputZoomA
+#__InputBL
 {
-	text-align:center;
-	width:150px;
+	background: rgba(255, 255, 255, 0.55);
+	border: solid 1px #7a7a7a;
+	padding: 2px;
+	width: 120px;
 }
-#__InputZoomB
-{
-	border:0;
-	margin:0;
-	padding:0;
-	text-align:center;
-}
-/* ↑OverLap */
+._ZA,
+._ZB,
 ._Btn1,
 ._Btn2,
-._Btn3,
-._ZA,
-._ZB
+._Btn3
 {
-	border:0;
-	color:#fff;
-	cursor:pointer;
-	font-size:12px;
-	margin:2px;
-	padding:0;
+	border: 0;
+	color: #fff;
+	font-size: 12px;
+	margin: 2px;
+	padding: 0;
 }
-/* ↓OverLap */
-._Btn1,
-._ZA,
-._ZB
+._Btn1
 {
-	background-color:rgba(0, 0, 0, 0.6);
-}
-._Btn1:hover,
-._ZA:hover,
-._ZB:hover
-{
-	background:#3c7bff !important;
+	background: rgba(0, 0, 0, 0.6);
 }
 ._Btn2
 {
-	background-color:rgba(12, 75, 157, 0.8);
+	background: rgba(12, 75, 157, 0.8);
 }
+._ZA:hover,
+._ZB:hover,
+._Btn1:hover,
 ._Btn2:hover
 {
-	background:#3c7bff !important;
+	background: #3c7bff !important;
 }
 ._Btn3
 {
-	background-color:rgba(229, 72, 72, 0.9);
+	background: rgba(229, 72, 72, 0.9);
 }
 ._Btn3:hover
 {
-	background:#ff5858 !important;
+	background: #ff5858 !important;
 }
 ._ZB
 {
-	margin:0;
+	margin: 0;
 }
 #__InputZoomA > ._ZA,
-#__InputZoomA > ._Btn3,
-#__InputZoomB > ._ZB
+#__InputZoomB > ._ZB,
+#__InputZoomA > ._Btn3
 {
-	height:26px;
-	width:26px;
+	height: 26px;
+	width: 26px;
 }
-/* ↑OverLap */
+#__InputBL > ._Btn1,
+#__InputBL > ._Btn2,
+#__InputBL > ._Btn3
+{
+	height: 23px;
+	width: 36px;
+}
+#__IBL1,
+#__IBL2,
+#__IBL3
+{
+	background: #fff;
+	border: solid 1px #7a7a7a;
+	color: #000;
+	height: 18px;
+	margin: 1px 2px;
+	padding: 0 2px;
+}
 #__NaviZoom,
 #__NaviLat,
 #__NaviLng,
 #__NaviURL
 {
-	background:#666;
-	border:0;
-	color:#fff;
-	font-size:12px;
-	height:18px;
-	ime-mode:inactive;
-	line-height:18px;
-	margin:0;
-	padding:0 2px;
-	vertical-align:middle;
+	background: #666;
+	border: 0;
+	color: #fff;
+	font-size: 12px;
+	height: 18px;
+	ime-mode: inactive;
+	line-height: 18px;
+	margin: 0;
+	padding: 0 3px;
 }
 #__NaviZoom
 {
-	width:0;
+	width: 0;
 }
 #__NaviLat,
 #__NaviLng
 {
-	width:90px;
+	width: 90px;
 }
 #__NaviURL
 {
-	width:120px;
+	width: 120px;
 }
 #__NaviZoom:hover,
 #__NaviZoom:focus
 {
-	background:#ff5;
+	background: #ff5;
 }
-/*----------------
-// Simple Window
-----------------*/
+/* Simple Window */
 ._simpleWindowCall
 {
-	background:transparent;
-	border:solid 1px #fff;
-	color:#fff;
-	font-size:12px;
-	float:right;
-	height:20px;
-	margin:0;
-	padding:0 4px;
+	background: transparent;
+	border: solid 1px #fff;
+	color: #fff;
+	font-size: 12px;
+	float: right;
+	height: 20px;
+	margin: 0 8px 0 0;
+	padding: 0 6px;
 }
 ._simpleWindowCall:hover
 {
-	color:#f00;
-	cursor:pointer;
+	background: #7a7a7a;
 }
 ._simpleWindow
 {
-	background-color:rgba(13, 76, 158, 0.9);
-	color:#fff;
-	float:right;
-	font-size:12px;
-	line-height:22px;
-	margin:0;
-	padding:0;
-	position:absolute;
-	text-align:center;
+	background: rgba(56, 56, 56, 0.75);
+	color: #fff;
+	cursor: pointer;
+	float: right;
+	font-size: 12px;
+	line-height: 22px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	text-align: center;
 	top: -1000px;
-	z-index:2000;
+	z-index: 2000;
 }
 ._simpleWindowOutput
 {
-	background:#f7f7f7;
-	border:0;
-	color:#000;
-	font-size:12px;
-	margin:1px;
-	overflow:auto;
-	padding:0;
-	text-align:left;
+	color: #000;
+	font-size: 12px;
+	margin: 0;
+	overflow: auto;
+	padding: 0;
+	text-align: left;
 }
-/*---------------
-// Edit Textbox
----------------*/
+/* Edit Textbox */
 ._editTextBox
 {
-	border:1px solid #a5a5a5;
-	color:#000;
-	font-size:13px;
-	ime-mode:inactive;
-	margin:0;
-	overflow:auto;
-	padding:2px 6px;
-	resize:none;
+	border: solid 1px #3d7cce;
+	color: #000;
+	font-size: 12px;
+	margin: 0;
+	overflow: auto;
+	padding: 2px 6px;
+	resize: none;
 }
 </style>
-<!---------
-// 前処理
----------->
-<script>
+<script defer>
+	// 前処理
 	// Microsoft 独自仕様？
-	const uA = window.navigator.userAgent.toLowerCase();
-	if(uA.indexOf("edge") != -1 || uA.indexOf("trident") != -1 || uA.indexOf("msie") != -1)
+	const UA = window.navigator.userAgent.toLowerCase();
+	if(UA.indexOf("edge") != -1 || UA.indexOf("trident") != -1 || UA.indexOf("msie") != -1)
 	{
 		alert("このブラウザでは正しく動作しないことがあります。\n\n【動作確認済】\n・Firefox\n・Google Chrome\n・Opera\n・Vivaldi");
 	}
-</script>
-<script>
-	/*-----------------------
 	// フレームサイズを調整
-	-----------------------*/
-	// 大域定数
-	const $mapTopPx = 24;
+	const MapTopPx = 24;
 	function subInitDisp()
 	{
 		const naviCommanderWidthPad = 14;
@@ -416,93 +436,100 @@ input[type=range]
 		// __divNaviCommander
 		document.getElementById("__divNaviCommander").style.width = (mapW - naviCommanderWidthPad) + "px";
 		// __divMap
-		const obj1 = document.getElementById("__divMap").style;
-		obj1.height = (mapH - $mapTopPx) + "px";
-		obj1.top    = $mapTopPx + "px";
-		obj1.width  = mapW + "px";
+		const e1 = document.getElementById("__divMap").style;
+		e1.height = (mapH - MapTopPx) + "px";
+		e1.top    = MapTopPx + "px";
+		e1.width  = mapW + "px";
 	}
-	/*---------------
 	// 数値入力補完
-	---------------*/
-	// 大域変数
+	let $subIwmInput_BL_now = null;
 	let $subIwmInput_BL_toSave = null;
 	function subIwmInput_Init()
 	{
 		subIwmInput_Close("__InputBL");
 	}
+	let $subIwmInput_ZoomA_OpenFlg = false;
 	function subIwmInput_ZoomA_Open(
 		$outputId, // [id]
-		$posX,     // INT
-		$posY      // INT
+		$posX,     // Int
+		$posY      // Int
 	)
 	{
 		subIwmInput_Open("__InputZoomA", $outputId, $posX, $posY, true);
+		$subIwmInput_ZoomA_OpenFlg = true;
 	}
 	function subIwmInput_ZoomA_Close()
 	{
 		subIwmInput_Close("__InputZoomA");
+		$subIwmInput_ZoomA_OpenFlg = false;
 	}
 	function subIwmInput_Zoom_Change(
-		$str
+		$zoom // Int
 	)
 	{
-		document.getElementById("__NaviZoom").value = parseInt($str, 10);
+		$zoom = parseInt($zoom);
+		document.getElementById("__NaviZoom").value = $zoom;
 		const color1 = "#000";
 		const color2 = "#0c4b9d";
-		const obj1 = document.getElementsByClassName("_ZA");
-		const obj2 = document.getElementsByClassName("_ZB");
-		let i1 = $str;
+		const e1 = document.getElementsByClassName("_ZA");
+		const e2 = document.getElementsByClassName("_ZB");
+		let i1 = $zoom;
 		let i2 = 0;
-		let i3 = obj1.length;
+		let i3 = e1.length;
 		for(; i2 < i3; i2++)
 		{
-			obj1[i2].style.background = (i1 == obj1[i2].value ? color2 : color1);
-			if(i1 == obj1[i2].value)
+			e1[i2].style.background = (i1 == e1[i2].value ? color2 : color1);
+			if(i1 == e1[i2].value)
 			{
-				obj1[i2].style.background = color2;
-				obj1[i2].style.opacity = 0.8;
+				e1[i2].style.background = color2;
+				e1[i2].style.opacity = 0.8;
 			}
 			else
 			{
-				obj1[i2].style.background = color1;
-				obj1[i2].style.opacity = 0.6;
+				e1[i2].style.background = color1;
+				e1[i2].style.opacity = 0.6;
 			}
-			if(i1 == obj2[i2].value)
+			if(i1 == e2[i2].value)
 			{
-				obj2[i2].style.background = color2;
-				obj2[i2].style.opacity = 0.8;
+				e2[i2].style.background = color2;
+				e2[i2].style.opacity = 0.8;
 			}
 			else
 			{
-				obj2[i2].style.background = color1;
-				obj2[i2].style.opacity = 0.6;
+				e2[i2].style.background = color1;
+				e2[i2].style.opacity = 0.6;
 			}
 		}
 		subIwmInput_Close("__InputZoomA");
 	}
+	let $subIwmInput_Open_timerId = null;
 	function subIwmInput_Open(
 		$inputId,   // [id]
 		$outputId,  // [id]
-		$posX,      // iNT
-		$posY,      // INT
+		$posX,      // Int
+		$posY,      // Int
 		$autoHidden // BOOL
 	)
 	{
 		$subIwmInput_BL_now = $outputId;
 		// 他の入力フォームを全て閉じる
 		subIwmInput_Init();
-		const obj1 = document.getElementById($outputId);
-		const rect = obj1.getBoundingClientRect();
-		const _posX = ($posX == null || $posX == undefined ? rect.left + window.pageXOffset : $posX);
-		const _posY = ($posY == null || $posY == undefined ? rect.top + window.pageYOffset + obj1.clientHeight : $posY);
-		const obj2 = document.getElementById($inputId).style;
-		obj2.display = "";
-		obj2.left    = _posX + "px";
-		obj2.top     = _posY + "px";
-		// 設定ミリ秒後に自動終了
+		const e1 = document.getElementById($outputId);
+		const rect = e1.getBoundingClientRect();
+		const _posX = ($posX == null || $posX == undefined ? rect.left + window.pageXOffset : ($posX + 25));
+		const _posY = ($posY == null || $posY == undefined ? rect.top + window.pageYOffset + e1.clientHeight : ($posY - 20));
+		const e2 = document.getElementById($inputId).style;
+		e2.display = "";
+		e2.left    = _posX + "px";
+		e2.top     = _posY + "px";
+		// 設定ミリ秒後に閉じる
 		if($autoHidden)
 		{
-			setTimeout("subIwmInput_Close('" + $inputId + "')", 2500);
+			// 初期化しないと前回の残り時間が使用されてしまう
+			clearTimeout($subIwmInput_Open_timerId);
+			$subIwmInput_Open_timerId = setTimeout(() => {
+				subIwmInput_Close($inputId);
+			}, 7500);
 		}
 	}
 	function subIwmInput_Close(
@@ -513,16 +540,14 @@ input[type=range]
 		{
 			document.getElementById($outputId).style.display = "none";
 		}
-		catch(e)
+		catch
 		{
 		}
 		// 初期化
 		$subIwmInput_BL_now = null;
-		document.onkeydown = function(evt){}
+		document.onkeydown = function(){}
 	}
-	/*-------------
 	// エイリアス
-	-------------*/
 	// "__InputBL" を更新
 	function subIwmIBL(
 		$d1 // DBL
@@ -544,16 +569,16 @@ input[type=range]
 		subChangeUrl("__NaviLat", "__NaviLng", "__NaviZoom");
 	}
 	// センタリング
-	let $iwmSV_hash = null;
+	let $iwmSV_Hash = null;
 	function subIwmSV()
 	{
-		if($iwmSV_hash)
+		if($iwmSV_Hash)
 		{
 			$Map.setView(
-				[$iwmSV_hash.lat, $iwmSV_hash.lng],
+				[$iwmSV_Hash.lat, $iwmSV_Hash.lng],
 				document.getElementById("__NaviZoom").value
 			);
-			$iwmSV_hash = null;
+			$iwmSV_Hash = null;
 		}
 		else
 		{
@@ -571,10 +596,10 @@ input[type=range]
 		subIwmSV();
 	}
 	function subIwmZB(
-		$str
+		$zoom // Int
 	)
 	{
-		subIwmInput_Zoom_Change($str);
+		subIwmInput_Zoom_Change($zoom);
 		// URL／BL表示を変更
 		subIwmCU();
 		// センタリング
@@ -583,34 +608,92 @@ input[type=range]
 			document.getElementById("__NaviZoom").value
 		);
 	}
-	/*----------------
 	// Simple Window
-	----------------*/
-	const $AryNaviCommanderId = ["__NC03", "__NC01"];
-	const $ArySimpleWindowId  = ["__SW03", "__SW01"];
+	const AryNaviCommanderId = ["__NC02", "__NC01"];
+	const ArySimpleWindowId  = ["__SW02", "__SW01"];
 	function subSimpleWindow_OpenClose(
 		$id,
-		$btnId
+		$btnId,
+		$forceOpenMsec = 0
 	)
 	{
-		const bg1 = document.getElementById($btnId).style.background;
-		for(let _s1 of $AryNaviCommanderId)
+		const e1 = document.getElementById($btnId).style.borderColor;
+		for(let _s1 of AryNaviCommanderId)
 		{
-			document.getElementById(_s1).style.background = "";
+			document.getElementById(_s1).style.borderColor = "";
 		}
-		for(let _s1 of $ArySimpleWindowId)
+		for(let _s1 of ArySimpleWindowId)
 		{
 			document.getElementById(_s1).style.top = "-1000px";
 		}
-		if(! bg1)
+		if(! e1)
 		{
-			document.getElementById($id).style.top = $mapTopPx + "px";
-			document.getElementById($btnId).style.background = "#3c639b";
+			document.getElementById($btnId).style.borderColor = "#f00";
+			document.getElementById($id).style.top = MapTopPx + "px";
+			return;
+		}
+		// 強調するため時間差表示
+		if($forceOpenMsec)
+		{
+			document.getElementById($btnId).style.borderColor = "#f00";
+			setTimeout(() => {
+				document.getElementById($id).style.top = MapTopPx + "px";
+			}, parseInt($forceOpenMsec));
+			return;
 		}
 	}
-	/*---------------
+	let $HashSimpleWindowResize = {
+		flag: false,
+		x: 0,
+		y: 0
+	};
+	function subSimpleWindow_Resize(
+		$id,
+		$function
+	)
+	{
+		const e1 = document.getElementById($id);
+			const iMinWidth = parseInt(e1.style.minWidth);
+			const iMaxWidth = parseInt(e1.style.maxWidth);
+			const iMinHeight = parseInt(e1.style.minHeight);
+			const iMaxHeight = parseInt(e1.style.maxHeight);
+		e1.addEventListener("mouseover", () => { e1.draggable = true; });
+		e1.addEventListener("dragstart", (e) => {
+			$HashSimpleWindowResize.flag = true;
+			$HashSimpleWindowResize.x = e.screenX;
+			$HashSimpleWindowResize.y = e.screenY;
+		});
+		e1.addEventListener("dragend", (e) => {
+			if($HashSimpleWindowResize.flag)
+			{
+				$HashSimpleWindowResize.flag = false;
+				e.dragX = e.screenX - $HashSimpleWindowResize.x;
+					let iWidth = e1.clientWidth - e.dragX;
+					if(iWidth > iMaxWidth)
+					{
+						iWidth = iMaxWidth;
+					}
+					else if(iWidth < iMinWidth)
+					{
+						iWidth = iMinWidth;
+					}
+					e1.style.width = iWidth + "px";
+				e.dragY = e.screenY - $HashSimpleWindowResize.y;
+					let iHeight = e1.clientHeight + e.dragY;
+					if(iHeight > iMaxHeight)
+					{
+						iHeight = iMaxHeight;
+					}
+					else if(iHeight < iMinHeight)
+					{
+						iHeight = iMinHeight;
+					}
+					e1.style.height = iHeight + "px";
+				$function(iWidth, iHeight);
+			}
+		});
+	}
 	// ファイル読込
-	---------------*/
 	let $FileName = "";
 	function subReadFile(
 		$fileId,
@@ -621,10 +704,9 @@ input[type=range]
 		let fileList = document.getElementById($fileId).files;
 		// ファイル名記憶
 		$FileName = fileList[0].name;
-		let reader = new FileReader();
-		reader.onload = function(evt)
-		{
-			document.getElementById($textareaId).value = evt.target.result;
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			document.getElementById($textareaId).value = e.target.result;
 			// 再設定
 			subMapSelector();
 		}
@@ -632,9 +714,7 @@ input[type=range]
 		reader.readAsText(fileList[0]);
 		fileList = null;
 	}
-	/*---------------------
-	// Gtsvタグデータ読込
-	---------------------*/
+	// GTSVタグデータ読込
 	function rtnGtsvTagData(
 		$sText = "",
 		$sTag = ""
@@ -652,22 +732,22 @@ input[type=range]
 		{
 			_s1 = _s1.trim();
 			// 空白行／コメント行を無視
-			if (_s1.length == 0 || _s1.substr(0, 2) == "//")
+			if(_s1.length == 0 || _s1.substr(0, 2) == "//")
 			{
 				continue;
 			}
 			// タグの始まりか？
-			else if (_s1 == tagBgn)
+			else if(_s1 == tagBgn)
 			{
 				bFlg = true;
 			}
 			// タグの終わりか？
-			else if (_s1 == tagEnd)
+			else if(_s1 == tagEnd)
 			{
 				bFlg = false;
 			}
 			// 調べたいタグである
-			else if (bFlg == true)
+			else if(bFlg)
 			{
 				rtn.push(_s1);
 			}
@@ -675,12 +755,10 @@ input[type=range]
 		///console.log(rtn);
 		return rtn;
 	}
-	/*--------------------
 	// URL／BL表示を変更
-	--------------------*/
 	function subChangeUrl(
-		$Lat,
-		$Lng,
+		$lat,
+		$lng,
 		$Zoom
 	)
 	{
@@ -691,22 +769,18 @@ input[type=range]
 				arguments[_i1] = document.getElementById(arguments[_i1]).value;
 			}
 		}
-		document.getElementById("__NaviLat").value  = parseFloat($Lat).toFixed(8);
-		document.getElementById("__NaviLng").value  = parseFloat($Lng).toFixed(8);
+		document.getElementById("__NaviLat").value  = parseFloat($lat).toFixed(8);
+		document.getElementById("__NaviLng").value  = parseFloat($lng).toFixed(8);
 		document.getElementById("__NaviZoom").value = $Zoom;
 		// URL置換
 		history.replaceState(
 			null,
 			null,
-			("#" + $Zoom + "/" + $Lat + "/" + $Lng)
+			("#" + $Zoom + "/" + $lat + "/" + $lng)
 		);
 	}
-	/*----------------------
 	// [Tab]入力可能にする
-	----------------------*/
-	/*【参考】
-		http://www.webclap-dandy.com/?category=Programing&id=5
-	*/
+	//   http://www.webclap-dandy.com/?category=Programing&id=5
 	function subAddTabCtrl(
 		$this,
 		$e
@@ -726,39 +800,28 @@ input[type=range]
 </script>
 </head>
 <body>
-	<script>
-		window.addEventListener(
-			"load",
-			function()
-			{
-				subInitDisp();
-				subSimpleWindow_OpenClose("__SW03", "__NC03");
-			}
-		);
-		window.addEventListener(
-			"resize",
-			function()
-			{
-				subInitDisp();
-			}
-		);
+	<script defer>
+		window.addEventListener("load", () => {
+			subInitDisp();
+			subSimpleWindow_OpenClose("__SW02", "__NC02", 500);
+		});
+		window.addEventListener("resize", () => {
+			subInitDisp();
+		});
 	</script>
-	<!---------------
-	// 数値入力補完
-	---------------->
-	<div id="__InputZoomA">
-		ズームレベル<br>
-		<input type="button" class="_ZA" value="5" onclick="subIwmZA('5');"><input type="button" class="_ZA" value="6" onclick="subIwmZA('6');"><input type="button" class="_ZA" value="7" onclick="subIwmZA('7');"><input type="button" class="_ZA" value="8" onclick="subIwmZA('8');"><input type="button" class="_ZA" value="9" onclick="subIwmZA('9');"><br>
-		<input type="button" class="_ZA" value="10" onclick="subIwmZA('10');"><input type="button" class="_ZA" value="11" onclick="subIwmZA('11');"><input type="button" class="_ZA" value="12" onclick="subIwmZA('12');"><input type="button" class="_ZA" value="13" onclick="subIwmZA('13');"><input type="button" class="_ZA" value="14" onclick="subIwmZA('14');"><br>
-		<input type="button" class="_ZA" value="15" onclick="subIwmZA('15');"><input type="button" class="_ZA" value="16" onclick="subIwmZA('16');"><input type="button" class="_ZA" value="17" onclick="subIwmZA('17');"><input type="button" class="_ZA" value="18" onclick="subIwmZA('18');"><div class="_btnNavi1" style="display:inline-block;_display:inline;font-size:14px;height:26px;line-height:26px;margin:2px;padding:0;vertical-align:top;width:26px;" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div>
+	<!-- ズームレベル -->
+	<div id="__InputZoomA" style="top:-1000px;">
+		<div class="_btnNavi1fa" style="margin:0 5px;" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div><input type="button" class="_ZA" value="5" onclick="subIwmZA('5');"/><input type="button" class="_ZA" value="6" onclick="subIwmZA('6');"/><input type="button" class="_ZA" value="7" onclick="subIwmZA('7');"/><input type="button" class="_ZA" value="8" onclick="subIwmZA('8');"/><br>
+		<input type="button" class="_ZA" value="9" onclick="subIwmZA('9');"/><input type="button" class="_ZA" value="10" onclick="subIwmZA('10');"/><input type="button" class="_ZA" value="11" onclick="subIwmZA('11');"/><input type="button" class="_ZA" value="12" onclick="subIwmZA('12');"/><input type="button" class="_ZA" value="13" onclick="subIwmZA('13');"/><br>
+		<input type="button" class="_ZA" value="14" onclick="subIwmZA('14');"/><input type="button" class="_ZA" value="15" onclick="subIwmZA('15');"/><input type="button" class="_ZA" value="16" onclick="subIwmZA('16');"/><input type="button" class="_ZA" value="17" onclick="subIwmZA('17');"/><input type="button" class="_ZA" value="18" onclick="subIwmZA('18');"/><br>
 	</div>
-	<script>
+	<script defer>
 		function subIwmZA(
-			$str
+			$zoom // Int
 		)
 		{
 			subIwmInput_ZoomA_Close();
-			subIwmInput_Zoom_Change($str);
+			subIwmInput_Zoom_Change($zoom);
 			subBaseMarkerNew("__NaviLat", "__NaviLng");
 			subIwmCU();
 			subIwmSV();
@@ -769,64 +832,65 @@ input[type=range]
 			subIwmSV();
 		}
 	</script>
-	<div id="__InputZoomB">
+	<div id="__InputZoomB" style="left:10px;top:33px;">
 		<div style="background:#999;border-radius:3px 3px 0 0;height:3px;width:26px;"></div>
-		<input type="button" class="_ZB" value="18" onclick="subIwmZB('18');"><br>
-		<input type="button" class="_ZB" value="17" onclick="subIwmZB('17');"><br>
-		<input type="button" class="_ZB" value="16" onclick="subIwmZB('16');"><br>
-		<input type="button" class="_ZB" value="15" onclick="subIwmZB('15');"><br>
-		<input type="button" class="_ZB" value="14" onclick="subIwmZB('14');"><br>
-		<input type="button" class="_ZB" value="13" onclick="subIwmZB('13');"><br>
-		<input type="button" class="_ZB" value="12" onclick="subIwmZB('12');"><br>
-		<input type="button" class="_ZB" value="11" onclick="subIwmZB('11');"><br>
-		<input type="button" class="_ZB" value="10" onclick="subIwmZB('10');"><br>
-		<input type="button" class="_ZB" value="9" onclick="subIwmZB('9');"><br>
-		<input type="button" class="_ZB" value="8" onclick="subIwmZB('8');"><br>
-		<input type="button" class="_ZB" value="7" onclick="subIwmZB('7');"><br>
-		<input type="button" class="_ZB" value="6" onclick="subIwmZB('6');"><br>
-		<input type="button" class="_ZB" value="5" onclick="subIwmZB('5');">
+		<input type="button" class="_ZB" value="18" onclick="subIwmZB('18');"/><br>
+		<input type="button" class="_ZB" value="17" onclick="subIwmZB('17');"/><br>
+		<input type="button" class="_ZB" value="16" onclick="subIwmZB('16');"/><br>
+		<input type="button" class="_ZB" value="15" onclick="subIwmZB('15');"/><br>
+		<input type="button" class="_ZB" value="14" onclick="subIwmZB('14');"/><br>
+		<input type="button" class="_ZB" value="13" onclick="subIwmZB('13');"/><br>
+		<input type="button" class="_ZB" value="12" onclick="subIwmZB('12');"/><br>
+		<input type="button" class="_ZB" value="11" onclick="subIwmZB('11');"/><br>
+		<input type="button" class="_ZB" value="10" onclick="subIwmZB('10');"/><br>
+		<input type="button" class="_ZB" value="9" onclick="subIwmZB('9');"/><br>
+		<input type="button" class="_ZB" value="8" onclick="subIwmZB('8');"/><br>
+		<input type="button" class="_ZB" value="7" onclick="subIwmZB('7');"/><br>
+		<input type="button" class="_ZB" value="6" onclick="subIwmZB('6');"/><br>
+		<input type="button" class="_ZB" value="5" onclick="subIwmZB('5');"/>
 		<div style="background:#999;border-radius:0 0 3px 3px;height:3px;width:26px;"></div>
 	</div>
-	<!-------------------
-	// 地理院地図の設定
-	-------------------->
+	<!-- 地理院地図の設定 -->
 	<div id="__divNaviCommander">
-		緯度&nbsp;<input readonly type="text" id="__NaviLat"/>
-		経度&nbsp;<input readonly type="text" id="__NaviLng"/>
+		緯度&nbsp;<input type="text" id="__NaviLat" readonly/>
+		経度&nbsp;<input type="text" id="__NaviLng" readonly/>
 		<!-- ズーム --><input type="hidden" id="__NaviZoom"/>
 		<div class="_btnNavi1" style="border-radius:10px;display:inline-block;font-size:14px;height:20px;margin:0 0 0 2px;padding:0;width:20px;" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div>
-		<!---------
-		// ヘルプ
-		---------->
-		<div id="__NC01" style="float:right;margin:0 8px 0 4px;">
-			<input type="button" class="_simpleWindowCall" value="？" onclick="subSimpleWindow_OpenClose('__SW01','__NC01');"/>
-		</div>
+		<!-- ヘルプ -->
+		<input type="button" id="__NC01" class="_simpleWindowCall" value="？" onclick="subSimpleWindow_OpenClose('__SW01','__NC01');"/>
 		<div id="__SW01" class="_simpleWindow" style="right:0;width:360px;">
 			<div>操作説明</div>
-			<div id="__SW01Doc" class="_simpleWindowOutput" style="background:#fff;max-height:600px;padding:0 0 12px 0;"></div>
+			<div id="__SW01Doc" class="_simpleWindowOutput" style="background:#fff;margin:0 1px 1px 1px;max-height:600px;padding:0 0 12px 0;"></div>
 		</div>
-		<!---------------
-		// Gtsvファイル
-		---------------->
-		<div id="__NC03" style="float:right;margin:0 4px;">
-			<input type="button" class="_simpleWindowCall" value="設定ファイル" onclick="subSimpleWindow_OpenClose('__SW03','__NC03');"/>
-		</div>
-		<div id="__SW03" class="_simpleWindow" style="right:0;width:450px;">
-			<div>Gtsv 設定ファイル読込</div>
-			<div class="_simpleWindowOutput" style="background:#666;">
-				<input id="__readGtsv" type="file" class="_btnNavi2" style="text-align:left;width:448px;" accept=".gtsv" onchange="subReadFile(this.id,'__TA03');"/>
-				<textarea readonly id="__TA03" class="_editTextBox" wrap="off" style="height:480px;width:434px;" placeholder="// 例 皇居付近の地理院タイルを取得&#13;<tiletype>&#13;std	png&#13;</tiletype>&#13;<range>&#13;15	29104	29105	12902&#13;15	29104	29105	12903&#13;</range>&#13;"></textarea>
+		<!-- GTSVファイル -->
+		<input type="button" id="__NC02" class="_simpleWindowCall" value="設定ファイル" onclick="subSimpleWindow_OpenClose('__SW02','__NC02');"/>
+		<div id="__SW02" class="_simpleWindow" style="max-height:400px;max-width:600px;min-height:240px;min-width:360px;right:0;width:360px;">
+			<div>GTSVファイル読込</div>
+			<div class="_simpleWindowOutput" style="padding:6px;">
+				<input type="file" id="__readGtsv" accept=".gtsv" style="width:344px;" onchange="subReadFile(this.id,'__TA02');"/>
+				<textarea id="__TA02" class="_editTextBox" wrap="off" style="height:176px;width:334px;" placeholder="// 例 皇居付近の地理院タイルを取得&#13;<tiletype>&#13;std	png&#13;</tiletype>&#13;<range>&#13;15	29104	29105	12902&#13;15	29104	29105	12903&#13;</range>&#13;" readonly></textarea>
 			</div>
 		</div>
-		<!-------------
-		// Local File
-		-------------->
+		<script defer>
+			{
+				const e1 = document.getElementById("__readGtsv");
+				const e2 = document.getElementById("__TA02");
+				subSimpleWindow_Resize("__SW02", (w, h) => {
+					e1.style.width = (w - 16) + "px";
+					e2.style.width = (w - 26) + "px";
+					e2.style.height = (h - 64) + "px";
+				});
+				e2.addEventListener("mousedown", () => { subNaviDragOff("__SW02"); });
+			}
+		</script>
+		<!-- Local File -->
 		<span style="float:right;font-size:12px;line-height:18px;margin:0 8px;">
-			フォルダ&nbsp;<input type="text" id="__NaviURL" onchange="subUrlSelector(this.value);subMapSelector();" style="width:250px;"/>
+			フォルダ&nbsp;<input type="text" id="__NaviURL" style="background:#fff;color:#111;width:160px;" onchange="subUrlSelector(this.value);subMapSelector();"/>
 		</span>
 	</div>
+	<!-- __divMap -->
 	<div id="__divMap">
-		<script>
+	<script defer>
 		// 地図描写調整
 		subInitDisp();
 		// URLからアンカー(#Z/X/Y)取得
@@ -834,7 +898,7 @@ input[type=range]
 		if(hash.length)
 		{
 			const aHash = hash.split("/");
-			let iZoom = parseInt(aHash[0].substr(1), 10);
+			let iZoom = parseInt(aHash[0].substr(1));
 			if(isNaN(iZoom))
 			{
 				subIwmCU();
@@ -857,50 +921,42 @@ input[type=range]
 		document.getElementById("__NaviLat").value = parseFloat(document.getElementById("__NaviLat").value).toFixed(8);
 		document.getElementById("__NaviLng").value = parseFloat(document.getElementById("__NaviLng").value).toFixed(8);
 		// 初回表示設定
-		const $Map = L.map(
-			"__divMap",
-			{
-				center:[document.getElementById("__NaviLat").value, document.getElementById("__NaviLng").value],
-				zoom:document.getElementById("__NaviZoom").value,
-				minZoom:5,  // 最小ズーム
-				maxZoom:18, // 最大ズーム
-				zoomControl:false,    // Control.Zoom 非表示
-				doubleClickZoom:false // DblClick制御
-			}
-		);
-		/*---------------
+		const $Map = L.map("__divMap", {
+			center: [document.getElementById("__NaviLat").value, document.getElementById("__NaviLng").value],
+			zoom: document.getElementById("__NaviZoom").value,
+			minZoom: 5,  // 最小ズーム
+			maxZoom: 18, // 最大ズーム
+			zoomControl: false,    // Control.Zoom 非表示
+			doubleClickZoom: false // DblClick制御
+		});
 		// スケール表示
-		---------------*/
-		L.control.scale(
-			{
-				metric:true,
-				imperial:false,
-				position:"bottomleft"
-			}
-		).addTo($Map);
-		/*-------------
+		L.control.scale({
+			metric: true,
+			imperial: false,
+			position: "bottomleft"
+		})
+		.addTo($Map);
 		// タイル座標
-		-------------*/
 		const $TileCoord = new L.GridLayer();
 		$TileCoord.createTile = function(coords)
 		{
 			const tile = L.DomUtil.create("canvas", "leaflet-tile");
-				tile.width = tile.height = 256;
+			tile.width = tile.height = 256;
 			const tileText = coords.z + "-" + coords.x + "-" + coords.y;
 			const ctx = tile.getContext("2d");
-				// 枠線
-				ctx.lineWidth = 1;
-				ctx.strokeStyle = "#555";
-				ctx.strokeRect(0, 0, 255, 255);
-				// 文字
-				ctx.font = "24px Arial";
-				ctx.textAlign = "center";
-				ctx.lineWidth = 6.0;
-				ctx.strokeStyle = "#fff";
-				ctx.strokeText(tileText, 128, 128);
-				// 文字ヌキ
-				ctx.fillStyle = "#55f";
-				ctx.fillText(tileText, 128, 128);
+			// 枠線
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = "#555";
+			ctx.strokeRect(0, 0, 255, 255);
+			// 文字
+			ctx.font = "24px Arial";
+			ctx.textAlign = "center";
+			ctx.lineWidth = 6.0;
+			ctx.strokeStyle = "#fff";
+			ctx.strokeText(tileText, 128, 128);
+			// 文字ヌキ
+			ctx.fillStyle = "#55f";
+			ctx.fillText(tileText, 128, 128);
 			return tile;
 		};
 		let $URL = null;
@@ -913,19 +969,15 @@ input[type=range]
 			document.getElementById("__NaviURL").value = $URL = url;
 		}
 		subUrlSelector("./data/");
-		/*---------------
 		// ラジオボタン
-		---------------*/
 		let $RadioButtonSelectMap = [];
-		/*-----------------------
 		// チェックボックス可変
-		-----------------------*/
 		let $MapSelector = null;
 		function subMapSelector()
 		{
 			let checkBoxSelectMap = [];
 			let ary = [];
-			for(let _a1 of rtnGtsvTagData(document.getElementById("__TA03").value, "tiletype"))
+			for(let _a1 of rtnGtsvTagData(document.getElementById("__TA02").value, "tiletype"))
 			{
 				let _a2 = _a1.split("\t");
 				if(_a2.length < 2)
@@ -939,18 +991,15 @@ input[type=range]
 				checkBoxSelectMap[_a1[0]] = L.tileLayer(
 					_a1[1],
 					{
-						attribution:_a1[0],
-						opacity:_a1[2],
-						maxNativeZoom:_a1[3],
-						maxZoom:18
+						attribution: _a1[0],
+						opacity: _a1[2],
+						maxNativeZoom: _a1[3],
+						maxZoom: 18
 					}
 				).addTo($Map);
 			}
 			checkBoxSelectMap["タイル座標"] = $TileCoord.addTo($Map);
-			///checkBoxSelectMap["タイル座標"] = $TileCoord.addTo($Map);
-			/*-------------------
 			// 地図選択メニュー
-			-------------------*/
 			if($MapSelector)
 			{
 				$Map.removeControl($MapSelector); // 前出を削除
@@ -959,43 +1008,35 @@ input[type=range]
 				$RadioButtonSelectMap,
 				checkBoxSelectMap,
 				{
-					position:"topright"
+					position: "topright"
 				}
 			);
 			$MapSelector.addTo($Map);
 			// 初回表示の処理
-			$Map.on(
-				"overlayremove",
-				function(e)
+			$Map.on("overlayremove", (e) => {
+				try
 				{
-					try
-					{
-						// 地図選択メニューから削除
-						$MapOverlays[e.name].remove($Map);
-					}
-					catch(e)
-					{
-					}
+					// 地図選択メニューから削除
+					$MapOverlays[e.name].remove($Map);
 				}
-			);
+				catch
+				{
+				}
+			});
 		}
 		subMapSelector();
 		// 座標マーカー
-		const $BaseMarkerIcon = L.AwesomeMarkers.icon(
-			{
-				icon:"home",
-				prefix:"fa",
-				markerColor:"darkblue",
-				spin:false
-			}
-		);
-		/*---------------------
+		const $BaseMarkerIcon = L.AwesomeMarkers.icon({
+			icon: "home",
+			prefix: "fa",
+			markerColor: "darkblue",
+			spin: false
+		});
 		// ベースマーカー描画
-		---------------------*/
 		let $BaseMarker = null;
 		function subBaseMarkerNew(
-			$Lat,
-			$Lng
+			$lat, // Dbl
+			$lng  // Dbl
 		)
 		{
 			for(let _i1 = 0, _i2 = arguments.length; _i1 < _i2; _i1++)
@@ -1010,37 +1051,40 @@ input[type=range]
 				$Map.removeLayer($BaseMarker);
 			}
 			$BaseMarker = L.marker(
-				[$Lat, $Lng],
+				[$lat, $lng],
 				{
 					icon:$BaseMarkerIcon,
 					draggable:true // ドラッグ許可
 				}
 			).addTo($Map);
 			// URL／BL表示を変更
-			subChangeUrl($Lat, $Lng, "__NaviZoom");
-			// ズームレベル変更 <= click
+			subChangeUrl($lat, $lng, "__NaviZoom");
+			// ズームレベル変更
 			$BaseMarker.on(
 				"click",
-				function(e)
+				function()
 				{
-					// ズームレベル補完
-					const mouseP = $Map.latLngToContainerPoint(this.getLatLng());
-					subIwmInput_ZoomA_Open(
-						"__NaviZoom",
-						(mouseP.x + 20),
-						(mouseP.y - 25)
-					);
+					// Double Click 排除
+					setTimeout(() => {
+						const mouseP = $Map.latLngToContainerPoint(this.getLatLng());
+						if($subIwmInput_ZoomA_OpenFlg)
+						{
+							subIwmInput_ZoomA_Close();
+						}
+						else
+						{
+							subIwmInput_ZoomA_Open("__NaviZoom", mouseP.x, mouseP.y);
+						}
+					}, 1);
 				}
 			);
-			// ポップアップ情報更新 <= dragend
+			// ポップアップ非表示／ポップアップ閉じるで再読込
 			$BaseMarker.on(
 				"dragend",
-				function(e)
+				function()
 				{
-					// URL／BL表示を変更
 					const a1 = this.getLatLng();
 					subChangeUrl(a1.lat, a1.lng, "__NaviZoom");
-					// "_InputBL" を更新
 					subIwmIBL($subIwmInput_BL_toSave);
 				}
 			);
@@ -1053,75 +1097,71 @@ input[type=range]
 		const miniMapLayer = new L.TileLayer(
 			"https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
 			{
-				minZoom:3,
-				maxZoom:18
+				minZoom: 3,
+				maxZoom: 18
 			}
 		);
 		new L.Control.MiniMap(
 			miniMapLayer,
 			{
-				height:256,
-				position:"bottomright",
-				toggleDisplay:true,
-				width:256,
-				zoomLevelOffset:-3
+				height: 160,
+				position: "bottomright",
+				toggleDisplay: true,
+				width: 260,
+				zoomLevelOffset: -4
 			}
 		).addTo($Map);
-		/*---------------------
 		// 地図上イベント共通
-		---------------------*/
-		// マーカー毎のイベント設定後でないと不具合
-		$Map.on(
-			"dblclick",
-			function(e)
+		let $Map_DblClickFlg = false;
+		let $Map_timerId = null;
+		$Map.on("click", (e) => {
+			clearTimeout($Map_timerId);
+			// Double Click
+			// "click ２回目" で発火
+			if($Map_DblClickFlg)
 			{
 				// ズームレベル補完
-				subIwmInput_ZoomA_Open(
-					"__NaviZoom",
-					(e.containerPoint.x + 20),
-					(e.containerPoint.y - 25)
-				);
+				subIwmInput_ZoomA_Open("__NaviZoom", e.containerPoint.x, e.containerPoint.y);
 				// ベースマーカー再描画
 				subBaseMarkerNew(e.latlng.lat, e.latlng.lng);
+				$Map_DblClickFlg = false;
+				return;
 			}
-		);
-		$Map.on(
-			"contextmenu",
-			function(e)
-			{
-				// メニュー非表示
-			}
-		);
-		$Map.on(
-			"zoomend",
-			function(e)
-			{
-				// URL／BL表示を変更
-				subChangeUrl("__NaviLat", "__NaviLng", $Map.getZoom());
-				// ズームバー
-				subIwmInput_Zoom_Change($Map.getZoom());
-			}
-		);
-		</script>
+			// Click
+			// "click １回目" 300ms以内に "click ２回目" なければ発火
+			$Map_timerId = setTimeout(() => {
+				$Map_DblClickFlg = false;
+				return;
+			}, 300);
+			// Double Click 判定
+			$Map_DblClickFlg = true;
+		});
+		$Map.on("contextmenu", () => {
+			// メニュー非表示
+		});
+		$Map.on("zoomend", () => {
+			subChangeUrl("__NaviLat", "__NaviLng", $Map.getZoom());
+			subIwmInput_Zoom_Change($Map.getZoom());
+		});
+	</script>
 	</div>
-</body>
-</html>
-<!---------------------
-// ヒアドキュメント風
----------------------->
+<!-- ヒアドキュメント風 -->
 <textarea id="__HDoc01" style="display:none;">
 <style>
-._div_head{background:#ffc;color:#000;margin:8px 4px 4px 4px;padding:0 8px;font-weight:600;}
-._ol, ._ul{margin:0;padding:0;}
-._li1, ._li2{padding:0 0 2px 0;}
-._li1{margin:0 0 0 24px;}
-._li2{margin:0 0 0 8px;}
-._font_size22px{font-size:22px;}
-._font_color1{color:#3d7cce;}
+._div_head{background: #ffc; border: solid 1px #666; color: #444; font-weight: 700; margin: 8px 4px 4px 4px; padding: 0 6px;}
+._ol, ._ul{margin: 0; padding: 0;}
+._li1, ._li2{line-height: 26px;}
+._li1{margin: 0 0 0 24px;}
+._li2{margin: 0 0 0 8px;}
+._font_size22px{font-size: 22px;}
+._font_color1, ._font_color2, ._font_color3{font-weight: 700;}
+._font_color1{color: #3d7cce;}
+._font_color2{color: #bd1e38;}
+._font_color3{color: #fb9d3e;}
 </style>
 <div class="_div_head">表示するタイルを指定する</div>
  <ul class="_ul">
-  <li class="_li1">[設定ファイル]ボタンを押し、地理院タイルをダウンロードするときに使用したGtsvファイル (例)sample.gtsv を読み込む。</li>
+  <li class="_li1">[設定ファイル]から、GTSVファイルを読み込む。</li>
  </ul>
 <div class="_div_head">地図上でのマウス操作</div>
  <ul class="_ul">
@@ -1131,13 +1171,15 @@ input[type=range]
  <ol class="_ol">
   <li class="_li1"><span class="_font_color1">青マーカー<i class="fa fa-map-marker _font_size22px"></i></span>
    <ul class="_ul">
-    <li class="_li2">左クリック：ズームレベル補完表示</li>
+    <li class="_li2">左クリック：ズーム開く／閉じる</li>
     <li class="_li2">ドラッグ：移動</li>
    </ul>
   </li>
  </ol>
 </li>
 </textarea>
-<script>
+<script defer>
 	document.getElementById("__SW01Doc").innerHTML = document.getElementById("__HDoc01").value;
 </script>
+</body>
+</html>
