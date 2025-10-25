@@ -1,4 +1,4 @@
-<!-- Ver.20250720 'AC-130J' -->
+<!-- Ver.20251024 'AC-130J' -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -236,7 +236,6 @@ ol
 {
 	background:#fff;
 	border:2px solid #3d7cce;
-	color:#383838;
 	font-size:12px;
 	margin:0;
 	padding:2px 8px 6px 8px;
@@ -378,11 +377,17 @@ ol
 	margin: 0;
 }
 #__InputZoomA > ._ZA,
-#__InputZoomB > ._ZB,
 #__InputZoomA > ._Btn3
 {
-	height: 26px;
+	height: 24px;
+	line-height: 24px;
 	width: 26px;
+}
+#__InputZoomB > ._ZB
+{
+	height: 26px;
+	line-height: 26px;
+	width: 23px;
 }
 #__InputBL > ._Btn1,
 #__InputBL > ._Btn2,
@@ -1018,30 +1023,28 @@ ol
 		}
 	</script>
 	<div id="__InputZoomB" style="left:320px;top:34px;">
-		<div style="background:#999;border-radius:3px 3px 0 0;height:3px;width:26px;"></div>
-		<input type="button" class="_ZB" value="18" onclick="subIwmZB('18');"/><br>
-		<input type="button" class="_ZB" value="17" onclick="subIwmZB('17');"/><br>
-		<input type="button" class="_ZB" value="16" onclick="subIwmZB('16');"/><br>
-		<input type="button" class="_ZB" value="15" onclick="subIwmZB('15');"/><br>
-		<input type="button" class="_ZB" value="14" onclick="subIwmZB('14');"/><br>
-		<input type="button" class="_ZB" value="13" onclick="subIwmZB('13');"/><br>
-		<input type="button" class="_ZB" value="12" onclick="subIwmZB('12');"/><br>
-		<input type="button" class="_ZB" value="11" onclick="subIwmZB('11');"/><br>
-		<input type="button" class="_ZB" value="10" onclick="subIwmZB('10');"/><br>
-		<input type="button" class="_ZB" value="9" onclick="subIwmZB('9');"/><br>
-		<input type="button" class="_ZB" value="8" onclick="subIwmZB('8');"/><br>
-		<input type="button" class="_ZB" value="7" onclick="subIwmZB('7');"/><br>
+		<input type="button" class="_ZB" value="5" onclick="subIwmZB('5');"/><br>
 		<input type="button" class="_ZB" value="6" onclick="subIwmZB('6');"/><br>
-		<input type="button" class="_ZB" value="5" onclick="subIwmZB('5');"/>
-		<div style="background:#999;border-radius:0 0 3px 3px;height:3px;width:26px;"></div>
+		<input type="button" class="_ZB" value="7" onclick="subIwmZB('7');"/><br>
+		<input type="button" class="_ZB" value="8" onclick="subIwmZB('8');"/><br>
+		<input type="button" class="_ZB" value="9" onclick="subIwmZB('9');"/><br>
+		<input type="button" class="_ZB" value="10" onclick="subIwmZB('10');"/><br>
+		<input type="button" class="_ZB" value="11" onclick="subIwmZB('11');"/><br>
+		<input type="button" class="_ZB" value="12" onclick="subIwmZB('12');"/><br>
+		<input type="button" class="_ZB" value="13" onclick="subIwmZB('13');"/><br>
+		<input type="button" class="_ZB" value="14" onclick="subIwmZB('14');"/><br>
+		<input type="button" class="_ZB" value="15" onclick="subIwmZB('15');"/><br>
+		<input type="button" class="_ZB" value="16" onclick="subIwmZB('16');"/><br>
+		<input type="button" class="_ZB" value="17" onclick="subIwmZB('17');"/><br>
+		<input type="button" class="_ZB" value="18" onclick="subIwmZB('18');"/>
 	</div>
 	<!-- 地理院地図の設定 -->
 	<div id="__divNaviCommander">
 		緯度&nbsp;<input type="text" id="__NaviLat" readonly/>
 		経度&nbsp;<input type="text" id="__NaviLng" readonly/>
 		<!-- ズーム --><input type="hidden" id="__NaviZoom"/>
-		<div class="_btnNavi1fa" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div>
-		<div id="__RmMarker" class="_btnNavi2fa" onclick="subMyObj_Remove($ArySelectedLayer);"><i class="fa fa-times"></i></div>
+		<div class="_btnNavi1" style="border-radius:10px;display:inline-block;font-size:14px;height:20px;margin:0 0 0 2px;padding:0;width:20px;" onclick="subIwmZA2();"><i class="fa fa-map-marker"></i></div>
+		<input type="button" id="__RmMarker" class="_btnNavi2" style="border-radius:10px;font-size:17px;height:20px;margin:0 0 0 4px;padding:0;width:20px;" value="×" onclick="subMyObj_Remove($ArySelectedLayer);"/>
 		<!-- ヘルプ -->
 		<input type="button" id="__NC01" class="_simpleWindowCall" value="？" onclick="subSimpleWindow_OpenClose('__SW01','__NC01');"/>
 		<div id="__SW01" class="_simpleWindow" style="right:0;width:360px;">
