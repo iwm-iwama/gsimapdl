@@ -5,8 +5,8 @@
 
 【実行に必要なファイル】
 
-	01_iwm_GetGsiMapList.exe
-	02_iwm_Gsimapdl-supporter.exe
+	01_iwm_GetGsiMapList.exe (.NET Desktop Runtime 10)
+	02_iwm_Gsimapdl-supporter.exe (.NET Desktop Runtime 10)
 	iwm_gsimapdl.exe (.NET Runtime 10 / Windows)
 	iwm_gsimapdl.bin (.NET Runtime 10 / Linux)
 		https://dotnet.microsoft.com/ja-jp/download/dotnet/10.0
