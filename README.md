@@ -7,15 +7,9 @@
 
 	01_iwm_GetGsiMapList.exe
 	02_iwm_Gsimapdl-supporter.exe
-	iwm_gsimapdl.exe
-		Microsoft(R) .NET Framework 4.8.1 ランタイム
-			https://dotnet.microsoft.com/ja-jp/download/dotnet-framework/thank-you/net481-web-installer
-
-	iwm_gsimapdl-mono_linux.bin
-		Mono(Linux) 環境
-			https://www.mono-project.com/download/stable/#download-lin-debian
-		必要なライブラリ
-			libmono-system-net-http4.0-cil
+	iwm_gsimapdl.exe (.NET 10 Windows)
+	iwm_gsimapdl.bin (.NET 10 Linux)
+		.Net 10 Runtime: https://dotnet.microsoft.com/ja-jp/download/dotnet/10.0
 
 【ファイルの説明／使用順】
 
@@ -34,9 +28,9 @@
 			$ iwm_gsimapdl.exe sample.gtsv -test
 		02_iwm_Gsimapdl-supporter.exe のバックエンド。
 
-	iwm_gsimapdl-mono_linux.bin
-		iwm_gsimapdl.exe の Linux Mono 版コマンドライン・ツール。
-			$ mono ./iwm_gsimapdl-mono_linux.bin ./sample.gtsv -test
+	iwm_gsimapdl.bin
+		iwm_gsimapdl.exe のLinux版コマンドライン・ツール。
+			$ ./iwm_gsimapdl.bin ./sample.gtsv -test
 
 	03_dl_checker2.html
 		ダウンロードされた地理院タイルを閲覧するためのオンライン版ツール。
@@ -53,5 +47,5 @@
 
 	・Linux
 		(1) 01_dl_supporter2.html
-		(2) iwm_gsimapdl-mono_linux.bin
+		(2) iwm_gsimapdl.bin
 		(3) 03_dl_checker2.html
