@@ -7,9 +7,9 @@
 
 	01_iwm_GetGsiMapList.exe
 	02_iwm_Gsimapdl-supporter.exe
-	iwm_gsimapdl.exe (.NET 10 Windows)
-	iwm_gsimapdl.bin (.NET 10 Linux)
-		.Net 10 Runtime: https://dotnet.microsoft.com/ja-jp/download/dotnet/10.0
+	iwm_gsimapdl.exe (.NET Runtime 10 / Windows)
+	iwm_gsimapdl.bin (.NET Runtime 10 / Linux)
+		https://dotnet.microsoft.com/ja-jp/download/dotnet/10.0
 
 【ファイルの説明／使用順】
 
